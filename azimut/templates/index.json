@@ -1,0 +1,479 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {}
+    },
+    "manifeste": {
+      "type": "manifeste",
+      "settings": {},
+      "blocks": {
+        "manifeste-1": {
+          "type": "stat",
+          "settings": {
+            "number": "1 840",
+            "az": "AZ 014°",
+            "label": "voyageurs accompagnés depuis la première expédition"
+          }
+        },
+        "manifeste-2": {
+          "type": "stat",
+          "settings": {
+            "number": "11",
+            "az": "AZ 127°",
+            "label": "pays où nous travaillons avec des guides que nous connaissons"
+          }
+        },
+        "manifeste-3": {
+          "type": "stat",
+          "settings": {
+            "number": "97 %",
+            "az": "AZ 233°",
+            "label": "de nos voyageurs repartent avec nous ou nous recommandent"
+          }
+        },
+        "manifeste-4": {
+          "type": "stat",
+          "settings": {
+            "number": "1",
+            "az": "AZ 351°",
+            "label": "interlocuteur unique, du premier appel au retour"
+          }
+        }
+      },
+      "block_order": [
+        "manifeste-1",
+        "manifeste-2",
+        "manifeste-3",
+        "manifeste-4"
+      ]
+    },
+    "destinations": {
+      "type": "destinations",
+      "settings": {},
+      "blocks": {
+        "destinations-1": {
+          "type": "card",
+          "settings": {
+            "handle": "japon",
+            "country": "Japon",
+            "title": "Kyoto et les Alpes japonaises",
+            "meta": "11 jours · automne",
+            "asset": "dest-japon",
+            "alt": "Pagode japonaise entourée d'érables rouges"
+          }
+        },
+        "destinations-2": {
+          "type": "card",
+          "settings": {
+            "handle": "canada",
+            "country": "Canada",
+            "title": "Rocheuses et lacs glaciaires",
+            "meta": "9 jours · juin à septembre",
+            "asset": "dest-canada",
+            "alt": "Lac turquoise entouré de sapins et de sommets rocheux"
+          }
+        },
+        "destinations-3": {
+          "type": "card",
+          "settings": {
+            "handle": "maroc",
+            "country": "Maroc",
+            "title": "Erg Chigaga, bivouac mobile",
+            "meta": "7 jours · octobre à avril",
+            "asset": "dest-maroc",
+            "alt": "Dunes de sable au lever du soleil"
+          }
+        }
+      },
+      "block_order": [
+        "destinations-1",
+        "destinations-2",
+        "destinations-3"
+      ]
+    },
+    "why": {
+      "type": "why",
+      "settings": {},
+      "blocks": {
+        "why-1": {
+          "type": "point",
+          "settings": {
+            "title": "Un concepteur, pas un agent",
+            "text": "La personne qui dessine votre itinéraire est celle qui a marché la vallée. Elle reste votre interlocutrice du premier appel jusqu'au retour, et elle décroche pendant le voyage."
+          }
+        },
+        "why-2": {
+          "type": "point",
+          "settings": {
+            "title": "Des guides que nous connaissons",
+            "text": "Pas de prestataire choisi sur appel d'offres. Nous travaillons avec les mêmes équipes depuis des années, rémunérées directement, et nous refusons les destinations où nous n'avons personne."
+          }
+        },
+        "why-3": {
+          "type": "point",
+          "settings": {
+            "title": "Un prix qui ne bouge pas",
+            "text": "Le devis détaille chaque nuit, chaque transfert et chaque repas. Ce que vous signez est ce que vous payez, même si le change ou le carburant varient entre-temps."
+          }
+        },
+        "why-4": {
+          "type": "point",
+          "settings": {
+            "title": "Une assistance réelle sur place",
+            "text": "Un numéro joignable vingt-quatre heures sur vingt-quatre, tenu par quelqu'un de la maison et non par une plateforme. Vol annulé, météo qui tourne, imprévu de santé : on reprend la main."
+          }
+        }
+      },
+      "block_order": [
+        "why-1",
+        "why-2",
+        "why-3",
+        "why-4"
+      ]
+    },
+    "process": {
+      "type": "process",
+      "settings": {},
+      "blocks": {
+        "process-1": {
+          "type": "step",
+          "settings": {
+            "when": "J-120",
+            "title": "Un appel de 30 minutes",
+            "text": "On parle de vous avant de parler de route : ce qui vous fait envie, ce que vous voulez éviter, le rythme de chacun.",
+            "tag": "Gratuit, sans engagement"
+          }
+        },
+        "process-2": {
+          "type": "step",
+          "settings": {
+            "when": "72 h",
+            "title": "Une proposition écrite",
+            "text": "Un itinéraire jour par jour, chaque nuit et chaque transfert détaillés, et un prix ferme. On l'ajuste jusqu'à ce qu'il vous ressemble."
+          }
+        },
+        "process-3": {
+          "type": "step",
+          "settings": {
+            "when": "J-90",
+            "title": "L'acompte bloque la date",
+            "text": "500 € pour réserver les guides et les adresses à votre nom. Remboursable sous 14 jours si vous changez d'avis.",
+            "key": true
+          }
+        },
+        "process-4": {
+          "type": "step",
+          "settings": {
+            "when": "J-0",
+            "title": "Vous partez, on reste joignable",
+            "text": "Le solde est réglé 45 jours avant. Sur place, la maison décroche vingt-quatre heures sur vingt-quatre."
+          }
+        }
+      },
+      "block_order": [
+        "process-1",
+        "process-2",
+        "process-3",
+        "process-4"
+      ]
+    },
+    "guides": {
+      "type": "guides",
+      "settings": {},
+      "blocks": {
+        "guides-1": {
+          "type": "guide",
+          "settings": {
+            "name": "Mateo Iriarte",
+            "role": "Guide de haute montagne IFMGA · Andes",
+            "langs": "FR · EN · ES",
+            "quote": "La montagne ne se négocie pas. On part tôt, ou on ne part pas.",
+            "zones": "Patagonie, Aconcagua, Cordillère Blanche",
+            "base": "EL CHALTÉN · AZ 214°",
+            "years": "12 ans dans la maison",
+            "asset": "guide-mateo"
+          }
+        },
+        "guides-2": {
+          "type": "guide",
+          "settings": {
+            "name": "Kaisa Lindqvist",
+            "role": "Guide nordique · ski et traîneau",
+            "langs": "FR · EN · SV",
+            "quote": "Je choisis l'itinéraire selon la neige du matin, jamais selon le programme.",
+            "zones": "Laponie, Svalbard, Groenland",
+            "base": "ABISKO · AZ 003°",
+            "years": "7 ans dans la maison",
+            "asset": "guide-kaisa"
+          }
+        },
+        "guides-3": {
+          "type": "guide",
+          "settings": {
+            "name": "Ibrahim Ould Sidi",
+            "role": "Guide de désert · navigation céleste",
+            "langs": "FR · AR · EN",
+            "quote": "Dans le désert, le luxe c'est l'eau et l'ombre. Le reste n'est que décor.",
+            "zones": "Sahara marocain, Mauritanie, Namib",
+            "base": "M'HAMID · AZ 168°",
+            "years": "15 ans dans la maison",
+            "asset": "guide-ibrahim"
+          }
+        },
+        "guides-4": {
+          "type": "guide",
+          "settings": {
+            "name": "Sigrún Hall",
+            "role": "Glaciologue, guide AIMG · Atlantique nord",
+            "langs": "EN · IS · FR",
+            "quote": "Un glacier bouge. Ce que j'ai montré l'an dernier n'existe déjà plus.",
+            "zones": "Islande, Féroé, Groenland oriental",
+            "base": "HÖFN · AZ 341°",
+            "years": "9 ans dans la maison",
+            "asset": "guide-sigrun"
+          }
+        }
+      },
+      "block_order": [
+        "guides-1",
+        "guides-2",
+        "guides-3",
+        "guides-4"
+      ]
+    },
+    "trips": {
+      "type": "trips",
+      "settings": {}
+    },
+    "guarantees": {
+      "type": "guarantees",
+      "settings": {},
+      "blocks": {
+        "guarantees-1": {
+          "type": "item",
+          "settings": {
+            "fig": "14 j",
+            "title": "Acompte remboursable",
+            "text": "500 € pour bloquer une date, rendus sans justificatif dans les 14 jours."
+          }
+        },
+        "guarantees-2": {
+          "type": "item",
+          "settings": {
+            "fig": "0 %",
+            "title": "Prix garanti à la signature",
+            "text": "Ni le change ni le carburant ne bougent le prix une fois signé."
+          }
+        },
+        "guarantees-3": {
+          "type": "item",
+          "settings": {
+            "fig": "100 %",
+            "title": "Fonds protégés",
+            "text": "Vos versements sont couverts par une garantie financière, comme l'exige la loi."
+          }
+        },
+        "guarantees-4": {
+          "type": "item",
+          "settings": {
+            "fig": "24/7",
+            "title": "La maison décroche 24 h/24",
+            "text": "Pas une plateforme : quelqu'un qui connaît votre itinéraire par cœur."
+          }
+        }
+      },
+      "block_order": [
+        "guarantees-1",
+        "guarantees-2",
+        "guarantees-3",
+        "guarantees-4"
+      ]
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {},
+      "blocks": {
+        "reviews-1": {
+          "type": "review",
+          "settings": {
+            "stars": "5",
+            "text": "Le camp était monté avant notre arrivée, et Mateo connaissait la vallée mieux que la carte. Le jour de réserve a servi : on a vu les tours sans un nuage.",
+            "name": "Camille R.",
+            "meta": "En couple · mars 2026",
+            "trip": "Patagonie",
+            "handle": "patagonie",
+            "asset": "avis-camille"
+          }
+        },
+        "reviews-2": {
+          "type": "review",
+          "settings": {
+            "stars": "4",
+            "text": "Itinéraire superbe, guide exceptionnel. Notre vol retour a été annulé à Punta Arenas et ça a été long.",
+            "name": "Thomas L.",
+            "meta": "Entre amis, 4 voyageurs · janvier 2026",
+            "trip": "Patagonie",
+            "handle": "patagonie",
+            "asset": "avis-thomas"
+          }
+        },
+        "reviews-3": {
+          "type": "review",
+          "settings": {
+            "stars": "5",
+            "text": "Sigrún nous a fait marcher sur un glacier qu'elle étudie depuis quinze ans. On a compris ce qu'on regardait, et c'est ce qui change tout.",
+            "name": "Nadia et Paul B.",
+            "meta": "Avec nos deux ados · août 2025",
+            "trip": "Islande",
+            "handle": "islande",
+            "asset": "avis-nadia-paul"
+          }
+        },
+        "reviews-4": {
+          "type": "review",
+          "settings": {
+            "stars": "5",
+            "text": "Conduire son propre attelage dès le deuxième jour, je n'y croyais pas. Les cabanes étaient chaudes, l'astronome passionnant.",
+            "name": "Hélène V.",
+            "meta": "En solo · février 2026",
+            "trip": "Laponie",
+            "handle": "laponie",
+            "asset": "avis-helene"
+          }
+        },
+        "reviews-5": {
+          "type": "review",
+          "settings": {
+            "stars": "5",
+            "text": "Partir avant le jour sur les dunes, sans personne autour : Ibrahim avait raison, c'est là que le désert existe vraiment.",
+            "name": "Marc et Inès D.",
+            "meta": "En couple · octobre 2025",
+            "trip": "Namibie",
+            "handle": "namibie",
+            "asset": "avis-marc-ines"
+          }
+        },
+        "reviews-6": {
+          "type": "review",
+          "settings": {
+            "stars": "5",
+            "text": "Nous voulions la Patagonie sans souffrir. Ils ont raccourci deux étapes et ajouté un jour de repos, sans que le prix bouge.",
+            "name": "Sophie et Alain G.",
+            "meta": "Jeunes retraités · novembre 2025",
+            "trip": "Patagonie",
+            "handle": "patagonie",
+            "asset": "avis-sophie-alain"
+          }
+        }
+      },
+      "block_order": [
+        "reviews-1",
+        "reviews-2",
+        "reviews-3",
+        "reviews-4",
+        "reviews-5",
+        "reviews-6"
+      ]
+    },
+    "gift": {
+      "type": "gift",
+      "settings": {}
+    },
+    "experience": {
+      "type": "experience",
+      "settings": {},
+      "blocks": {
+        "experience-1": {
+          "type": "float",
+          "settings": {
+            "icon": "home",
+            "title": "Adresses exclusives",
+            "text": "Lodges de moins de dix chambres, camps mobiles montés pour vous, maisons d'hôtes hors circuit."
+          }
+        },
+        "experience-2": {
+          "type": "float",
+          "settings": {
+            "icon": "fork",
+            "title": "Table du lieu",
+            "text": "Produits de la vallée, cuisinés par quelqu'un d'ici. Régimes et allergies transmis en amont."
+          }
+        },
+        "experience-3": {
+          "type": "float",
+          "settings": {
+            "icon": "car",
+            "title": "Transferts privés",
+            "text": "Aucune attente en gare ni en aéroport. Véhicule et chauffeur réservés à votre groupe."
+          }
+        }
+      },
+      "block_order": [
+        "experience-1",
+        "experience-2",
+        "experience-3"
+      ]
+    },
+    "band": {
+      "type": "band",
+      "settings": {}
+    },
+    "journal": {
+      "type": "journal",
+      "settings": {},
+      "blocks": {
+        "journal-1": {
+          "type": "post",
+          "settings": {
+            "tag": "Préparation",
+            "title": "Ce que demande vraiment une traversée en autonomie",
+            "meta": "7 min de lecture · septembre 2026",
+            "asset": "journal-autonomie",
+            "alt": "Massif de granit en Patagonie"
+          }
+        },
+        "journal-2": {
+          "type": "post",
+          "settings": {
+            "tag": "Saison",
+            "title": "Choisir sa fenêtre pour voir les aurores sans geler",
+            "meta": "5 min de lecture · août 2026",
+            "asset": "journal-aurores",
+            "alt": "Aurore boréale au-dessus de la forêt"
+          }
+        },
+        "journal-3": {
+          "type": "post",
+          "settings": {
+            "tag": "Terrain",
+            "title": "Désert : pourquoi nous partons toujours avant le jour",
+            "meta": "6 min de lecture · juillet 2026",
+            "asset": "journal-desert",
+            "alt": "Dune rouge et acacia"
+          }
+        }
+      },
+      "block_order": [
+        "journal-1",
+        "journal-2",
+        "journal-3"
+      ]
+    }
+  },
+  "order": [
+    "hero",
+    "manifeste",
+    "destinations",
+    "why",
+    "process",
+    "guides",
+    "trips",
+    "guarantees",
+    "reviews",
+    "gift",
+    "experience",
+    "band",
+    "journal"
+  ]
+}

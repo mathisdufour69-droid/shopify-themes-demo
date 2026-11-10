@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_violet }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
+    {%- endif -%}
+
+    {%- assign brand = settings.brand_name | default: 'SANSMODÉ' -%}
+    <title>
+      {%- if request.page_type == 'index' -%}{{ brand }} &ndash; Bonbons sans sucres ajoutés, 80 % fruits et légumes
+      {%- else -%}{{ page_title }}
+        {%- if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif -%}
+        {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+        {%- unless page_title contains brand %} &ndash; {{ brand }}{% endunless -%}
+      {%- endif -%}
+    </title>
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {% render 'meta-tags' %}
+
+    {%- comment -%}
+      Polices auto-hébergées (pas de Google Fonts : zéro requête tierce, conforme RGPD/CNIL, meilleur LCP).
+      On précharge seulement les 2 graisses visibles au-dessus de la ligne de flottaison.
+    {%- endcomment -%}
+    {{ 'fredoka-latin-700-normal.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {{ 'nunito-latin-400-normal.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    <style>
+      @font-face { font-family: 'Fredoka'; font-weight: 600; font-style: normal; font-display: swap; src: url('{{ 'fredoka-latin-600-normal.woff2' | asset_url }}') format('woff2'); }
+      @font-face { font-family: 'Fredoka'; font-weight: 700; font-style: normal; font-display: swap; src: url('{{ 'fredoka-latin-700-normal.woff2' | asset_url }}') format('woff2'); }
+      @font-face { font-family: 'Nunito'; font-weight: 400; font-style: normal; font-display: swap; src: url('{{ 'nunito-latin-400-normal.woff2' | asset_url }}') format('woff2'); }
+      @font-face { font-family: 'Nunito'; font-weight: 700; font-style: normal; font-display: swap; src: url('{{ 'nunito-latin-700-normal.woff2' | asset_url }}') format('woff2'); }
+      @font-face { font-family: 'Nunito'; font-weight: 800; font-style: normal; font-display: swap; src: url('{{ 'nunito-latin-800-normal.woff2' | asset_url }}') format('woff2'); }
+      :root {
+        --violet: {{ settings.color_violet }};
+        --jaune: {{ settings.color_jaune }};
+        --turquoise: {{ settings.color_turquoise }};
+        --rouge: {{ settings.color_rouge }};
+        --rose: {{ settings.color_rose }};
+        --creme: {{ settings.color_creme }};
+        --encre: {{ settings.color_encre }};
+        --free-shipping: {{ settings.free_shipping_threshold | times: 100 }};
+      }
+    </style>
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
+    <script>
+      window.Sansmode = {
+        routes: { cart_add: '{{ routes.cart_add_url }}', cart_change: '{{ routes.cart_change_url }}', cart: '{{ routes.cart_url }}', root: '{{ routes.root_url }}', all_products_collection: '{{ routes.all_products_collection_url }}' },
+        freeShipping: {{ settings.free_shipping_threshold | times: 100 }},
+        cutoffHour: {{ settings.cutoff_hour }},
+        currency: {{ cart.currency.iso_code | json }},
+        locale: {{ request.locale.iso_code | json }}
+      };
+    </script>
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="template-{{ template.name }}{% if template.suffix %} template-{{ template.name }}--{{ template.suffix }}{% endif %}">
+    <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" class="main" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {% section 'cart-drawer' %}
+    {% render 'lightbox' %}
+  </body>
+</html>

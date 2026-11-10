@@ -1,0 +1,79 @@
+{%- comment -%}
+  Deux offres côte à côte, une décision simple : le cadeau (achat unique) ou l'abonnement (récurrent).
+  Le coffret s'ajoute au panier depuis la home. L'abonnement affiche le prix par sachet et « sans engagement ».
+{%- endcomment -%}
+{%- assign coffret = section.settings.gift_product | default: all_products['coffret-de-noel'] -%}
+{%- assign sub_product = section.settings.sub_product | default: all_products['grisaille'] -%}
+{%- unless coffret.handle -%}{%- assign coffret = nil -%}{%- endunless -%}
+{%- unless sub_product.handle -%}{%- assign sub_product = nil -%}{%- endunless -%}
+<section class="offers" id="offre-noel" aria-labelledby="OffersTitle-{{ section.id }}">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker">{{ section.settings.kicker }}</p>
+      <h2 id="OffersTitle-{{ section.id }}" class="h2">{{ section.settings.title }}</h2>
+    </div>
+    <div class="offers__grid">
+      <article class="offer offer--gift">
+        <div class="offer__media">
+          {%- if coffret and coffret.featured_media -%}
+            {{ coffret.featured_media | image_url: width: 900 | image_tag: widths: '450,700,900', sizes: '(min-width: 750px) 40vw, 90vw', loading: 'lazy', alt: coffret.featured_media.alt | default: coffret.title }}
+          {%- else -%}
+            {% render 'picture', base: 'coffret-noel', widths: '600,1000', width: 1000, height: 1250, alt: 'Le coffret de Noël : les cinq sachets dans une boîte lilas, ruban jaune', sizes: '(min-width: 750px) 40vw, 90vw' %}
+          {%- endif -%}
+        </div>
+        <div class="offer__body">
+          <span class="badge badge--noel">{{ section.settings.gift_badge }}</span>
+          <h3 class="offer__title">{{ coffret.title | default: 'Coffret de Noël' }}</h3>
+          <p>{{ section.settings.gift_text }}</p>
+          {%- if coffret -%}
+            <p class="offer__price"><span class="price price--big">{{ coffret.price | money }}</span>{% if coffret.compare_at_price > coffret.price %} <s class="price--old">{{ coffret.compare_at_price | money }}</s> <span class="save">−{{ coffret.compare_at_price | minus: coffret.price | money }}</span>{% endif %}</p>
+            {%- if settings.christmas_deadline != blank -%}<p class="offer__deadline">{% render 'icon', name: 'gift' %} Livré avant Noël si commandé avant le {{ settings.christmas_deadline }}</p>{%- endif -%}
+            {%- form 'product', coffret, class: 'offer__form' -%}
+              <input type="hidden" name="id" value="{{ coffret.selected_or_first_available_variant.id }}">
+              <button type="submit" class="btn btn--block" {% unless coffret.available %}disabled{% endunless %}>Ajouter le coffret · {{ coffret.price | money }}</button>
+            {%- endform -%}
+          {%- endif -%}
+        </div>
+      </article>
+
+      <article class="offer offer--sub">
+        <div class="offer__body">
+          <span class="badge badge--sub">{% render 'icon', name: 'refresh' %} {{ section.settings.sub_badge }}</span>
+          <h3 class="offer__title">{{ section.settings.sub_title }}</h3>
+          <p class="offer__price"><span class="price price--big">{{ section.settings.sub_price }}</span> <span class="offer__unit">{{ section.settings.sub_unit }}</span></p>
+          <ul class="checklist" role="list">
+            {%- assign perks = section.settings.sub_perks | newline_to_br | split: '<br />' -%}
+            {%- for perk in perks -%}{%- assign perk_s = perk | strip -%}{%- if perk_s != blank -%}<li>{% render 'icon', name: 'check' %} {{ perk_s }}</li>{%- endif -%}{%- endfor -%}
+          </ul>
+          <a href="{{ sub_product.url | default: routes.all_products_collection_url }}" class="btn btn--block btn--light">{{ section.settings.sub_cta }}</a>
+          <p class="offer__fine">{{ section.settings.sub_fine }}</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Offre Noël + abonnement",
+  "class": "section-offers",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Deux façons d’en profiter" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Pour offrir, ou pour ne jamais en manquer." },
+    { "type": "header", "content": "Coffret" },
+    { "type": "product", "id": "gift_product", "label": "Produit coffret" },
+    { "type": "text", "id": "gift_badge", "label": "Badge", "default": "Édition limitée" },
+    { "type": "textarea", "id": "gift_text", "label": "Texte", "default": "Les cinq parfums dans une boîte qui se garde. Le cadeau qui plaît à ceux qui « ne mangent pas de sucre »." },
+    { "type": "header", "content": "Abonnement" },
+    { "type": "product", "id": "sub_product", "label": "Produit vers lequel pointer", "info": "La fiche produit propose le format abonnement." },
+    { "type": "text", "id": "sub_badge", "label": "Badge", "default": "Abonnement" },
+    { "type": "text", "id": "sub_title", "label": "Titre", "default": "3 sachets chaque mois, −15\u00a0%" },
+    { "type": "text", "id": "sub_price", "label": "Prix", "default": "8,40 €/mois" },
+    { "type": "text", "id": "sub_unit", "label": "Prix unitaire", "default": "soit 2,80 € le sachet au lieu de 3,90 €" },
+    { "type": "textarea", "id": "sub_perks", "label": "Avantages (un par ligne)", "default": "Tu choisis tes parfums, tu les changes quand tu veux\nUn rappel par mail 3 jours avant chaque envoi\nPause ou arrêt en un clic, sans engagement" },
+    { "type": "text", "id": "sub_cta", "label": "Bouton", "default": "Composer mon abonnement" },
+    { "type": "text", "id": "sub_fine", "label": "Mention", "default": "Sans engagement. Prélevé à l’expédition, jamais avant." }
+  ],
+  "presets": [{ "name": "Offre Noël + abonnement" }]
+}
+{% endschema %}

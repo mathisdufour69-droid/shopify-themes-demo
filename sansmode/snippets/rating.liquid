@@ -1,0 +1,12 @@
+{%- comment -%} Étoiles (note décimale) + nombre d'avis. Usage : {% render 'rating', rating: '4.7', count: '1284', compact: true %} {%- endcomment -%}
+{%- assign pct = rating | times: 20 | round -%}
+{%- assign c = count | plus: 0 -%}
+<span class="rating{% if compact %} rating--compact{% endif %}">
+  <span class="rating__stars" style="--pct: {{ pct }}%" role="img" aria-label="Noté {{ rating | replace: '.', ',' }} sur 5">
+    {%- for i in (1..5) -%}{% render 'icon', name: 'star' %}{%- endfor -%}
+  </span>
+  <span class="rating__text"><strong>{{ rating | replace: '.', ',' }}</strong>
+    {%- if c > 0 %} <span class="rating__count">(
+      {%- if c >= 1000 -%}{{ c | divided_by: 1000 | floor }}&nbsp;{{ c | modulo: 1000 | prepend: '00' | slice: -3, 3 }}{%- else -%}{{ c }}{%- endif %}{% unless compact %} avis{% endunless %})</span>{% endif -%}
+  </span>
+</span>

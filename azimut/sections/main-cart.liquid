@@ -1,0 +1,35 @@
+<section class="cart-page" style="padding-top:40px">
+  <div class="wrap">
+    <span class="kick">Panier</span>
+    <h1 style="margin:14px 0 28px">Votre panier</h1>
+    {%- if cart.item_count > 0 -%}
+      <form action="{{ routes.cart_url }}" method="post">
+        <ul class="items" role="list">
+          {%- for item in cart.items -%}
+            {%- capture img -%}{% render 'trip-data', handle: item.product.handle, field: 'img', product: item.product %}{%- endcapture -%}
+            <li class="it">
+              {%- if item.image -%}{{ item.image | image_url: width: 240 | image_tag: alt: '', loading: 'lazy' }}{%- elsif img != blank -%}<img src="{{ img | append: '-600.webp' | asset_url }}" alt="" loading="lazy" width="600" height="400">{%- else -%}<span></span>{%- endif -%}
+              <div>
+                <b>{{ item.product.title }}</b>
+                {%- unless item.product.has_only_default_variant -%}<p>{{ item.variant.title | replace: ' / ', ' · ' }}</p>{%- endunless -%}
+                <a href="{{ item.url_to_remove }}" style="font-size:12.5px;color:var(--grey);text-decoration:underline">Retirer</a>
+              </div>
+              <b>{% render 'eur', cents: item.final_line_price %}</b>
+            </li>
+          {%- endfor -%}
+        </ul>
+        <div class="cart-tot"><div>
+          <div style="display:flex;justify-content:space-between"><span>À régler aujourd'hui</span><b>{% render 'eur', cents: cart.total_price %}</b></div>
+          <p style="font-size:12.5px">Acompte remboursable sous 14 jours. Le solde du voyage est demandé 45 jours avant le départ.</p>
+          <button type="submit" name="checkout" class="b b-ink" style="justify-content:space-between">Régler {% render 'eur', cents: cart.total_price %} <span class="d">{% render 'icon', name: 'lock' %}</span></button>
+        </div></div>
+      </form>
+    {%- else -%}
+      <p>Votre panier est vide.</p>
+      <a class="b b-line" style="margin-top:20px" href="{{ collections['voyages'].url | default: routes.all_products_collection_url }}">Voir les itinéraires <span class="d">{% render 'icon', name: 'arrow' %}</span></a>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{ "name": "Panier", "settings": [] }
+{% endschema %}

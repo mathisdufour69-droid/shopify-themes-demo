@@ -1,0 +1,10 @@
+{%- comment -%} Cellule du comparatif. text: true pour la version lecteur d'écran. {%- endcomment -%}
+{%- if text -%}
+  {%- case value -%}{%- when 'yes' -%}Oui{%- when 'no' -%}Non{%- else -%}{{ value }}{%- endcase -%}
+{%- else -%}
+  {%- case value -%}
+    {%- when 'yes' -%}<span class="tick tick--yes">{% render 'icon', name: 'check' %}</span>
+    {%- when 'no' -%}<span class="tick tick--no">{% render 'icon', name: 'cross' %}</span>
+    {%- else -%}<span class="cmp__val">{{ value }}</span>
+  {%- endcase -%}
+{%- endif -%}

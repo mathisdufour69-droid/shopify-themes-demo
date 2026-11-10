@@ -1,0 +1,81 @@
+{%- comment -%}
+  Preuve d'origine : photo de l'atelier (bouton lecture = lightbox, pas de clic mort) + carte SVG inline
+  (0 requête, 2 Ko) qui situe Montélimar. Chiffres concrets plutôt qu'adjectifs.
+{%- endcomment -%}
+<section class="origin" id="fabrication" aria-labelledby="OriginTitle-{{ section.id }}">
+  <div class="container origin__grid">
+    <div class="origin__media">
+      <button type="button" class="origin__btn" data-lightbox="origin-{{ section.id }}" aria-label="{{ section.settings.play_label | escape }}">
+        {% render 'picture', image: section.settings.image, base: 'atelier-montelimar', widths: '800,1456', width: 1456, height: 816, alt: section.settings.alt, sizes: '(min-width: 990px) 55vw, 100vw', class: 'origin__img' %}
+        <span class="vr__play vr__play--big">{% render 'icon', name: 'play' %}</span>
+        <span class="origin__btn-label">{{ section.settings.play_label }}</span>
+      </button>
+      <template id="origin-{{ section.id }}">
+        <div class="lb-review lb-review--wide">
+          <div class="lb-review__media">
+            {%- if section.settings.video != blank -%}
+              {{ section.settings.video | video_tag: autoplay: true, controls: true, playsinline: true }}
+            {%- else -%}
+              {% render 'picture', image: section.settings.image, base: 'atelier-montelimar', widths: '800,1456', width: 1456, height: 816, alt: section.settings.alt, sizes: '(min-width: 990px) 900px, 92vw' %}
+            {%- endif -%}
+          </div>
+          <div class="lb-review__text">
+            <p class="lb-review__label">Visite de l’atelier</p>
+            <div class="rte">{{ section.settings.transcript }}</div>
+          </div>
+        </div>
+      </template>
+    </div>
+    <div class="origin__text">
+      <p class="kicker">{{ section.settings.kicker }}</p>
+      {%- assign title_parts = section.settings.title | split: '. ' -%}
+      <h2 id="OriginTitle-{{ section.id }}" class="h2">
+        {%- for part in title_parts -%}<span class="tline">{{ part }}{% unless forloop.last %}.{% endunless %}</span>{% unless forloop.last %} {% endunless %}{%- endfor -%}
+      </h2>
+      <div class="rte">{{ section.settings.text }}</div>
+      <div class="origin__bottom">
+        <svg class="map" viewBox="0 0 420 412" role="img" aria-label="Carte de France : l’atelier est à Montélimar, dans la Drôme">
+          <path d="M208.4,14.0 L194.1,18.0 L187.2,28.0 L185.9,48.0 L172.9,58.8 L145.9,76.0 L132.2,82.8 L108.8,72.0 L99.1,70.0 L89.5,67.2 L99.1,102.4 L101.9,110.4 L88.1,110.0 L66.1,114.0 L48.2,102.8 L33.0,107.2 L11.8,120.0 L12.9,134.4 L30.3,144.0 L50.4,148.0 L57.8,156.8 L67.5,156.0 L82.6,165.2 L82.6,178.0 L93.6,196.0 L111.5,210.0 L114.3,231.2 L108.8,248.0 L110.1,270.0 L106.0,296.0 L100.2,316.8 L94.2,321.2 L104.6,334.0 L123.9,342.0 L143.2,348.0 L162.5,344.0 L181.7,352.0 L198.2,360.0 L214.8,360.0 L230.5,358.8 L227.2,348.0 L229.9,332.0 L245.1,320.0 L269.8,322.0 L290.5,324.0 L306.5,332.0 L326.3,325.2 L335.9,314.0 L343.4,308.0 L349.7,304.8 L353.8,290.0 L333.2,280.0 L335.9,256.0 L330.4,248.0 L338.7,232.0 L330.4,220.0 L311.1,210.0 L311.1,200.0 L308.4,188.0 L320.8,178.0 L335.9,158.0 L351.1,152.8 L352.4,136.0 L357.9,112.0 L369.0,97.2 L346.9,90.0 L327.7,88.0 L311.1,77.2 L302.9,74.0 L286.4,68.0 L276.2,50.4 L257.4,58.0 L245.1,44.0 L231.3,28.0 L214.8,13.2 Z" class="map__land"/>
+          <path d="M380.0,338.0 L402.0,336.0 L406.1,352.0 L406.1,372.0 L396.5,400.0 L385.5,392.0 L380.0,376.0 L378.6,360.0 Z" class="map__land"/>
+          <circle cx="274.0" cy="273.6" r="22" class="map__pulse"/>
+          <circle cx="274.0" cy="273.6" r="8" class="map__dot"/>
+          <text x="260" y="278" text-anchor="end" class="map__label">Montélimar</text>
+        </svg>
+        <ul class="origin__facts" role="list">
+          {%- for block in section.blocks -%}
+            <li {{ block.shopify_attributes }}><strong>{{ block.settings.number }}</strong> {{ block.settings.label }}</li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fabriqué en France",
+  "class": "section-origin",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo de l'atelier" },
+    { "type": "text", "id": "alt", "label": "Texte alternatif", "default": "L’atelier SANSMODÉ : une maison en pierre de la Drôme aux volets de cinq couleurs" },
+    { "type": "video", "id": "video", "label": "Vidéo de visite (Shopify)" },
+    { "type": "text", "id": "play_label", "label": "Libellé du bouton", "default": "Visiter l’atelier (1 min)" },
+    { "type": "richtext", "id": "transcript", "label": "Texte affiché si pas de vidéo", "default": "<p>Chaque matin, les purées de fruits arrivent des vergers de la Drôme et de l’Ardèche. On les cuit doucement, on ajoute les fibres de chicorée et le nutriment de la recette, puis on moule chaque bonbon en forme de pilule. Quatorze personnes, une cuisson, zéro sucre ajouté.</p>" },
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Fabriqué en France" },
+    { "type": "text", "id": "title", "label": "Titre", "info": "Chaque phrase (après un point) passe à la ligne sur ordinateur.", "default": "Cuits à Montélimar. Pas dans une usine anonyme." },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>La capitale du nougat méritait un bonbon qui ne fait pas culpabiliser. Nos fruits viennent de moins de 150 km, nos recettes sont pesées à la main et chaque lot est goûté avant de partir.</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "fact",
+      "name": "Chiffre",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Chiffre", "default": "14" },
+        { "type": "text", "id": "label", "label": "Libellé", "default": "personnes à l’atelier" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [{ "name": "Fabriqué en France", "blocks": [{ "type": "fact" }] }]
+}
+{% endschema %}

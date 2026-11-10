@@ -1,0 +1,48 @@
+{%- comment -%} Ajout e-commerce : la carte cadeau, vendue directement (Shopify natif), mise en avant pour Noël. {%- endcomment -%}
+{%- assign gp = section.settings.product | default: all_products[section.settings.handle] -%}
+{%- if gp.title == blank or gp.variants.size == 0 -%}{%- assign gp = nil -%}{%- endif -%}
+<section id="offrir" style="padding-top:0">
+  <div class="wrap">
+    <div class="gift rv">
+      <div>
+        <div class="gcard" aria-hidden="true">
+          <span class="lg">{{ settings.brand_name | default: 'Azimut' }}</span>
+          <span class="az">AZ 000°</span>
+          <span class="amt"><small>CARTE CADEAU</small>{{ section.settings.amount | replace: ' ', '&nbsp;' }}</span>
+        </div>
+      </div>
+      <div>
+        <span class="kick">{{ section.settings.kicker }}</span>
+        <h2>{{ section.settings.title }}</h2>
+        <p>{{ section.settings.text }}</p>
+        <ul role="list">
+          {%- assign perks = section.settings.perks | newline_to_br | split: '<br />' -%}
+          {%- for perk in perks -%}{%- assign t = perk | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
+        </ul>
+        {%- if gp -%}
+          <div class="amts" aria-label="Montants disponibles">
+            {%- for v in gp.variants -%}<span>{% render 'eur', cents: v.price %}</span>{%- endfor -%}
+          </div>
+        {%- endif -%}
+        <a class="b b-ink" href="{{ gp.url | default: '#' }}">{{ section.settings.cta }} <span class="d">{% render 'icon', name: 'arrow' %}</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Offrir un voyage",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Carte cadeau" },
+    { "type": "text", "id": "handle", "label": "Handle de secours", "default": "carte-cadeau" },
+    { "type": "text", "id": "amount", "label": "Montant sur la carte", "default": "1 000 €" },
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Offrir un voyage" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Le cadeau qu'on raconte encore dans dix ans." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Une carte cadeau valable sur tous nos itinéraires, pendant deux ans. Le destinataire choisit sa route avec un concepteur, vous, vous n'avez rien à deviner." },
+    { "type": "textarea", "id": "perks", "label": "Avantages (un par ligne)", "default": "Envoyée par e-mail le jour de votre choix, avec votre message\nValable deux ans, sur tous les itinéraires et l'acompte\nCumulable : à plusieurs, on offre la Patagonie" },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Offrir une carte cadeau" }
+  ],
+  "presets": [{ "name": "Offrir un voyage" }]
+}
+{% endschema %}

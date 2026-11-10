@@ -1,0 +1,69 @@
+{%- comment -%}
+  Avis produit (démo statique). En production : Judge.me ou Okendo branchés ici.
+  On garde volontairement un avis à 4 étoiles avec réponse de la marque : la réponse rassure plus que la note.
+{%- endcomment -%}
+{%- capture rating -%}{% render 'product-data', handle: product.handle, field: 'rating', product: product %}{%- endcapture -%}
+{%- capture count -%}{% render 'product-data', handle: product.handle, field: 'count', product: product %}{%- endcapture -%}
+{%- assign dist = section.settings.distribution | split: ',' -%}
+<section class="previews" id="avis" aria-labelledby="ReviewsTitle-{{ section.id }}">
+  <div class="container previews__grid">
+    <div class="previews__summary">
+      <h2 id="ReviewsTitle-{{ section.id }}" class="h2">{{ section.settings.title }}</h2>
+      <p class="previews__big">{{ rating | strip | replace: '.', ',' }}<small>/5</small></p>
+      {% render 'rating', rating: rating, count: count %}
+      <ul class="dist" role="list">
+        {%- for pct in dist -%}
+          {%- assign stars = 6 | minus: forloop.index -%}
+          <li><span>{{ stars }} ★</span><span class="dist__bar"><span style="width: {{ pct | strip }}%"></span></span><span>{{ pct | strip }} %</span></li>
+        {%- endfor -%}
+      </ul>
+      <p class="muted">Avis collectés après achat uniquement.</p>
+    </div>
+    <ul class="previews__list" role="list" data-mcarousel>
+      {%- for block in section.blocks -%}
+        <li class="review" {{ block.shopify_attributes }}>
+          <div class="review__head">
+            {% render 'rating', rating: block.settings.stars %}
+            <span class="review__verified">{% render 'icon', name: 'check' %} Achat vérifié</span>
+          </div>
+          <p class="review__title">{{ block.settings.title }}</p>
+          <p>{{ block.settings.text | replace: '[produit]', product.title }}</p>
+          <p class="review__meta">{{ block.settings.author }} · {{ block.settings.format }}</p>
+          {%- if block.settings.reply != blank -%}
+            <div class="review__reply">
+              <p class="review__reply-head">Réponse de {{ settings.brand_name | default: 'SANSMODÉ' }}</p>
+              <p>{{ block.settings.reply }}</p>
+            </div>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Avis produit",
+  "class": "section-previews",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ce qu’en disent ceux qui ont goûté" },
+    { "type": "text", "id": "distribution", "label": "Répartition 5★ à 1★ (en %)", "default": "79,15,4,1,1" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Avis",
+      "settings": [
+        { "type": "select", "id": "stars", "label": "Note", "default": "5", "options": [{ "value": "5", "label": "5" }, { "value": "4", "label": "4" }, { "value": "3", "label": "3" }] },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Enfin un goûter sans culpabilité" },
+        { "type": "textarea", "id": "text", "label": "Texte", "info": "[produit] est remplacé par le nom du produit.", "default": "J’ai pris [produit] pour tester, j’ai fini le sachet en deux jours." },
+        { "type": "text", "id": "author", "label": "Auteur", "default": "Camille R." },
+        { "type": "text", "id": "format", "label": "Format acheté", "default": "Lot de 3" },
+        { "type": "textarea", "id": "reply", "label": "Réponse de la marque" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [{ "name": "Avis produit", "blocks": [{ "type": "review" }] }]
+}
+{% endschema %}

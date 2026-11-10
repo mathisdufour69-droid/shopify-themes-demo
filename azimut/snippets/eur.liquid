@@ -1,0 +1,3 @@
+{%- comment -%} Formate un montant en euros : value: 6400 ou cents: 640000 → « 6 400 € ». {%- endcomment -%}
+{%- if cents != blank -%}{%- assign v = cents | divided_by: 100 | round -%}{%- else -%}{%- assign v = value | plus: 0 | round -%}{%- endif -%}
+{%- if v >= 1000 -%}{{ v | divided_by: 1000 | floor }}&nbsp;{{ v | modulo: 1000 | prepend: '00' | slice: -3, 3 }}{%- else -%}{{ v }}{%- endif -%}&nbsp;€

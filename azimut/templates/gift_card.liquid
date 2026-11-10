@@ -1,0 +1,13 @@
+{%- layout none -%}
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Carte cadeau {{ settings.brand_name | default: 'Azimut' }}</title>{{ 'base.css' | asset_url | stylesheet_tag }}<script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>{{ content_for_header }}</head>
+<body><main class="pw"><img src="{{ 'route-1600.webp' | asset_url }}" alt="" width="1600" height="900"><div class="pw-in">
+  <span class="logo">{{ settings.brand_name | default: 'Azimut' }}</span>
+  <p>Votre carte cadeau : <b style="color:#fff">{% render 'eur', cents: gift_card.balance %}</b>, valable sur tous nos itinéraires.</p>
+  <p style="font-family:'IBM Plex Mono',monospace;font-size:20px;letter-spacing:.1em;color:#fff">{{ gift_card.code | format_code }}</p>
+  <div id="QrCode" data-identifier="{{ gift_card.qr_identifier }}" style="display:inline-block;background:#fff;padding:8px;border-radius:8px;margin:12px 0"></div>
+  <p><a class="b b-lt" href="{{ shop.url }}">Choisir une route <span class="d">{% render 'icon', name: 'arrow' %}</span></a></p>
+  {%- if gift_card.pass_url -%}<p><a href="{{ gift_card.pass_url }}" style="color:#fff;text-decoration:underline">Ajouter à Apple Wallet</a></p>{%- endif -%}
+</div></main>
+<script>document.addEventListener('DOMContentLoaded',function(){var e=document.getElementById('QrCode');if(window.QRCode&&e)new QRCode(e,{text:e.dataset.identifier,width:120,height:120});});</script>
+</body></html>

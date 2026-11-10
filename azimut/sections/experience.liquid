@@ -1,0 +1,56 @@
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="head rv">
+      <div>
+        <span class="kick">{{ section.settings.kicker }}</span>
+        <h2 style="margin-top:16px">{{ section.settings.title }}</h2>
+      </div>
+      <p>{{ section.settings.text }}</p>
+    </div>
+    <div class="exp rv clip">
+      {% render 'picture', image: section.settings.image, base: 'table-fjord', widths: '800,1400', width: 1400, height: 785, alt: section.settings.alt, sizes: '100vw' %}
+      <div class="exp-in">
+        <div>
+          <span class="kick lt">{{ section.settings.inner_kicker }}</span>
+          <h2 style="margin-top:14px">{{ section.settings.inner_title }}</h2>
+          <p>{{ section.settings.inner_text }}</p>
+        </div>
+      </div>
+      <div class="floats">
+        {%- for block in section.blocks -%}
+          <div class="float rv" {{ block.shopify_attributes }}>
+            <span class="ic">{% render 'icon', name: block.settings.icon %}</span>
+            <b>{{ block.settings.title }}</b>
+            <button type="button" class="fl-tg" aria-expanded="false" aria-controls="fl-{{ block.id }}" aria-label="Lire : {{ block.settings.title | escape }}" data-fl-toggle></button>
+            <p id="fl-{{ block.id }}">{{ block.settings.text }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Au quotidien",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Au quotidien" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ce qui se passe entre les sommets." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "La logistique, l'hébergement et la table font autant le voyage que l'itinéraire. Nous les traitons avec le même soin." },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "alt", "label": "Texte alternatif", "default": "Table dressée sur une terrasse en bois face à un fjord au crépuscule" },
+    { "type": "text", "id": "inner_kicker", "label": "Sur-titre (image)", "default": "Table et hébergement" },
+    { "type": "text", "id": "inner_title", "label": "Titre (image)", "default": "Dormir et manger là où c'est juste." },
+    { "type": "textarea", "id": "inner_text", "label": "Texte (image)", "default": "Aucune nuit choisie par défaut. Chaque lieu est visité avant d'être proposé, et retiré s'il ne tient plus." }
+  ],
+  "blocks": [
+    { "type": "float", "name": "Carte", "settings": [
+      { "type": "select", "id": "icon", "label": "Icône", "default": "home", "options": [{ "value": "home", "label": "Maison" }, { "value": "fork", "label": "Table" }, { "value": "car", "label": "Transfert" }] },
+      { "type": "text", "id": "title", "label": "Titre", "default": "Adresses exclusives" },
+      { "type": "textarea", "id": "text", "label": "Texte" }
+    ] }
+  ],
+  "max_blocks": 3,
+  "presets": [{ "name": "Au quotidien" }]
+}
+{% endschema %}

@@ -1,0 +1,45 @@
+<section id="manifeste">
+  <div class="wrap">
+    <div class="mani">
+      <div class="mani-txt rv">
+        <span class="kick c">{{ section.settings.kicker }}</span>
+        <h2 style="margin-top:18px">{{ section.settings.title }}</h2>
+      </div>
+      {%- assign half = section.blocks.size | plus: 1 | divided_by: 2 -%}
+      <div class="rv relev">
+        {%- for block in section.blocks limit: half -%}
+          <div class="stat" {{ block.shopify_attributes }}><div class="stat-h"><strong>{{ block.settings.number }}</strong><span class="az">{{ block.settings.az }}</span></div><div class="scale" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><span class="lb">{{ block.settings.label }}</span></div>
+        {%- endfor -%}
+      </div>
+      <div class="mani-img rv clip">
+        {% render 'picture', image: section.settings.image, base: 'marcheurs', widths: '600,940', width: 940, height: 1175, alt: section.settings.alt, sizes: '(min-width: 1080px) 36vw, 100vw' %}
+      </div>
+      <div class="rv relev">
+        {%- for block in section.blocks offset: half -%}
+          <div class="stat" {{ block.shopify_attributes }}><div class="stat-h"><strong>{{ block.settings.number }}</strong><span class="az">{{ block.settings.az }}</span></div><div class="scale" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><span class="lb">{{ block.settings.label }}</span></div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Manifeste et chiffres",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Qui nous sommes" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Quinze ans à dessiner des routes que personne d'autre ne vend." },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "alt", "label": "Texte alternatif", "default": "Trois marcheurs sur une crête herbeuse face à une vallée" }
+  ],
+  "blocks": [
+    { "type": "stat", "name": "Chiffre", "settings": [
+      { "type": "text", "id": "number", "label": "Chiffre", "default": "1 840" },
+      { "type": "text", "id": "az", "label": "Relèvement", "default": "AZ 014°" },
+      { "type": "text", "id": "label", "label": "Légende", "default": "voyageurs accompagnés depuis la première expédition" }
+    ] }
+  ],
+  "max_blocks": 4,
+  "presets": [{ "name": "Manifeste et chiffres" }]
+}
+{% endschema %}

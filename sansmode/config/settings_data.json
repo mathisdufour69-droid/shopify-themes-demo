@@ -1,0 +1,25 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "color_violet": "#7B3FC4",
+      "color_jaune": "#F6C21B",
+      "color_turquoise": "#2DB3A8",
+      "color_rouge": "#E5321F",
+      "color_rose": "#EC3C8C",
+      "color_creme": "#FBF6EE",
+      "color_encre": "#2A1A3A",
+      "logo_text": "SANSMODÉ",
+      "free_shipping_threshold": 25,
+      "shipping_relay_price": "3,90 €",
+      "shipping_home_price": "5,90 €",
+      "cutoff_hour": 14,
+      "christmas_deadline": "19 décembre",
+      "social_instagram": "https://instagram.com/",
+      "social_tiktok": "https://tiktok.com/",
+      "social_youtube": "https://youtube.com/",
+      "social_pinterest": "https://pinterest.com/",
+      "social_facebook": "https://facebook.com/"
+    }
+  }
+}

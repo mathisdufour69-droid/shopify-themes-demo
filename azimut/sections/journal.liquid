@@ -1,0 +1,59 @@
+{%- assign blog = blogs[section.settings.blog] -%}
+<section id="journal">
+  <div class="wrap">
+    <div class="head rv">
+      <div>
+        <span class="kick">{{ section.settings.kicker }}</span>
+        <h2 style="margin-top:16px;max-width:none">{{ section.settings.title }}</h2>
+      </div>
+      <a class="b b-line" href="{% if blog.handle != blank %}{{ blog.url }}{% else %}#journal{% endif %}">{{ section.settings.cta }} <span class="d">{% render 'icon', name: 'arrow' %}</span></a>
+    </div>
+    <div class="blog">
+      {%- assign n_art = 0 -%}{%- if blog.handle != blank -%}{%- assign n_art = blog.articles.size | plus: 0 -%}{%- endif -%}
+      {%- if n_art > 0 -%}
+        {%- for article in blog.articles limit: 3 -%}
+          <a class="post rv" href="{{ article.url }}">
+            <span class="im">{%- if article.image -%}{{ article.image | image_url: width: 900 | image_tag: widths: '450,700,900', sizes: '(min-width: 1080px) 31vw, 100vw', loading: 'lazy', alt: article.image.alt | default: article.title }}{%- endif -%}</span>
+            <span class="tag">{{ article.tags.first | default: 'Journal' }}</span>
+            <h3>{{ article.title }}</h3>
+            <small>{{ article.published_at | date: '%m/%Y' }}</small>
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.link != blank -%}<a class="post rv" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>{%- else -%}<article class="post rv" {{ block.shopify_attributes }}>{%- endif -%}
+            <span class="im">{% render 'picture', image: block.settings.image, base: block.settings.asset, widths: '600', width: 600, height: 400, alt: block.settings.alt, sizes: '(min-width: 1080px) 31vw, 100vw' %}</span>
+            <span class="tag">{{ block.settings.tag }}</span>
+            <h3>{{ block.settings.title }}</h3>
+            <small>{{ block.settings.meta }}</small>
+          {%- if block.settings.link != blank -%}</a>{%- else -%}</article>{%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Journal",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Journal" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ce qu'on apprend en revenant." },
+    { "type": "blog", "id": "blog", "label": "Blog", "info": "Sans blog, les articles ci-dessous s'affichent." },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Tous les articles" }
+  ],
+  "blocks": [
+    { "type": "post", "name": "Article", "settings": [
+      { "type": "text", "id": "tag", "label": "Rubrique", "default": "Préparation" },
+      { "type": "text", "id": "title", "label": "Titre", "default": "Ce que demande vraiment une traversée en autonomie" },
+      { "type": "text", "id": "meta", "label": "Détail", "default": "7 min de lecture · septembre 2026" },
+      { "type": "url", "id": "link", "label": "Lien" },
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "asset", "label": "Image du thème", "default": "journal-autonomie" },
+      { "type": "text", "id": "alt", "label": "Texte alternatif" }
+    ] }
+  ],
+  "max_blocks": 3,
+  "presets": [{ "name": "Journal" }]
+}
+{% endschema %}

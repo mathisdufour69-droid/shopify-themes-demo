@@ -1,0 +1,33 @@
+{%- layout none -%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Carte cadeau {{ settings.brand_name | default: 'SANSMODÉ' }}</title>
+    <meta name="robots" content="noindex">
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
+    {{ content_for_header }}
+  </head>
+  <body class="template-gift-card">
+    <main class="pw">
+      <div class="pw__card">
+        {% render 'logo' %}
+        <h1 class="pw__title">Ta carte cadeau : {{ gift_card.balance | money }}</h1>
+        {%- if gift_card.expired or gift_card.enabled != true -%}<p class="form-error">Cette carte n’est plus valable.</p>{%- endif -%}
+        <p class="pw__text">Code à saisir au paiement :</p>
+        <p class="giftcode">{{ gift_card.code | format_code }}</p>
+        <div id="QrCode" data-identifier="{{ gift_card.qr_identifier }}"></div>
+        <p><a href="{{ shop.url }}" class="btn">Aller à la boutique</a></p>
+        {%- if gift_card.pass_url -%}<p><a href="{{ gift_card.pass_url }}" class="link">Ajouter à Apple Wallet</a></p>{%- endif -%}
+      </div>
+    </main>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var el = document.getElementById('QrCode');
+        if (window.QRCode && el) new QRCode(el, { text: el.dataset.identifier, width: 120, height: 120 });
+      });
+    </script>
+  </body>
+</html>

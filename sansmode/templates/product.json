@@ -1,0 +1,129 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {}
+    },
+    "reviews": {
+      "type": "product-reviews",
+      "blocks": {
+        "rv-1": {
+          "type": "review",
+          "settings": {
+            "stars": "5",
+            "title": "Le goût d’un vrai bonbon",
+            "text": "Je m’attendais à un truc « healthy » un peu triste. Pas du tout : [produit] a un vrai goût de fruit, la texture est tendre, et on ne sent aucun arrière-goût. Mes collègues me les piquent.",
+            "author": "Camille R., Bordeaux",
+            "format": "Lot de 3"
+          }
+        },
+        "rv-2": {
+          "type": "review",
+          "settings": {
+            "stars": "5",
+            "title": "L’abonnement, c’est la paix",
+            "text": "Trois sachets par mois, je change les parfums selon l’humeur. J’ai mis en pause en août, ça a pris dix secondes.",
+            "author": "Thomas L., Lyon",
+            "format": "Abonnement mensuel"
+          }
+        },
+        "rv-3": {
+          "type": "review",
+          "settings": {
+            "stars": "4",
+            "title": "Très bon, sachet un peu petit",
+            "text": "Les bonbons sont délicieux mais le sachet de 100 g part très vite à deux. Je reprendrai le lot de 3 la prochaine fois.",
+            "author": "Sophie M., Rennes",
+            "format": "1 sachet",
+            "reply": "Merci Sophie ! C’est exactement pour ça qu’on a créé le lot de 3 à 3,30 € le sachet. Et on teste un format 250 g pour le printemps, promis on te tient au courant."
+          }
+        },
+        "rv-4": {
+          "type": "review",
+          "settings": {
+            "stars": "5",
+            "title": "Validé par mes enfants",
+            "text": "Mes deux garçons n’ont pas vu la différence avec leurs bonbons habituels. Moi si : la liste d’ingrédients tient en une ligne.",
+            "author": "Nadia B., Toulouse",
+            "format": "Lot de 3"
+          }
+        }
+      },
+      "block_order": [
+        "rv-1",
+        "rv-2",
+        "rv-3",
+        "rv-4"
+      ],
+      "settings": {
+        "title": "Ce qu’en disent ceux qui ont goûté",
+        "distribution": "79,15,4,1,1"
+      }
+    },
+    "guarantee": {
+      "type": "guarantee",
+      "settings": {}
+    },
+    "xsell": {
+      "type": "product-cross-sell",
+      "settings": {
+        "title": "Complète ta cure",
+        "text": "Ajoute un deuxième parfum : la livraison devient offerte dès 25 €.",
+        "skip_handle": "coffret-de-noel",
+        "limit": 4
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q-1": {
+          "type": "question",
+          "settings": {
+            "question": "C’est vraiment sans sucres ajoutés ?",
+            "answer": "<p>Oui. La douceur vient uniquement des fruits et des légumes doux. Pas de sucre, pas de sirop de glucose, pas d’édulcorant.</p>"
+          }
+        },
+        "q-2": {
+          "type": "question",
+          "settings": {
+            "question": "Combien en manger par jour ?",
+            "answer": "<p>Autant que tu veux, c’est le principe. Une portion de 25 g (environ 8 bonbons) fait 90 kcal et apporte le nutriment de la recette indiqué sur le sachet.</p>"
+          }
+        },
+        "q-3": {
+          "type": "question",
+          "settings": {
+            "question": "Ça se conserve combien de temps ?",
+            "answer": "<p>9 mois fermé, 3 semaines une fois ouvert grâce au zip refermable. Pas besoin de frigo.</p>"
+          }
+        },
+        "q-4": {
+          "type": "question",
+          "settings": {
+            "question": "Je peux annuler l’abonnement ?",
+            "answer": "<p>Oui, en un clic depuis ton compte, sans engagement ni frais. Tu peux aussi le mettre en pause.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q-1",
+        "q-2",
+        "q-3",
+        "q-4"
+      ],
+      "settings": {
+        "kicker": "Questions",
+        "title": "Avant de craquer",
+        "text": "Une autre question ? bonjour@sansmode.fr, réponse en moins de 24 h.",
+        "open_first": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "reviews",
+    "guarantee",
+    "xsell",
+    "faq"
+  ]
+}

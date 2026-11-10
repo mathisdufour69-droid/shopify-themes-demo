@@ -1,0 +1,86 @@
+{%- comment -%}
+  Avis vidéo façon UGC (qualité téléphone, volontairement). Chaque bouton lecture ouvre la lightbox :
+  vidéo Shopify si elle est fournie, sinon la photo + la transcription de l'avis. Jamais de clic mort.
+  Un avis à 4 étoiles est gardé exprès : une moyenne parfaite fait fuir (Spiegel Research Center).
+{%- endcomment -%}
+<section class="vreviews" aria-labelledby="VrTitle-{{ section.id }}">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker">{{ section.settings.kicker }}</p>
+      <h2 id="VrTitle-{{ section.id }}" class="h2">{{ section.settings.title }}</h2>
+      <p class="sec-head__text">{% render 'rating', rating: section.settings.rating, count: section.settings.count %}</p>
+    </div>
+    <ul class="vreviews__list" role="list" data-mcarousel>
+      {%- for block in section.blocks -%}
+        {%- assign p = block.settings.product | default: all_products[block.settings.product_handle] -%}
+        {%- unless p.handle -%}{%- assign p = nil -%}{%- endunless -%}
+        {%- assign stars = block.settings.stars | plus: 0 -%}
+        <li class="vr" {{ block.shopify_attributes }}>
+          <button type="button" class="vr__media" data-lightbox="vr-{{ block.id }}" aria-label="Voir l’avis de {{ block.settings.name | escape }}">
+            {% render 'picture', image: block.settings.image, base: block.settings.fallback, widths: block.settings.fallback_width, width: block.settings.fallback_width, height: block.settings.fallback_height, alt: '', sizes: '(min-width: 990px) 22vw, 46vw', class: 'vr__img' %}
+            <span class="vr__play">{% render 'icon', name: 'play' %}</span>
+            <span class="vr__who"><strong>{{ block.settings.name }}</strong> {{ block.settings.age }}</span>
+          </button>
+          <div class="vr__body">
+            {% render 'rating', rating: stars %}
+            <p class="vr__quote">«&nbsp;{{ block.settings.quote }}&nbsp;»</p>
+            {%- if p -%}<a class="vr__product" href="{{ p.url }}">Son choix : {{ p.title }} {% render 'icon', name: 'arrow' %}</a>{%- endif -%}
+          </div>
+          <template id="vr-{{ block.id }}">
+            <div class="lb-review">
+              <div class="lb-review__media">
+                {%- if block.settings.video != blank -%}
+                  {{ block.settings.video | video_tag: autoplay: true, controls: true, playsinline: true, class: 'lb-review__video' }}
+                {%- else -%}
+                  {% render 'picture', image: block.settings.image, base: block.settings.fallback, widths: block.settings.fallback_width, width: block.settings.fallback_width, height: block.settings.fallback_height, alt: block.settings.name, sizes: '(min-width: 750px) 420px, 90vw' %}
+                {%- endif -%}
+              </div>
+              <div class="lb-review__text">
+                {% render 'rating', rating: stars %}
+                <p class="lb-review__name">{{ block.settings.name }}, {{ block.settings.age }}</p>
+                <p class="lb-review__label">Transcription de l’avis</p>
+                <p>«&nbsp;{{ block.settings.transcript | default: block.settings.quote }}&nbsp;»</p>
+                {%- if p -%}<a class="btn" href="{{ p.url }}">Goûter {{ p.title }} · {{ p.price | money }}</a>{%- endif -%}
+              </div>
+            </div>
+          </template>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Avis vidéo",
+  "class": "section-vreviews",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Avis vérifiés" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ils ont arrêté de se cacher pour manger des bonbons." },
+    { "type": "text", "id": "rating", "label": "Note globale", "default": "4.6" },
+    { "type": "text", "id": "count", "label": "Nombre d'avis", "default": "3120" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Avis",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Prénom", "default": "Léa" },
+        { "type": "text", "id": "age", "label": "Âge / ville", "default": "29 ans, Lille" },
+        { "type": "select", "id": "stars", "label": "Note", "default": "5", "options": [{ "value": "5", "label": "5 étoiles" }, { "value": "4", "label": "4 étoiles" }, { "value": "3", "label": "3 étoiles" }] },
+        { "type": "text", "id": "quote", "label": "Citation courte", "default": "J’en ai mangé un sachet entier devant ma série. Zéro culpabilité." },
+        { "type": "textarea", "id": "transcript", "label": "Transcription complète" },
+        { "type": "product", "id": "product", "label": "Produit cité" },
+        { "type": "text", "id": "product_handle", "label": "Handle de secours", "default": "grisaille" },
+        { "type": "video", "id": "video", "label": "Vidéo (Shopify)" },
+        { "type": "image_picker", "id": "image", "label": "Miniature" },
+        { "type": "text", "id": "fallback", "label": "Image du thème (secours)", "default": "avis-cuisine" },
+        { "type": "text", "id": "fallback_width", "label": "Largeur image secours", "default": "457" },
+        { "type": "text", "id": "fallback_height", "label": "Hauteur image secours", "default": "822" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [{ "name": "Avis vidéo", "blocks": [{ "type": "review" }] }]
+}
+{% endschema %}

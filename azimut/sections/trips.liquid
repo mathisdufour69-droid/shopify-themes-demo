@@ -1,0 +1,49 @@
+{%- liquid
+  assign coll = section.settings.collection
+  assign list = section.settings.handles | split: ','
+-%}
+<section id="voyages" style="padding-top:0">
+  <div class="wrap">
+    <div class="head rv">
+      <div>
+        <span class="kick">{{ section.settings.kicker }}</span>
+        <h2 class="h-itin" style="margin-top:16px;max-width:none">{{ section.settings.title_1 }} <br>{{ section.settings.title_2 }}</h2>
+      </div>
+      <p>{{ section.settings.text }}</p>
+    </div>
+    <div class="trips">
+      {%- assign shown = 0 -%}
+      {%- if coll != blank -%}
+        {%- for p in coll.products limit: section.settings.limit -%}
+          {%- unless p.gift_card? or p.id == product.id -%}{% render 'trip-card', trip: p %}{%- assign shown = shown | plus: 1 -%}{%- endunless -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for h in list -%}
+          {%- assign p = all_products[h] -%}
+          {%- if p.title != blank and p.variants.size > 0 and p.id != product.id -%}{% render 'trip-card', trip: p %}{%- assign shown = shown | plus: 1 -%}{%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+    {%- if shown == 0 -%}<p class="rv" style="text-align:center;padding:40px;border:1px dashed var(--line);border-radius:20px">Importez le fichier produits pour afficher les itinéraires.</p>{%- endif -%}
+    <div class="trips-foot rv">
+      <a class="b b-line" href="{{ collections['voyages'].url | default: routes.all_products_collection_url }}">{{ section.settings.cta }} <span class="d">{% render 'icon', name: 'arrow' %}</span></a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Nos voyages",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Nos voyages" },
+    { "type": "text", "id": "title_1", "label": "Titre, ligne 1", "default": "Quatre itinéraires à reprendre," },
+    { "type": "text", "id": "title_2", "label": "Titre, ligne 2", "default": "ou à défaire entièrement." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Chacun sert de point de départ. Nous déplaçons les étapes, changeons le rythme et adaptons le niveau à votre équipe." },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "text", "id": "handles", "label": "Itinéraires (handles, si pas de collection)", "default": "islande,patagonie,namibie,laponie" },
+    { "type": "range", "id": "limit", "label": "Nombre", "min": 2, "max": 8, "step": 1, "default": 4 },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Voir les 7 itinéraires" }
+  ],
+  "presets": [{ "name": "Nos voyages" }]
+}
+{% endschema %}

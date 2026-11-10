@@ -1,0 +1,54 @@
+{%- comment -%}
+  Ajout CRO : avant de verser 500 € pour un voyage à 6 000 €, on veut savoir ce qui se passe après le clic.
+  Quatre étapes, des délais concrets, l'étape décisive (l'acompte) marquée, et la sortie de secours (remboursable) en clair.
+{%- endcomment -%}
+<section id="comment" style="padding-top:0">
+  <div class="wrap">
+    <div class="head rv">
+      <div>
+        <span class="kick">{{ section.settings.kicker }}</span>
+        <h2 style="margin-top:16px">{{ section.settings.title }}</h2>
+      </div>
+      <p>{{ section.settings.text }}</p>
+    </div>
+    <ol class="steps" role="list">
+      {%- for block in section.blocks -%}
+        <li class="step rv{% if block.settings.key %} is-key{% endif %}" {{ block.shopify_attributes }}>
+          <span class="dot" aria-hidden="true"></span>
+          <div class="step-top"><span class="n">ÉTAPE {{ forloop.index | prepend: '0' | slice: -2, 2 }}</span><span class="when">{{ block.settings.when }}</span></div>
+          <h3>{{ block.settings.title }}</h3>
+          <p>{{ block.settings.text }}</p>
+          {%- if block.settings.tag != blank -%}<span class="free">{{ block.settings.tag }}</span>{%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ol>
+    <div class="steps-foot rv">
+      <p>{{ section.settings.foot }}</p>
+      <button type="button" class="b b-ink" data-dlg-open>{{ section.settings.cta }} <span class="d">{% render 'icon', name: 'arrow' %}</span></button>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Comment ça se passe",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Comment ça se passe" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Du premier appel au départ, quatre étapes." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Rien n'est réservé avant que vous ayez dit oui. Et même après, vous gardez quatorze jours pour changer d'avis." },
+    { "type": "richtext", "id": "foot", "label": "Note de bas", "default": "<p><b>Acompte de 500 € remboursable sous 14 jours</b>, solde 45 jours avant le départ. Le prix signé ne bouge plus, même si le change ou le carburant varient.</p>" },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Réserver mon appel" }
+  ],
+  "blocks": [
+    { "type": "step", "name": "Étape", "settings": [
+      { "type": "text", "id": "when", "label": "Délai", "default": "J-90" },
+      { "type": "text", "id": "title", "label": "Titre", "default": "Un appel de 30 minutes" },
+      { "type": "textarea", "id": "text", "label": "Texte" },
+      { "type": "text", "id": "tag", "label": "Mention" },
+      { "type": "checkbox", "id": "key", "label": "Étape décisive", "default": false }
+    ] }
+  ],
+  "max_blocks": 4,
+  "presets": [{ "name": "Comment ça se passe" }]
+}
+{% endschema %}

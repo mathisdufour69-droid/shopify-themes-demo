@@ -1,0 +1,52 @@
+{%- comment -%}
+  En-tête de la référence : transparent sur le hero de l'accueil, plein partout ailleurs.
+  Ajouts : « Offrir un voyage » (Noël), panier, et le bouton « Parler à un concepteur » qui ouvre un formulaire sur place.
+{%- endcomment -%}
+{%- liquid
+  assign home = false
+  if template.name == 'index'
+    assign home = true
+  endif
+  assign base = ''
+  unless home
+    assign base = routes.root_url
+  endunless
+  assign trips_url = collections['voyages'].url | default: routes.all_products_collection_url
+  assign gift_handle = section.settings.gift_handle | default: 'carte-cadeau'
+  assign gift_p = all_products[gift_handle]
+  assign gift_url = trips_url
+  if gift_p.title != blank and gift_p.variants.size > 0
+    assign gift_url = gift_p.url
+  endif
+-%}
+<header id="hd" class="{% unless home %}solid{% endunless %}" data-header data-home="{{ home }}">
+  <div class="wrap nav">
+    <a class="logo" href="{{ routes.root_url }}">{{ settings.brand_name | default: 'Azimut' }}</a>
+    <nav class="nav-l" id="NavLinks" aria-label="Menu principal">
+      <a href="{{ base }}#manifeste">La maison</a>
+      <a href="{{ trips_url }}"{% if template.name == 'collection' %} aria-current="page"{% endif %}>Nos voyages</a>
+      <a href="{{ base }}#guides">Les guides</a>
+      <a href="{{ base }}#journal">Journal</a>
+      <a class="gift-lk" href="{{ gift_url }}">Offrir un voyage</a>
+      <button type="button" class="b b-ink nav-m" data-dlg-open>{{ section.settings.cta }} <span class="d">{% render 'icon', name: 'arrow' %}</span></button>
+    </nav>
+    <div class="nav-r">
+      <a class="cart-ic" href="{{ routes.cart_url }}" data-cart-open aria-label="Panier">
+        {% render 'icon', name: 'bag' %}<span class="ct" data-cart-count data-n="{{ cart.item_count }}">{{ cart.item_count }}</span>
+      </a>
+      <button type="button" class="b {% if home %}b-lt{% else %}b-ink{% endif %}" id="navcta" data-dlg-open>{{ section.settings.cta }} <span class="d">{% render 'icon', name: 'arrow' %}</span></button>
+      <button type="button" class="burger" aria-label="Menu" aria-controls="NavLinks" aria-expanded="false" data-burger>{% render 'icon', name: 'menu' %}</button>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "En-tête",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Parler à un concepteur" },
+    { "type": "text", "id": "gift_handle", "label": "Handle de la carte cadeau", "default": "carte-cadeau" }
+  ]
+}
+{% endschema %}

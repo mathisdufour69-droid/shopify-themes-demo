@@ -1,0 +1,26 @@
+<section class="guarantee" aria-labelledby="GuarTitle-{{ section.id }}">
+  <div class="container guarantee__inner">
+    <div class="guarantee__seal" aria-hidden="true">
+      <svg viewBox="0 0 200 200"><defs><path id="seal-{{ section.id }}" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/></defs><text><textPath href="#seal-{{ section.id }}" textLength="448" lengthAdjust="spacing">{{ section.settings.seal }}</textPath></text></svg>
+      <span class="guarantee__days">{{ section.settings.days }}<small>jours</small></span>
+    </div>
+    <div>
+      <h2 id="GuarTitle-{{ section.id }}" class="h2">{{ section.settings.title }}</h2>
+      <div class="rte">{{ section.settings.text }}</div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Garantie",
+  "class": "section-guarantee",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "Goût adoré ou remboursé." },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Tu n’aimes pas ? Écris-nous dans les 30 jours, même sachet ouvert, même à moitié mangé. On te rembourse sans te demander pourquoi. On préfère perdre 3,90 € que ta confiance.</p>" },
+    { "type": "text", "id": "days", "label": "Nombre de jours", "default": "30" },
+    { "type": "text", "id": "seal", "label": "Texte du sceau", "default": "GOÛT ADORÉ OU REMBOURSÉ · GOÛT ADORÉ OU REMBOURSÉ ·" }
+  ],
+  "presets": [{ "name": "Garantie" }]
+}
+{% endschema %}

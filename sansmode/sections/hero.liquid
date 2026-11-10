@@ -1,0 +1,78 @@
+{%- comment -%}
+  Hero. L'image est l'élément LCP : chargement eager + fetchpriority high, recadrage dédié mobile.
+  La promesse tient en une phrase, un seul bouton principal, la preuve sociale juste dessous.
+  La mini-carte coffret est un VRAI lien (pas de clic mort).
+{%- endcomment -%}
+{%- assign coffret = section.settings.mini_product | default: all_products[section.settings.mini_handle] -%}
+{%- unless coffret.handle -%}{%- assign coffret = nil -%}{%- endunless -%}
+<section class="hero" aria-labelledby="HeroTitle-{{ section.id }}">
+  <div class="hero__media">
+    <picture>
+      {%- if section.settings.image_mobile != blank -%}
+        <source media="(max-width: 749px)" srcset="{{ section.settings.image_mobile | image_url: width: 800 }} 800w, {{ section.settings.image_mobile | image_url: width: 1200 }} 1200w" sizes="100vw">
+      {%- else -%}
+        <source media="(max-width: 749px)" srcset="{{ 'hero-noel-mobile-800.webp' | asset_url }} 800w" sizes="100vw" width="800" height="677">
+      {%- endif -%}
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 2000 | image_tag: widths: '900,1300,1672,2000', sizes: '100vw', loading: 'eager', fetchpriority: 'high', class: 'hero__img', alt: section.settings.image.alt }}
+      {%- else -%}
+        <img class="hero__img" src="{{ 'hero-noel-1672.webp' | asset_url }}" srcset="{{ 'hero-noel-900.webp' | asset_url }} 900w, {{ 'hero-noel-1672.webp' | asset_url }} 1672w" sizes="100vw" width="1672" height="941" alt="Une femme rit devant un sapin de Noël, les cinq sachets SANSMODÉ alignés sur la cheminée" loading="eager" fetchpriority="high">
+      {%- endif -%}
+    </picture>
+  </div>
+  <div class="hero__content container">
+    <div class="hero__text">
+      {%- if section.settings.kicker != blank -%}<p class="kicker">{{ section.settings.kicker }}</p>{%- endif -%}
+      <h2 id="HeroTitle-{{ section.id }}" class="hero__title">{{ section.settings.title }}</h2>
+      <div class="hero__sub"><div class="long">{{ section.settings.text }}</div>{%- if section.settings.text_mobile != blank -%}<p class="court">{{ section.settings.text_mobile }}</p>{%- endif -%}</div>
+      <div class="hero__actions">
+        <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="btn hero__cta"><span class="long">{{ section.settings.cta_label }}</span><span class="court">{{ section.settings.cta_label_mobile | default: section.settings.cta_label }}</span> {% render 'icon', name: 'arrow' %}</a>
+        {%- if coffret -%}
+          <a href="{{ coffret.url }}" class="hero__mini" aria-label="{{ coffret.title | escape }}, {{ coffret.price | money_without_trailing_zeros | strip_html }}">
+            <span class="hero__mini-img">
+              {%- if coffret.featured_media -%}
+                {{ coffret.featured_media | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+              {%- else -%}
+                <img src="{{ 'coffret-noel-600.webp' | asset_url }}" width="600" height="750" alt="" loading="lazy">
+              {%- endif -%}
+            </span>
+            <span class="hero__mini-text">
+              <span class="hero__mini-tag">{{ section.settings.mini_tag }}</span>
+              <strong>{{ coffret.title }}</strong>
+              <span><span class="price">{{ coffret.price | money }}</span>{% if coffret.compare_at_price > coffret.price %} <s class="price--old">{{ coffret.compare_at_price | money }}</s>{% endif %}</span>
+            </span>
+            <span class="hero__mini-arrow">{% render 'icon', name: 'arrow' %}</span>
+          </a>
+        {%- endif -%}
+      </div>
+      <p class="hero__proof">{% render 'rating', rating: section.settings.rating, count: section.settings.reviews %} <span>· {{ section.settings.proof }}</span></p>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "class": "section-hero",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image (ordinateur)", "info": "Vide : visuel Noël du thème. Garder l'espace libre à gauche pour le texte." },
+    { "type": "image_picker", "id": "image_mobile", "label": "Image (mobile)", "info": "Recadrage serré sur le sujet." },
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Édition Noël 2026" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Des bonbons qu’on mange sans modération." },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>80 % de fruits et légumes, 0 g de sucres ajoutés, et chaque recette riche en vitamine ou en minéral. Fabriqués à Montélimar.</p>" },
+    { "type": "text", "id": "text_mobile", "label": "Texte (version courte mobile)", "default": "80 % de fruits, 0 g de sucres ajoutés. Fabriqués à Montélimar." },
+    { "type": "text", "id": "cta_label", "label": "Bouton", "default": "Choisir mes bonbons" },
+    { "type": "text", "id": "cta_label_mobile", "label": "Bouton (version courte mobile)", "default": "Voir la gamme" },
+    { "type": "url", "id": "cta_link", "label": "Lien du bouton" },
+    { "type": "text", "id": "rating", "label": "Note moyenne", "default": "4.6" },
+    { "type": "text", "id": "reviews", "label": "Nombre d'avis", "default": "3120" },
+    { "type": "text", "id": "proof", "label": "Preuve", "default": "+48 000 clients" },
+    { "type": "header", "content": "Mini-carte cliquable" },
+    { "type": "product", "id": "mini_product", "label": "Produit mis en avant" },
+    { "type": "text", "id": "mini_handle", "label": "Handle de secours", "default": "coffret-de-noel" },
+    { "type": "text", "id": "mini_tag", "label": "Étiquette", "default": "Idée cadeau" }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

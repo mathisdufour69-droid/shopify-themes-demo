@@ -1,0 +1,35 @@
+{%- assign coll = section.settings.collection | default: collections['all'] -%}
+<section class="grid-sec grid-sec--tight" aria-labelledby="XsellTitle-{{ section.id }}">
+  <div class="container">
+    <div class="sec-head sec-head--left">
+      <h2 id="XsellTitle-{{ section.id }}" class="h2">{{ section.settings.title }}</h2>
+      <p class="sec-head__text">{{ section.settings.text }}</p>
+    </div>
+    <ul class="product-grid product-grid--4" role="list">
+      {%- assign shown = 0 -%}
+      {%- for p in coll.products -%}
+        {%- if p.id != product.id and shown < section.settings.limit -%}
+          {%- unless section.settings.skip_handle != blank and p.handle == section.settings.skip_handle -%}
+            <li>{% render 'product-card', card_product: p %}</li>
+            {%- assign shown = shown | plus: 1 -%}
+          {%- endunless -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Produits complémentaires",
+  "class": "section-xsell",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "Complète ta cure" },
+    { "type": "text", "id": "text", "label": "Texte", "default": "Ajoute un deuxième parfum : la livraison devient offerte dès 25 €." },
+    { "type": "collection", "id": "collection", "label": "Collection source" },
+    { "type": "text", "id": "skip_handle", "label": "Exclure ce produit (handle)", "default": "coffret-de-noel" },
+    { "type": "range", "id": "limit", "label": "Nombre", "min": 2, "max": 8, "step": 1, "default": 4 }
+  ],
+  "presets": [{ "name": "Produits complémentaires" }]
+}
+{% endschema %}

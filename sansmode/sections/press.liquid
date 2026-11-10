@@ -1,0 +1,44 @@
+<section class="press" aria-labelledby="PressTitle-{{ section.id }}">
+  <div class="container">
+    <h2 id="PressTitle-{{ section.id }}" class="press__title">{{ section.settings.title }}</h2>
+    {%- if section.settings.quote != blank -%}
+      <figure class="press__quote">
+        <blockquote>«&nbsp;{{ section.settings.quote }}&nbsp;»</blockquote>
+        <figcaption>{{ section.settings.quote_source }}</figcaption>
+      </figure>
+    {%- endif -%}
+    <ul class="press__logos" role="list">
+      {%- for block in section.blocks -%}
+        <li class="press__logo press__logo--{{ block.settings.style }}" {{ block.shopify_attributes }}>{{ block.settings.name }}</li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Presse",
+  "class": "section-press",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ils en parlent" },
+    { "type": "text", "id": "quote", "label": "Citation", "default": "Le premier bonbon qu’on n’a plus besoin de cacher." },
+    { "type": "text", "id": "quote_source", "label": "Source", "default": "Madame Gourmande" },
+    { "type": "paragraph", "content": "Titres de presse fictifs, rendus en typographie : aucun logo réel n'est utilisé." }
+  ],
+  "blocks": [
+    {
+      "type": "media",
+      "name": "Média",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Nom", "default": "Sucre & Société" },
+        { "type": "select", "id": "style", "label": "Style typographique", "default": "serif", "options": [
+          { "value": "serif", "label": "Serif italique" }, { "value": "caps", "label": "Capitales espacées" }, { "value": "bold", "label": "Gras compact" },
+          { "value": "script", "label": "Manuscrit" }, { "value": "mono", "label": "Machine à écrire" }
+        ] }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [{ "name": "Presse" }]
+}
+{% endschema %}

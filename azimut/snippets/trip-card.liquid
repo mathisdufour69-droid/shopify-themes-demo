@@ -1,0 +1,73 @@
+{%- comment -%}
+  Carte itinéraire (grille « Nos voyages », collection, suggestions).
+  Le prix affiché est le prix du voyage par personne (base 2) ; la variante Shopify, elle, porte l'acompte.
+{%- endcomment -%}
+{%- liquid
+  assign h = trip.handle
+  capture country
+    render 'trip-data', handle: h, field: 'country', product: trip
+  endcapture
+  capture lead
+    render 'trip-data', handle: h, field: 'lead', product: trip
+  endcapture
+  capture days
+    render 'trip-data', handle: h, field: 'days', product: trip
+  endcapture
+  capture place
+    render 'trip-data', handle: h, field: 'place', product: trip
+  endcapture
+  capture price
+    render 'trip-data', handle: h, field: 'price', product: trip
+  endcapture
+  capture level
+    render 'trip-data', handle: h, field: 'level', product: trip
+  endcapture
+  capture img
+    render 'trip-data', handle: h, field: 'img', product: trip
+  endcapture
+  capture months
+    render 'trip-data', handle: h, field: 'months', product: trip
+  endcapture
+  assign next = ''
+  assign next_few = false
+  assign ms = months | split: '||'
+  for m in ms
+    assign mp = m | split: ':'
+    if mp[1] != 'full'
+      assign next = mp[0]
+      if mp[1] == 'few'
+        assign next_few = true
+      endif
+      break
+    endif
+  endfor
+  assign wide = '600,1080'
+  assign w = 1080
+  assign ht = 720
+  if img contains 'dest-'
+    assign wide = '600,940'
+    assign w = 940
+    assign ht = 1248
+  endif
+-%}
+<a class="trip rv" href="{{ trip.url }}">
+  <div class="trip-img">
+    {%- if trip.featured_media.preview_image -%}
+      {{ trip.featured_media.preview_image | image_url: width: 1100 | image_tag: widths: '540,800,1100', sizes: '(min-width: 1080px) 45vw, 100vw', loading: 'lazy', alt: trip.featured_media.alt | default: trip.title }}
+    {%- elsif img != blank -%}
+      {% render 'picture', base: img, widths: wide, width: w, height: ht, alt: trip.title, sizes: '(min-width: 1080px) 45vw, 100vw' %}
+    {%- endif -%}
+    {%- if country != blank -%}<span class="pill">{{ country }}</span>{%- endif -%}
+    {%- if next != blank -%}<span class="next{% if next_few %} few{% endif %}">{% if next_few %}Dernières places · {% else %}Prochain départ · {% endif %}{{ next }}</span>{%- endif -%}
+  </div>
+  <div class="trip-b">
+    {%- if level != blank -%}<div class="sub"><span class="lvl">Niveau {{ level | downcase }}</span></div>{%- endif -%}
+    <h3>{{ trip.title }}</h3>
+    {%- if lead != blank -%}<p>{{ lead }}</p>{%- endif -%}
+    <div class="meta">
+      {%- if days != blank -%}<span>{% render 'icon', name: 'clock' %}{{ days }} jours</span>{%- endif -%}
+      {%- if place != blank -%}<span>{% render 'icon', name: 'pin' %}{{ place }}</span>{%- endif -%}
+      <span class="price">{% if price != blank %}à partir de {% render 'eur', value: price %}{% else %}{{ trip.price | money }}{% endif %}<small>par personne, base 2</small></span>
+    </div>
+  </div>
+</a>

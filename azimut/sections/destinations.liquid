@@ -1,0 +1,48 @@
+<section id="destinations" style="padding-top:0">
+  <div class="wrap">
+    <div class="head rv">
+      <div>
+        <span class="kick">{{ section.settings.kicker }}</span>
+        <h2 style="margin-top:16px">{{ section.settings.title }}</h2>
+      </div>
+      <a class="b b-line" href="{{ collections['voyages'].url | default: routes.all_products_collection_url }}">{{ section.settings.cta }} <span class="d">{% render 'icon', name: 'arrow' %}</span></a>
+    </div>
+    <div class="dest">
+      {%- for block in section.blocks -%}
+        {%- assign p = block.settings.product | default: all_products[block.settings.handle] -%}
+        {%- if p.title == blank or p.variants.size == 0 -%}{%- assign p = nil -%}{%- endif -%}
+        {%- capture country -%}{% render 'trip-data', handle: block.settings.handle, field: 'country', product: p %}{%- endcapture -%}
+        <a class="card rv" href="{{ p.url | default: '#voyages' }}" {{ block.shopify_attributes }}>
+          {% render 'picture', image: block.settings.image, base: block.settings.asset, widths: '600,940', width: 940, height: 1248, alt: block.settings.alt, sizes: '(min-width: 1080px) 31vw, (min-width: 680px) 48vw, 100vw' %}
+          <span class="card-top"><span class="pill">{{ country | default: block.settings.country }}</span></span>
+          <span class="card-bot"><span><h3>{{ p.title | default: block.settings.title }}</h3><small>{{ block.settings.meta }}</small></span><span class="go">{% render 'icon', name: 'arrow' %}</span></span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Destinations",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Destinations" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Trois terrains de saison, cet hiver." },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Les 7 itinéraires" }
+  ],
+  "blocks": [
+    { "type": "card", "name": "Destination", "settings": [
+      { "type": "product", "id": "product", "label": "Itinéraire" },
+      { "type": "text", "id": "handle", "label": "Handle de secours", "default": "japon" },
+      { "type": "text", "id": "country", "label": "Pays", "default": "Japon" },
+      { "type": "text", "id": "title", "label": "Titre de secours", "default": "Kyoto et les Alpes japonaises" },
+      { "type": "text", "id": "meta", "label": "Détail", "default": "11 jours · automne" },
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "asset", "label": "Image du thème", "default": "dest-japon" },
+      { "type": "text", "id": "alt", "label": "Texte alternatif", "default": "Pagode japonaise entourée d'érables rouges" }
+    ] }
+  ],
+  "max_blocks": 3,
+  "presets": [{ "name": "Destinations" }]
+}
+{% endschema %}

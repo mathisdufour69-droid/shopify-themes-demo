@@ -1,0 +1,65 @@
+{%- comment -%}
+  « Anatomie d'un bonbon » : un bonbon géant au centre, les preuves autour, les chiffres qui comptent
+  au moment où la section entre à l'écran. Personne ne montre ses bonbons comme ça : on se différencie.
+{%- endcomment -%}
+{%- assign half = section.blocks.size | plus: 1 | divided_by: 2 -%}
+<section class="benefits" aria-labelledby="BenefitsTitle-{{ section.id }}">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker">{{ section.settings.kicker }}</p>
+      <h2 id="BenefitsTitle-{{ section.id }}" class="h2">{{ section.settings.title }}</h2>
+    </div>
+    <div class="anat">
+      <ul class="anat__list anat__list--left" role="list">
+        {%- for block in section.blocks limit: half -%}
+          <li class="benefit" style="--c: {{ block.settings.color }}" {{ block.shopify_attributes }}>
+            <span class="benefit__num" data-count>{{ block.settings.number }}</span>
+            <h3 class="benefit__title">{{ block.settings.title }}</h3>
+            <p class="benefit__text">{{ block.settings.text }}</p>
+          </li>
+        {%- endfor -%}
+      </ul>
+      <div class="anat__center" aria-hidden="true">
+        <div class="anat__pill"></div>
+        {%- if section.settings.caption != blank -%}<p class="anat__caption">{{ section.settings.caption }}</p>{%- endif -%}
+      </div>
+      <ul class="anat__list anat__list--right" role="list">
+        {%- for block in section.blocks offset: half -%}
+          <li class="benefit" style="--c: {{ block.settings.color }}" {{ block.shopify_attributes }}>
+            <span class="benefit__num" data-count>{{ block.settings.number }}</span>
+            <h3 class="benefit__title">{{ block.settings.title }}</h3>
+            <p class="benefit__text">{{ block.settings.text }}</p>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+    {%- if section.settings.note != blank -%}<p class="benefits__note">{{ section.settings.note }}</p>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Bénéfices",
+  "class": "section-benefits",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Anatomie d’un bonbon" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Un vrai bonbon. Sans le côté obscur." },
+    { "type": "text", "id": "caption", "label": "Légende du bonbon géant", "default": "Taille réelle × 6 (on a zoomé, pas triché)" },
+    { "type": "text", "id": "note", "label": "Note de bas", "default": "Pour une portion de 25 g (environ 8 bonbons) : 90 kcal." }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Bénéfice",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Chiffre", "info": "Le nombre au début s'anime (ex. 80 %, 6 g).", "default": "80 %" },
+        { "type": "text", "id": "title", "label": "Titre", "default": "de fruits et légumes" },
+        { "type": "textarea", "id": "text", "label": "Texte", "default": "Des purées de vrais fruits, pas des arômes qui font semblant." },
+        { "type": "color", "id": "color", "label": "Couleur", "default": "#F6C21B" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [{ "name": "Bénéfices", "blocks": [{ "type": "benefit" }, { "type": "benefit" }, { "type": "benefit" }, { "type": "benefit" }] }]
+}
+{% endschema %}

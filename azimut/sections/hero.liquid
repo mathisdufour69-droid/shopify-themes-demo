@@ -1,0 +1,78 @@
+{%- comment -%}
+  Hero de la référence. Changements CRO :
+  - note vérifiée de la maison (plus de badge d'une plateforme tierce sur une marque fictive) ;
+  - la vignette « film » n'est plus un clic mort : vidéo Shopify si fournie, sinon lien vers l'itinéraire.
+{%- endcomment -%}
+{%- liquid
+  assign feat = section.settings.feature_product | default: all_products[section.settings.feature_handle]
+  if feat.title == blank or feat.variants.size == 0
+    assign feat = nil
+  endif
+-%}
+<div class="hero">
+  <div class="hero-img" id="heroImg">
+    {% render 'picture', image: section.settings.image, base: 'hero-montagnes', widths: '900,1700', width: 1700, height: 953, alt: section.settings.alt, sizes: '100vw', eager: true %}
+  </div>
+  <div class="hero-mark" id="heroMark" aria-hidden="true">{{ section.settings.mark }}</div>
+  <div class="wrap hero-in">
+    <div class="hero-row">
+      <div>
+        <span class="kick lt">{{ section.settings.kicker }}</span>
+        <h1>{{ section.settings.title }}</h1>
+        <p class="lede">{{ section.settings.lede }}</p>
+        <a class="b b-lt" href="{{ section.settings.cta_link | default: collections['voyages'].url | default: routes.all_products_collection_url }}">{{ section.settings.cta }} <span class="d">{% render 'icon', name: 'arrow' %}</span></a>
+      </div>
+      <div class="hero-side">
+        <span class="rate">
+          {% render 'stars', rating: section.settings.rating %}
+          <span class="nb">{{ section.settings.rating | replace: '.', ',' }}/5 · {{ section.settings.reviews }} avis vérifiés</span>
+        </span>
+        {%- if section.settings.video != blank -%}
+          <button type="button" class="play" data-video-open="HeroVideo-{{ section.id }}">
+        {%- else -%}
+          <a class="play" href="{{ feat.url | default: '#voyages' }}">
+        {%- endif -%}
+          <span class="th">
+            {% render 'picture', image: section.settings.thumb, base: 'tente', widths: '600', width: 600, height: 750, alt: '', sizes: '80px' %}
+            <span class="tri"><span></span></span>
+          </span>
+          <span><b>{{ section.settings.film_title }}</b><small>{% if section.settings.video != blank %}{{ section.settings.film_meta }}{% else %}{{ section.settings.film_meta_link }}{% endif %}</small></span>
+        {%- if section.settings.video != blank -%}</button>{%- else -%}</a>{%- endif -%}
+      </div>
+    </div>
+  </div>
+  <div class="scroll" aria-hidden="true"><span>Défiler</span><i></i></div>
+  {%- if section.settings.video != blank -%}
+    <dialog class="dlg" id="HeroVideo-{{ section.id }}" aria-label="{{ section.settings.film_title | escape }}">
+      <button type="button" class="x" data-dlg-close aria-label="Fermer">{% render 'icon', name: 'close' %}</button>
+      {{ section.settings.video | video_tag: controls: true, playsinline: true, autoplay: true }}
+    </dialog>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "alt", "label": "Texte alternatif", "default": "Chaîne de montagnes enneigées au soleil couchant" },
+    { "type": "text", "id": "mark", "label": "Grand mot", "default": "AZIMUT" },
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Maison de voyage · depuis 2009" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Un itinéraire qui n'existe que pour vous." },
+    { "type": "textarea", "id": "lede", "label": "Texte", "default": "Nous concevons des expéditions privées, une par une. Pas de catalogue, pas de départ groupé : un concepteur, des guides locaux, et une route dessinée sur mesure." },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Découvrir nos voyages" },
+    { "type": "url", "id": "cta_link", "label": "Lien du bouton" },
+    { "type": "text", "id": "rating", "label": "Note", "default": "4.8" },
+    { "type": "text", "id": "reviews", "label": "Nombre d'avis", "default": "214" },
+    { "type": "header", "content": "Vignette" },
+    { "type": "image_picker", "id": "thumb", "label": "Miniature" },
+    { "type": "video", "id": "video", "label": "Film (Shopify)", "info": "Sans vidéo, la vignette mène à l'itinéraire choisi : jamais de clic mort." },
+    { "type": "text", "id": "film_title", "label": "Titre", "default": "Une nuit en Patagonie" },
+    { "type": "text", "id": "film_meta", "label": "Sous-titre (avec vidéo)", "default": "Film · 2 min 40" },
+    { "type": "text", "id": "film_meta_link", "label": "Sous-titre (sans vidéo)", "default": "Voir l'itinéraire · 12 jours" },
+    { "type": "product", "id": "feature_product", "label": "Itinéraire lié" },
+    { "type": "text", "id": "feature_handle", "label": "Handle de secours", "default": "patagonie" }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

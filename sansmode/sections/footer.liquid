@@ -1,0 +1,100 @@
+{%- comment -%}
+  Pied de page : la marque une dernière fois en grand, une vraie personne à qui écrire,
+  les réseaux, la réassurance qu'on cherche ici (paiement, livraison, retours), puis les mentions.
+{%- endcomment -%}
+{%- liquid
+  assign socials = 'instagram,tiktok,youtube,pinterest,facebook' | split: ','
+-%}
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="{{ routes.root_url }}" class="footer__logo" aria-label="{{ settings.brand_name | default: 'SANSMODÉ' }}, accueil">{% render 'logo' %}</a>
+        <p class="footer__baseline">{{ section.settings.baseline }}</p>
+        <ul class="footer__social" role="list">
+          {%- for s in socials -%}
+            {%- assign key = 'social_' | append: s -%}
+            {%- if settings[key] != blank -%}
+              <li><a href="{{ settings[key] }}" class="social social--{{ s }}" aria-label="{{ s | capitalize }}" rel="noopener" target="_blank">{% render 'icon', name: s %}</a></li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- assign menu = linklists[block.settings.menu] -%}
+        <nav class="footer__col" aria-label="{{ block.settings.title | escape }}" {{ block.shopify_attributes }}>
+          <h2 class="footer__title">{{ block.settings.title }}</h2>
+          <ul role="list">
+            {%- if menu.links.size > 0 -%}
+              {%- for link in menu.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+            {%- elsif forloop.first -%}
+              <li><a href="{{ routes.all_products_collection_url }}">Tous les bonbons</a></li>
+              <li><a href="{{ all_products['grisaille'].url | default: routes.all_products_collection_url }}">Grisaille, le best-seller</a></li>
+              <li><a href="{{ all_products['bras-de-fer'].url | default: routes.all_products_collection_url }}">Bras de Fer <span class="footer__new">Nouveau</span></a></li>
+              <li><a href="{{ all_products['coffret-de-noel'].url | default: routes.all_products_collection_url }}">Coffret de Noël</a></li>
+            {%- else -%}
+              <li><a href="{{ routes.root_url }}#faq">Questions fréquentes</a></li>
+              <li><a href="{{ routes.root_url }}#fabrication">Notre atelier</a></li>
+              <li><a href="{{ routes.root_url }}#offre-noel">Abonnement</a></li>
+              {%- for policy in shop.policies -%}<li><a href="{{ policy.url }}">{{ policy.title }}</a></li>{%- endfor -%}
+            {%- endif -%}
+          </ul>
+        </nav>
+      {%- endfor -%}
+
+      <div class="footer__contact">
+        <p class="footer__contact-kicker">{{ section.settings.contact_kicker }}</p>
+        <p class="footer__contact-title">{{ section.settings.contact_title }}</p>
+        {%- if section.settings.email != blank -%}
+          <a href="mailto:{{ section.settings.email }}" class="footer__mail">{% render 'icon', name: 'mail' %} {{ section.settings.email }}</a>
+        {%- endif -%}
+        <p class="footer__contact-note">{{ section.settings.contact_note }}</p>
+      </div>
+    </div>
+
+    <ul class="footer__trust" role="list">
+      <li>Paiement 100 % sécurisé</li>
+      <li>Livraison offerte dès {{ settings.free_shipping_threshold }}&nbsp;€</li>
+      <li>Goût adoré ou remboursé</li>
+      <li>Fabriqué à Montélimar</li>
+    </ul>
+  </div>
+
+  <div class="container footer__bottom">
+    <ul class="footer__payments" role="list" aria-label="Moyens de paiement">
+      {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>{%- endfor -%}
+    </ul>
+    <p class="footer__legal">© {{ 'now' | date: '%Y' }} {{ settings.brand_name | default: 'SANSMODÉ' }} · {{ section.settings.disclaimer }}</p>
+  </div>
+  <div class="footer__giant" aria-hidden="true">{% render 'logo' %}</div>
+</footer>
+
+{% schema %}
+{
+  "name": "Pied de page",
+  "class": "section-footer",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    { "type": "text", "id": "baseline", "label": "Phrase de marque", "default": "Des bonbons qu’on mange sans modération. Fabriqués à Montélimar, avec 80 % de fruits et légumes." },
+    { "type": "header", "content": "Contact" },
+    { "type": "text", "id": "contact_kicker", "label": "Sur-titre", "default": "Une question ?" },
+    { "type": "text", "id": "contact_title", "label": "Titre", "default": "Écris-nous, c’est Hugo qui répond." },
+    { "type": "text", "id": "email", "label": "E-mail", "default": "bonjour@sansmode.fr" },
+    { "type": "text", "id": "contact_note", "label": "Note", "default": "Réponse en moins de 24 h, du lundi au vendredi." },
+    { "type": "paragraph", "content": "Les liens des réseaux sociaux se règlent dans Paramètres du thème › Réseaux sociaux." },
+    { "type": "text", "id": "disclaimer", "label": "Mention légale", "default": "SANSMODÉ est une marque fictive. Boutique de démonstration conçue par Mathis Dufour." }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Colonne de liens",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre", "default": "Boutique" },
+        { "type": "link_list", "id": "menu", "label": "Menu" }
+      ]
+    }
+  ],
+  "max_blocks": 2
+}
+{% endschema %}

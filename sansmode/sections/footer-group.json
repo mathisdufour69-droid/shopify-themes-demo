@@ -1,0 +1,139 @@
+{
+  "type": "footer",
+  "name": "Groupe pied de page",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "col-1": {
+          "type": "menu",
+          "settings": {
+            "title": "Boutique"
+          }
+        },
+        "col-2": {
+          "type": "menu",
+          "settings": {
+            "title": "Aide"
+          }
+        }
+      },
+      "block_order": [
+        "col-1",
+        "col-2"
+      ],
+      "settings": {}
+    },
+    "gift-wheel": {
+      "type": "gift-wheel",
+      "blocks": {
+        "s-1": {
+          "type": "segment",
+          "settings": {
+            "label": "−10 %",
+            "prize": "−10 % sur ta commande",
+            "code": "NOEL10",
+            "weight": 30,
+            "color": "#7B3FC4",
+            "text_color": "#FFFFFF"
+          }
+        },
+        "s-2": {
+          "type": "segment",
+          "settings": {
+            "label": "Port offert",
+            "prize": "La livraison offerte",
+            "code": "NOELLIVRAISON",
+            "weight": 25,
+            "color": "#F6C21B",
+            "text_color": "#2A1A3A"
+          }
+        },
+        "s-3": {
+          "type": "segment",
+          "settings": {
+            "label": "−15 %",
+            "prize": "−15 % sur ta commande",
+            "code": "NOEL15",
+            "weight": 15,
+            "color": "#2DB3A8",
+            "text_color": "#FFFFFF"
+          }
+        },
+        "s-4": {
+          "type": "segment",
+          "settings": {
+            "label": "Presque !",
+            "prize": "",
+            "code": "",
+            "weight": 0,
+            "color": "#2A1A3A",
+            "text_color": "#FBF6EE"
+          }
+        },
+        "s-5": {
+          "type": "segment",
+          "settings": {
+            "label": "−5 %",
+            "prize": "−5 % sur ta commande",
+            "code": "NOEL5",
+            "weight": 25,
+            "color": "#EC3C8C",
+            "text_color": "#FFFFFF"
+          }
+        },
+        "s-6": {
+          "type": "segment",
+          "settings": {
+            "label": "−20 %",
+            "prize": "−20 % sur ta commande",
+            "code": "NOEL20",
+            "weight": 5,
+            "color": "#E5321F",
+            "text_color": "#FFFFFF"
+          }
+        },
+        "s-7": {
+          "type": "segment",
+          "settings": {
+            "label": "Un câlin",
+            "prize": "",
+            "code": "",
+            "weight": 0,
+            "color": "#FBF6EE",
+            "text_color": "#2A1A3A"
+          }
+        },
+        "s-8": {
+          "type": "segment",
+          "settings": {
+            "label": "+1 sachet",
+            "prize": "Un sachet offert dès 2 achetés",
+            "code": "NOELSACHET",
+            "weight": 10,
+            "color": "#C9A7F5",
+            "text_color": "#2A1A3A"
+          }
+        }
+      },
+      "block_order": [
+        "s-1",
+        "s-2",
+        "s-3",
+        "s-4",
+        "s-5",
+        "s-6",
+        "s-7",
+        "s-8"
+      ],
+      "settings": {
+        "enabled": true,
+        "kicker": "Cadeau de Noël"
+      }
+    }
+  },
+  "order": [
+    "footer",
+    "gift-wheel"
+  ]
+}

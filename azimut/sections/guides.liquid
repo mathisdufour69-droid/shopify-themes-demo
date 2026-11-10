@@ -1,0 +1,61 @@
+<section id="guides" style="padding-top:0">
+  <div class="wrap">
+    <div class="head rv">
+      <div>
+        <span class="kick">{{ section.settings.kicker }}</span>
+        <h2 style="margin-top:16px;max-width:none">{{ section.settings.title_1 }}<br>{{ section.settings.title_2 }}</h2>
+      </div>
+      <p>{{ section.settings.text }}</p>
+    </div>
+    <div class="guides">
+      {%- for block in section.blocks -%}
+        <article class="gd rv" {{ block.shopify_attributes }}>
+          <div class="gd-im" tabindex="0">
+            {% render 'picture', image: block.settings.image, base: block.settings.asset, widths: '500,820', width: 820, height: 1025, alt: block.settings.name, sizes: '(min-width: 1080px) 23vw, (min-width: 560px) 48vw, 100vw' %}
+            <span class="gd-ix">G.{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <span class="gd-cert">{{ block.settings.langs }}</span>
+            <div class="gd-q"><p>«&nbsp;{{ block.settings.quote }}&nbsp;»</p><span>{{ block.settings.zones }}</span></div>
+          </div>
+          <div class="gd-b">
+            <b>{{ block.settings.name }}</b>
+            <small>{{ block.settings.role }}</small>
+            <div class="gd-m"><span>{{ block.settings.base }}</span><span>{{ block.settings.years }}</span></div>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+    <div class="gd-foot rv">
+      <p>{{ section.settings.foot }}</p>
+      <button type="button" class="b b-line" data-dlg-open>{{ section.settings.cta }} <span class="d">{% render 'icon', name: 'arrow' %}</span></button>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Les guides",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Les guides" },
+    { "type": "text", "id": "title_1", "label": "Titre, ligne 1", "default": "Ce ne sont pas des prestataires." },
+    { "type": "text", "id": "title_2", "label": "Titre, ligne 2", "default": "Ce sont eux, la maison." },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Trente-huit guides dans onze pays, rémunérés directement et rencontrés sur le terrain avant d'être proposés. Quand aucun d'eux ne connaît une destination, nous ne la vendons pas." },
+    { "type": "richtext", "id": "foot", "label": "Note", "default": "<p><b>Un guide, un terrain.</b> Aucun de nos guides ne travaille sur plus de trois régions. C'est ce qui fait la différence entre quelqu'un qui suit une trace et quelqu'un qui décide d'en changer.</p>" },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Rencontrer l'équipe" }
+  ],
+  "blocks": [
+    { "type": "guide", "name": "Guide", "settings": [
+      { "type": "text", "id": "name", "label": "Nom", "default": "Mateo Iriarte" },
+      { "type": "text", "id": "role", "label": "Rôle", "default": "Guide de haute montagne IFMGA · Andes" },
+      { "type": "text", "id": "langs", "label": "Langues", "default": "FR · EN · ES" },
+      { "type": "text", "id": "quote", "label": "Citation" },
+      { "type": "text", "id": "zones", "label": "Terrains" },
+      { "type": "text", "id": "base", "label": "Base et relèvement" },
+      { "type": "text", "id": "years", "label": "Ancienneté" },
+      { "type": "image_picker", "id": "image", "label": "Portrait" },
+      { "type": "text", "id": "asset", "label": "Image du thème", "default": "guide-mateo" }
+    ] }
+  ],
+  "max_blocks": 8,
+  "presets": [{ "name": "Les guides" }]
+}
+{% endschema %}

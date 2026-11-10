@@ -1,0 +1,59 @@
+<section>
+  <div class="wrap why">
+    <div class="why-media rv clip">
+      {% render 'picture', image: section.settings.image, base: 'tente', widths: '600,940', width: 940, height: 1175, alt: section.settings.alt, sizes: '(min-width: 1080px) 46vw, 100vw' %}
+      <div class="avis">
+        {% render 'stars', rating: section.settings.stars %}
+        <p>{{ section.settings.quote }}</p>
+        <div class="who">
+          {%- if section.settings.avatar != blank -%}
+            {{ section.settings.avatar | image_url: width: 80 | image_tag: alt: '', loading: 'lazy' }}
+          {%- else -%}
+            <img class="av" src="{{ 'avis-camille-160.webp' | asset_url }}" alt="" width="30" height="30" loading="lazy" style="width:30px;height:30px">
+          {%- endif -%}
+          <span><b>{{ section.settings.name }}</b><small>{{ section.settings.trip }}</small></span>
+        </div>
+      </div>
+    </div>
+    <div class="rv">
+      <span class="kick">{{ section.settings.kicker }}</span>
+      <h2 style="margin-top:16px">{{ section.settings.title }}</h2>
+      <div class="acc">
+        {%- for block in section.blocks -%}
+          <details class="ac"{% if forloop.first %} open{% endif %} {{ block.shopify_attributes }}>
+            <summary><span class="mk" aria-hidden="true"></span><span class="n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span><span class="t">{{ block.settings.title }}</span></summary><div class="bd"><p>{{ block.settings.text }}</p></div>
+          </details>
+        {%- endfor -%}
+      </div>
+      <button type="button" class="b b-ink" data-dlg-open style="margin-top:30px">{{ section.settings.cta }} <span class="d">{% render 'icon', name: 'arrow' %}</span></button>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Notre façon de faire",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "alt", "label": "Texte alternatif", "default": "Tente d'expédition éclairée au crépuscule devant une montagne" },
+    { "type": "header", "content": "Avis posé sur l'image" },
+    { "type": "select", "id": "stars", "label": "Note", "default": "5", "options": [{ "value": "5", "label": "5" }, { "value": "4", "label": "4" }] },
+    { "type": "textarea", "id": "quote", "label": "Avis", "default": "Le camp était monté avant notre arrivée, et Mateo connaissait la vallée mieux que la carte." },
+    { "type": "text", "id": "name", "label": "Nom", "default": "Camille et Julien R." },
+    { "type": "text", "id": "trip", "label": "Voyage", "default": "Patagonie · mars 2026" },
+    { "type": "image_picker", "id": "avatar", "label": "Photo (sinon initiale)" },
+    { "type": "header", "content": "Texte" },
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Notre façon de faire" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ce qui change quand personne ne vend un catalogue." },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Parler à un concepteur" }
+  ],
+  "blocks": [
+    { "type": "point", "name": "Point", "settings": [
+      { "type": "text", "id": "title", "label": "Titre", "default": "Un concepteur, pas un agent" },
+      { "type": "textarea", "id": "text", "label": "Texte" }
+    ] }
+  ],
+  "max_blocks": 6,
+  "presets": [{ "name": "Notre façon de faire" }]
+}
+{% endschema %}

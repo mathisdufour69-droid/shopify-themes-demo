@@ -1,0 +1,147 @@
+{%- comment -%}
+  Données éditoriales par produit, indexées sur le handle.
+  Priorité : métachamp product.metafields.custom.<champ> s'il existe, sinon cette table.
+  En production, tout passe en métachamps (éditables sans toucher au code) ; ici la table
+  garantit une démo complète juste après l'import CSV.
+
+  Usage : {% render 'product-data', handle: product.handle, field: 'accroche', product: product %}
+  Champs : accroche, nutrient, flavour, color, bg, badge, rating, count, image, gallery,
+           vnr, moment, ingredients
+{%- endcomment -%}
+{%- liquid
+  assign mf = blank
+  if product and field
+    assign mf = product.metafields.custom[field].value
+  endif
+  if mf != blank
+    echo mf
+  else
+
+  assign accroche = ''
+  assign nutrient = ''
+  assign flavour = ''
+  assign color = '#7B3FC4'
+  assign bg = '#F1E8FB'
+  assign badge = ''
+  assign rating = '4.6'
+  assign count = '0'
+  assign image = ''
+  assign gallery = ''
+  assign vnr = ''
+  assign moment = ''
+  assign ingredients = ''
+
+  case handle
+    when 'grisaille'
+      assign ingredients = 'Purée de mangue (38 %), purée de fruit de la passion (17 %), purée de carotte (15 %), purée de pomme (10 %), fibres de chicorée, pectine de fruits, jus de citron concentré, vitamine D3 (cholécalciférol d’origine végétale), colorant naturel : curcuma.'
+      assign accroche = 'Ton rayon de soleil de novembre.'
+      assign nutrient = 'Riche en vitamine D'
+      assign flavour = 'Mangue · passion'
+      assign color = '#F6C21B'
+      assign bg = '#ECE0FA'
+      assign badge = 'Best-seller'
+      assign rating = '4.7'
+      assign count = '1284'
+      assign image = 'pouch-grisaille'
+      assign gallery = 'pouch-grisaille,portrait-grisaille,sachet-grisaille'
+      assign vnr = 'Vitamine D : 5 µg, soit 100 % des VNR'
+      assign moment = 'Au goûter, quand le ciel est gris depuis trois jours.'
+    when 'bras-de-fer'
+      assign ingredients = 'Purée de fraise (36 %), purée de betterave rouge (22 %), purée de pomme (22 %), fibres de chicorée, pectine de fruits, jus de citron concentré, bisglycinate de fer, vitamine C (acide L-ascorbique).'
+      assign accroche = 'Pour les bras… et le reste.'
+      assign nutrient = 'Riche en fer'
+      assign flavour = 'Fraise · betterave'
+      assign color = '#E5321F'
+      assign bg = '#D8F2EF'
+      assign badge = 'Nouveau'
+      assign rating = '4.5'
+      assign count = '212'
+      assign image = 'pouch-bras-de-fer'
+      assign gallery = 'pouch-bras-de-fer,portrait-bras-de-fer,sachet-bras-de-fer'
+      assign vnr = 'Fer : 4,2 mg, soit 30 % des VNR'
+      assign moment = 'Après le sport, ou à la place du carré de chocolat de 16 h.'
+    when 'lundi-matin'
+      assign ingredients = 'Purée de myrtille (30 %), purée de cassis (20 %), purée de patate douce (18 %), purée de pomme (12 %), fibres de chicorée, pectine de fruits, citrate de magnésium, jus de citron concentré, concentré de carotte pourpre.'
+      assign accroche = 'Le lundi, mais en violet.'
+      assign nutrient = 'Riche en magnésium'
+      assign flavour = 'Myrtille · cassis'
+      assign color = '#7B3FC4'
+      assign bg = '#FDF0C2'
+      assign rating = '4.6'
+      assign count = '746'
+      assign image = 'pouch-lundi-matin'
+      assign gallery = 'pouch-lundi-matin,sachet-lundi-matin'
+      assign vnr = 'Magnésium : 112 mg, soit 30 % des VNR'
+      assign moment = 'Dans le sac, pour la réunion de 9 h qui aurait pu être un mail.'
+    when 'poisson-davril'
+      assign ingredients = 'Purée de pomme (40 %), purée de concombre (15 %), purée de kiwi (15 %), jus de citron vert (8 %), fibres de chicorée, huile d’algue Schizochytrium (DHA), pectine de fruits, arôme naturel de menthe, colorant naturel : spiruline.'
+      assign accroche = 'Des oméga 3, zéro poisson. Sans blague.'
+      assign nutrient = 'Riche en oméga 3 d’algue'
+      assign flavour = 'Citron vert · menthe'
+      assign color = '#2DB3A8'
+      assign bg = '#FCE1EE'
+      assign rating = '4.4'
+      assign count = '398'
+      assign image = 'pouch-poisson-davril'
+      assign gallery = 'pouch-poisson-davril,sachet-poisson-davril'
+      assign vnr = 'Oméga 3 DHA d’algue : 250 mg par portion'
+      assign moment = 'En voiture, au bureau, ou devant une série un peu trop longue.'
+    when 'bad-hair-day'
+      assign ingredients = 'Purée de framboise (32 %), purée de litchi (20 %), purée de pomme (18 %), purée de betterave (10 %), fibres de chicorée, pectine de fruits, gluconate de zinc, biotine, jus de citron concentré.'
+      assign accroche = 'Pour les jours sans. Cheveux compris.'
+      assign nutrient = 'Riche en zinc et biotine'
+      assign flavour = 'Framboise · litchi'
+      assign color = '#EC3C8C'
+      assign bg = '#FFE6D6'
+      assign rating = '4.6'
+      assign count = '480'
+      assign image = 'pouch-bad-hair-day'
+      assign gallery = 'pouch-bad-hair-day,sachet-bad-hair-day'
+      assign vnr = 'Zinc : 3 mg (30 % des VNR) · Biotine : 15 µg (30 % des VNR)'
+      assign moment = 'Le matin, pendant que le fer à lisser chauffe.'
+    when 'coffret-de-noel'
+      assign ingredients = 'Voir le détail de chaque recette sur sa fiche produit. Cinq sachets de 100 g, boîte en carton recyclé imprimée à l’encre végétale.'
+      assign accroche = 'Les cinq parfums, un ruban, zéro stress.'
+      assign nutrient = 'Les 5 recettes'
+      assign flavour = '5 sachets de 100 g'
+      assign color = '#7B3FC4'
+      assign bg = '#FCF6EF'
+      assign badge = 'Édition Noël'
+      assign rating = '4.8'
+      assign count = '86'
+      assign image = 'coffret-noel'
+      assign gallery = 'coffret-noel'
+      assign vnr = 'Vitamine D, fer, magnésium, oméga 3 et zinc dans la même boîte'
+      assign moment = 'Sous le sapin, ou caché dans un placard jusqu’au 24.'
+  endcase
+
+  case field
+    when 'accroche'
+      echo accroche
+    when 'nutrient'
+      echo nutrient
+    when 'flavour'
+      echo flavour
+    when 'color'
+      echo color
+    when 'bg'
+      echo bg
+    when 'badge'
+      echo badge
+    when 'rating'
+      echo rating
+    when 'count'
+      echo count
+    when 'image'
+      echo image
+    when 'gallery'
+      echo gallery
+    when 'vnr'
+      echo vnr
+    when 'moment'
+      echo moment
+    when 'ingredients'
+      echo ingredients
+  endcase
+  endif
+-%}

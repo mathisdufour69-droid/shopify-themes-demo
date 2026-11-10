@@ -1,0 +1,21 @@
+<div class="band">
+  <div class="band-img" id="bandImg">
+    {% render 'picture', image: section.settings.image, base: 'canyon', widths: '900,1600', width: 1600, height: 686, alt: section.settings.alt, sizes: '100vw' %}
+  </div>
+  <div class="word" aria-hidden="true">{{ section.settings.line_1 }}<br>{{ section.settings.line_2 }}</div>
+  <button type="button" class="b b-lt cta" data-dlg-open>{{ section.settings.cta }} <span class="d">{% render 'icon', name: 'arrow' %}</span></button>
+</div>
+
+{% schema %}
+{
+  "name": "Bande parallaxe",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "alt", "label": "Texte alternatif", "default": "Canyon forestier dans la brume vu du ciel" },
+    { "type": "text", "id": "line_1", "label": "Ligne 1", "default": "PARTIR" },
+    { "type": "text", "id": "line_2", "label": "Ligne 2", "default": "PLUS LOIN" },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Commencer mon voyage" }
+  ],
+  "presets": [{ "name": "Bande parallaxe" }]
+}
+{% endschema %}

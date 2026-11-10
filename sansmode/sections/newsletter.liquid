@@ -1,0 +1,44 @@
+<section class="news" aria-labelledby="NewsTitle-{{ section.id }}">
+  <div class="container news__grid">
+    <div class="news__media">
+      {% render 'picture', image: section.settings.image, base: 'newsletter-noel', widths: '600,1089', width: 1089, height: 1445, alt: section.settings.alt, sizes: '(min-width: 750px) 40vw, 90vw', class: 'news__img' %}
+    </div>
+    <div class="news__text">
+      <p class="kicker">{{ section.settings.kicker }}</p>
+      <h2 id="NewsTitle-{{ section.id }}" class="h2">{{ section.settings.title }}</h2>
+      <div class="rte">{{ section.settings.text }}</div>
+      {%- form 'customer', class: 'news__form', id: 'NewsForm' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter,noel">
+        {%- if form.posted_successfully? -%}
+          <p class="form-ok" role="status">{% render 'icon', name: 'check' %} {{ section.settings.success }}</p>
+        {%- else -%}
+          <label for="NewsEmail-{{ section.id }}" class="visually-hidden">Ton adresse e-mail</label>
+          <div class="news__row">
+            <input id="NewsEmail-{{ section.id }}" type="email" name="contact[email]" required autocomplete="email" placeholder="ton@email.fr" class="input" {% if form.errors %}aria-invalid="true" aria-describedby="NewsError-{{ section.id }}"{% endif %}>
+            <button type="submit" class="btn">{{ section.settings.button }}</button>
+          </div>
+          {%- if form.errors -%}<p class="form-error" id="NewsError-{{ section.id }}">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>{%- endif -%}
+          <p class="news__fine">{{ section.settings.fine }}</p>
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "class": "section-news",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "alt", "label": "Texte alternatif", "default": "Une femme en pyjama de Noël rouge, des sachets SANSMODÉ tombent autour d’elle" },
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "−10 % sur ta première commande" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ton bas de Noël, en mieux." },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Ton code de bienvenue tout de suite, puis un mail par semaine maximum : nouveaux parfums, recettes de fêtes, ventes privées. Désinscription en un clic.</p>" },
+    { "type": "text", "id": "button", "label": "Bouton", "default": "Je veux mes −10 %" },
+    { "type": "text", "id": "success", "label": "Message de succès", "default": "C’est noté ! Ton code arrive dans ta boîte mail." },
+    { "type": "text", "id": "fine", "label": "Mention", "default": "Pas de spam, promis. Tes données restent chez nous." }
+  ],
+  "presets": [{ "name": "Newsletter" }]
+}
+{% endschema %}

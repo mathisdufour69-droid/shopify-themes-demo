@@ -1,0 +1,44 @@
+{%- comment -%}
+  Ordinateur : 4 engagements en ligne. Mobile : banderole qui défile en boucle
+  (la liste est doublée, la copie est masquée aux lecteurs d'écran).
+{%- endcomment -%}
+<section class="reassure" aria-label="Nos engagements">
+  <div class="reassure__viewport">
+    <div class="reassure__track">
+      {%- for pass in (1..2) -%}
+        <ul class="reassure__list container{% if pass == 2 %} reassure__list--clone{% endif %}" role="list"{% if pass == 2 %} aria-hidden="true"{% endif %}>
+          {%- for block in section.blocks -%}
+            <li class="reassure__item" {% if pass == 1 %}{{ block.shopify_attributes }}{% endif %}>
+              <span class="reassure__icon" style="--c: {{ block.settings.color }}">{% render 'icon', name: block.settings.icon %}</span>
+              <span><strong>{{ block.settings.title }}</strong><span class="reassure__text">{{ block.settings.text }}</span></span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Réassurance",
+  "class": "section-reassure",
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Engagement",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icône", "default": "leaf", "options": [
+          { "value": "leaf", "label": "Feuille" }, { "value": "heart", "label": "Cœur" }, { "value": "flag", "label": "Drapeau" },
+          { "value": "truck", "label": "Camion" }, { "value": "shield", "label": "Bouclier" }, { "value": "gift", "label": "Cadeau" }, { "value": "refresh", "label": "Abonnement" }
+        ] },
+        { "type": "color", "id": "color", "label": "Couleur", "default": "#7B3FC4" },
+        { "type": "text", "id": "title", "label": "Titre", "default": "80 % de fruits et légumes" },
+        { "type": "text", "id": "text", "label": "Détail", "default": "Purées de vrais fruits" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [{ "name": "Réassurance", "blocks": [{ "type": "item" }, { "type": "item" }, { "type": "item" }, { "type": "item" }] }]
+}
+{% endschema %}

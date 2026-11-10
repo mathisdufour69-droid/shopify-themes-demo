@@ -1,0 +1,13 @@
+<section class="grid-sec">
+  <div class="container">
+    <div class="sec-head"><h1 class="h2">{{ section.settings.title }}</h1></div>
+    <ul class="coll-list" role="list">
+      {%- for c in collections -%}
+        <li><a href="{{ c.url }}" class="coll-list__item"><strong>{{ c.title }}</strong><span>{{ c.products_count }} produit{% if c.products_count > 1 %}s{% endif %}</span>{% render 'icon', name: 'arrow' %}</a></li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+{% schema %}
+{ "name": "Liste des collections", "settings": [{ "type": "text", "id": "title", "label": "Titre", "default": "Nos collections" }] }
+{% endschema %}

@@ -1,0 +1,34 @@
+<div class="announce" style="--announce-bg: {{ section.settings.bg }}; --announce-fg: {{ section.settings.fg }}" role="region" aria-label="Annonces">
+  <ul class="announce__list" role="list">
+    {%- for block in section.blocks -%}
+      <li class="announce__item" {{ block.shopify_attributes }}>
+        {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{{ block.settings.text }}</a>{%- else -%}{{ block.settings.text }}{%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% schema %}
+{
+  "name": "Barre d'annonce",
+  "class": "section-announce",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "color", "id": "bg", "label": "Fond", "default": "#2A1A3A" },
+    { "type": "color", "id": "fg", "label": "Texte", "default": "#FBF6EE" },
+    { "type": "paragraph", "content": "Sur mobile, seul le premier message s'affiche : mets le plus fort en premier." }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        { "type": "inline_richtext", "id": "text", "label": "Texte", "default": "Livraison offerte dès 25 €" },
+        { "type": "url", "id": "link", "label": "Lien" }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [{ "name": "Barre d'annonce", "blocks": [{ "type": "message" }] }]
+}
+{% endschema %}

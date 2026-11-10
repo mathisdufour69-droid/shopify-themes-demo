@@ -1,0 +1,36 @@
+{%- comment -%}
+  « Parler à un concepteur » : formulaire sur place (formulaire de contact Shopify, reçu par e-mail).
+  Aucun changement de page : on garde l'élan. L'itinéraire consulté est prérempli.
+{%- endcomment -%}
+<dialog class="dlg" id="ContactDlg" aria-labelledby="ContactTitle">
+  <button type="button" class="x" data-dlg-close aria-label="Fermer">{% render 'icon', name: 'close' %}</button>
+  <div class="dlg-in">
+    <div class="dlg-side">
+      {% render 'picture', base: 'tente', widths: '600', width: 600, height: 750, alt: '', sizes: '240px' %}
+      <span class="logo">{{ settings.brand_name | default: 'Azimut' }}</span>
+      <p>Un concepteur vous rappelle sous 24 h ouvrées. Trente minutes, gratuites, sans engagement : on parle de vous avant de parler de route.</p>
+    </div>
+    <div class="dlg-main">
+      <span class="kick">Premier échange</span>
+      <h2 id="ContactTitle">Racontez-nous le voyage.</h2>
+      <p>Une destination, une envie, une date. Même vague, c'est un bon début.</p>
+      {%- form 'contact', id: 'ContactForm' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="ok" role="status">Merci, c'est noté. Un concepteur vous rappelle sous 24 h ouvrées.</p>
+        {%- else -%}
+          <label class="field"><span>Prénom et nom</span><input type="text" name="contact[name]" autocomplete="name" required></label>
+          <label class="field"><span>Téléphone</span><input type="tel" name="contact[phone]" autocomplete="tel"></label>
+          <label class="field full"><span>E-mail</span><input type="email" name="contact[email]" autocomplete="email" required></label>
+          <label class="field"><span>Destination</span><input type="text" name="contact[destination]" data-dlg-trip placeholder="Patagonie, ou « je ne sais pas »"></label>
+          <label class="field"><span>Période</span><input type="text" name="contact[periode]" placeholder="Mars 2027"></label>
+          <label class="field full"><span>Votre voyage en quelques mots</span><textarea name="contact[body]" rows="3" placeholder="Qui part, ce qui vous fait envie, ce que vous voulez éviter."></textarea></label>
+          {%- if form.errors -%}<p class="fine" style="color:var(--orange)">{{ form.errors | default_errors }}</p>{%- endif -%}
+          <div class="full" style="display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap">
+            <span class="fine" style="margin:0">Réponse sous 24 h ouvrées. Aucune donnée revendue.</span>
+            <button type="submit" class="b b-ink">Être rappelé <span class="d">{% render 'icon', name: 'arrow' %}</span></button>
+          </div>
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+  </div>
+</dialog>

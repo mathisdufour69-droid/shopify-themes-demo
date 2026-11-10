@@ -1,0 +1,176 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "SANSMODÉ",
+    "theme_version": "1.0.0",
+    "theme_author": "Mathis Dufour",
+    "theme_documentation_url": "https://github.com/",
+    "theme_support_url": "https://github.com/"
+  },
+  {
+    "name": "Couleurs",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Palette de la marque"
+      },
+      {
+        "type": "color",
+        "id": "color_violet",
+        "label": "Violet (principal, boutons)",
+        "default": "#7B3FC4"
+      },
+      {
+        "type": "color",
+        "id": "color_jaune",
+        "label": "Jaune",
+        "default": "#F6C21B"
+      },
+      {
+        "type": "color",
+        "id": "color_turquoise",
+        "label": "Turquoise",
+        "default": "#2DB3A8"
+      },
+      {
+        "type": "color",
+        "id": "color_rouge",
+        "label": "Rouge",
+        "default": "#E5321F"
+      },
+      {
+        "type": "color",
+        "id": "color_rose",
+        "label": "Rose",
+        "default": "#EC3C8C"
+      },
+      {
+        "type": "color",
+        "id": "color_creme",
+        "label": "Crème (fond)",
+        "default": "#FBF6EE"
+      },
+      {
+        "type": "color",
+        "id": "color_encre",
+        "label": "Encre (texte)",
+        "default": "#2A1A3A"
+      }
+    ]
+  },
+  {
+    "name": "Identité",
+    "settings": [
+      {
+        "type": "text",
+        "id": "brand_name",
+        "label": "Nom de la marque",
+        "default": "SANSMODÉ",
+        "info": "Affiché à la place du nom de la boutique Shopify."
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "32 × 32 px recommandé"
+      },
+      {
+        "type": "text",
+        "id": "logo_text",
+        "label": "Logo (texte)",
+        "default": "SANSMODÉ",
+        "info": "Le É est remplacé automatiquement par la pilule rose."
+      },
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Image de partage (réseaux sociaux)"
+      }
+    ]
+  },
+  {
+    "name": "Panier et livraison",
+    "settings": [
+      {
+        "type": "range",
+        "id": "free_shipping_threshold",
+        "label": "Seuil de livraison offerte",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "€",
+        "default": 25
+      },
+      {
+        "type": "text",
+        "id": "shipping_relay_price",
+        "label": "Prix livraison point relais",
+        "default": "3,90 €"
+      },
+      {
+        "type": "text",
+        "id": "shipping_home_price",
+        "label": "Prix livraison domicile",
+        "default": "5,90 €"
+      },
+      {
+        "type": "range",
+        "id": "cutoff_hour",
+        "label": "Heure limite d'expédition le jour même",
+        "min": 8,
+        "max": 20,
+        "step": 1,
+        "unit": "h",
+        "default": 14
+      },
+      {
+        "type": "text",
+        "id": "christmas_deadline",
+        "label": "Date limite pour Noël",
+        "default": "19 décembre",
+        "info": "Laisser vide pour masquer le message Noël."
+      },
+      {
+        "type": "product",
+        "id": "cart_upsell",
+        "label": "Produit suggéré dans le panier",
+        "info": "Un seul produit : Lundi Matin par défaut (handle lundi-matin)."
+      }
+    ]
+  },
+  {
+    "name": "Réseaux sociaux",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram",
+        "default": "https://instagram.com/"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok",
+        "default": "https://tiktok.com/"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube",
+        "label": "YouTube",
+        "default": "https://youtube.com/"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest",
+        "label": "Pinterest",
+        "default": "https://pinterest.com/"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook",
+        "default": "https://facebook.com/"
+      }
+    ]
+  }
+]

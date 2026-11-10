@@ -1,0 +1,482 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "kicker": "Édition Noël 2026",
+        "title": "Des bonbons qu’on mange sans modération.",
+        "text": "<p>80 % de fruits et légumes, 0 g de sucres ajoutés, et chaque recette riche en vitamine ou en minéral. Fabriqués à Montélimar.</p>",
+        "cta_label": "Choisir mes bonbons",
+        "rating": "4.6",
+        "reviews": "3120",
+        "proof": "+48 000 clients",
+        "mini_handle": "coffret-de-noel",
+        "mini_tag": "Idée cadeau",
+        "text_mobile": "80 % de fruits, 0 g de sucres ajoutés. Fabriqués à Montélimar.",
+        "cta_label_mobile": "Voir la gamme"
+      }
+    },
+    "reassurance": {
+      "type": "reassurance",
+      "settings": {},
+      "blocks": {
+        "r-1": {
+          "type": "item",
+          "settings": {
+            "icon": "leaf",
+            "color": "#2DB3A8",
+            "title": "80 % de fruits et légumes",
+            "text": "Des purées de vrais fruits"
+          }
+        },
+        "r-2": {
+          "type": "item",
+          "settings": {
+            "icon": "heart",
+            "color": "#EC3C8C",
+            "title": "0 g de sucres ajoutés",
+            "text": "La douceur vient des fruits"
+          }
+        },
+        "r-3": {
+          "type": "item",
+          "settings": {
+            "icon": "flag",
+            "color": "#7B3FC4",
+            "title": "Fabriqué à Montélimar",
+            "text": "Dans la Drôme, depuis 2024"
+          }
+        },
+        "r-4": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "color": "#F6C21B",
+            "title": "Livraison offerte dès 25 €",
+            "text": "Expédié sous 24 h"
+          }
+        }
+      },
+      "block_order": [
+        "r-1",
+        "r-2",
+        "r-3",
+        "r-4"
+      ]
+    },
+    "press": {
+      "type": "press",
+      "settings": {
+        "title": "Ils en parlent",
+        "quote": "Le premier bonbon qu’on n’a plus besoin de cacher.",
+        "quote_source": "Madame Gourmande"
+      },
+      "blocks": {
+        "p-1": {
+          "type": "media",
+          "settings": {
+            "name": "Sucre & Société",
+            "style": "serif"
+          }
+        },
+        "p-2": {
+          "type": "media",
+          "settings": {
+            "name": "Madame Gourmande",
+            "style": "script"
+          }
+        },
+        "p-3": {
+          "type": "media",
+          "settings": {
+            "name": "Le Journal du Goût",
+            "style": "caps"
+          }
+        },
+        "p-4": {
+          "type": "media",
+          "settings": {
+            "name": "POP PARIS",
+            "style": "bold"
+          }
+        },
+        "p-5": {
+          "type": "media",
+          "settings": {
+            "name": "Néo Santé Mag",
+            "style": "mono"
+          }
+        }
+      },
+      "block_order": [
+        "p-1",
+        "p-2",
+        "p-3",
+        "p-4",
+        "p-5"
+      ]
+    },
+    "duo": {
+      "type": "editorial-duo",
+      "settings": {
+        "label": "Nouveauté et best-seller"
+      },
+      "blocks": {
+        "t-1": {
+          "type": "tile",
+          "settings": {
+            "fallback_handle": "bras-de-fer",
+            "fallback_title": "Bras de Fer",
+            "alt": "Une femme en chemise rouge tient un sachet Bras de Fer",
+            "badge": "Nouveau",
+            "cta": "Goûter la nouveauté"
+          }
+        },
+        "t-2": {
+          "type": "tile",
+          "settings": {
+            "fallback_handle": "grisaille",
+            "fallback_title": "Grisaille",
+            "alt": "Une femme en manteau lilas croque un bonbon Grisaille",
+            "badge": "Best-seller",
+            "cta": "Prendre le best-seller"
+          }
+        }
+      },
+      "block_order": [
+        "t-1",
+        "t-2"
+      ]
+    },
+    "grid": {
+      "type": "product-grid",
+      "settings": {
+        "kicker": "La gamme",
+        "title": "Choisis ton humeur.",
+        "text": "Cinq recettes, cinq nutriments, un seul principe : on en mange autant qu’on veut.",
+        "limit": 6
+      }
+    },
+    "benefits": {
+      "type": "benefits",
+      "settings": {
+        "kicker": "Anatomie d’un bonbon",
+        "title": "Un vrai bonbon. Sans le côté obscur.",
+        "note": "Pour une portion de 25 g, soit environ 8 bonbons : 90 kcal.",
+        "caption": "Taille réelle × 6 (on a zoomé, pas triché)"
+      },
+      "blocks": {
+        "b-1": {
+          "type": "benefit",
+          "settings": {
+            "number": "80 %",
+            "title": "de fruits et légumes",
+            "text": "Des purées de vrais fruits et de légumes doux, pas des arômes qui font semblant.",
+            "color": "#F6C21B"
+          }
+        },
+        "b-2": {
+          "type": "benefit",
+          "settings": {
+            "number": "0 g",
+            "title": "de sucres ajoutés",
+            "text": "La douceur vient uniquement des fruits. Ni sucre, ni sirop de glucose, ni édulcorant.",
+            "color": "#EC3C8C"
+          }
+        },
+        "b-3": {
+          "type": "benefit",
+          "settings": {
+            "number": "6 g",
+            "title": "de fibres par portion",
+            "text": "Grâce aux fibres de chicorée. Ça cale, et ça évite le pic du goûter.",
+            "color": "#2DB3A8"
+          }
+        },
+        "b-4": {
+          "type": "benefit",
+          "settings": {
+            "number": "5",
+            "title": "nutriments, un par recette",
+            "text": "Vitamine D, fer, magnésium, oméga 3 d’algue, zinc : chaque parfum en apporte au moins 30 % des VNR par portion.",
+            "color": "#C9A7F5"
+          }
+        }
+      },
+      "block_order": [
+        "b-1",
+        "b-4",
+        "b-2",
+        "b-3"
+      ]
+    },
+    "compare": {
+      "type": "comparison",
+      "settings": {
+        "kicker": "Comparons honnêtement",
+        "title": "Ce qui change vraiment.",
+        "col_2": "Bonbons classiques",
+        "col_3": "Gélules de compléments",
+        "note": "Valeurs moyennes pour 100 g, relevées sur les étiquettes des bonbons les plus vendus en grande surface."
+      },
+      "blocks": {
+        "c-1": {
+          "type": "row",
+          "settings": {
+            "label": "Sucres ajoutés",
+            "us": "0 g",
+            "col_2": "≈ 50 g",
+            "col_3": "0 g"
+          }
+        },
+        "c-2": {
+          "type": "row",
+          "settings": {
+            "label": "Fruits et légumes",
+            "us": "80 %",
+            "col_2": "0 %",
+            "col_3": "0 %"
+          }
+        },
+        "c-3": {
+          "type": "row",
+          "settings": {
+            "label": "Riche en vitamine ou minéral",
+            "us": "yes",
+            "col_2": "no",
+            "col_3": "yes"
+          }
+        },
+        "c-4": {
+          "type": "row",
+          "settings": {
+            "label": "Fibres",
+            "us": "6 g / portion",
+            "col_2": "0 g",
+            "col_3": "0 g"
+          }
+        },
+        "c-5": {
+          "type": "row",
+          "settings": {
+            "label": "Envie d’en reprendre",
+            "us": "yes",
+            "col_2": "yes",
+            "col_3": "no"
+          }
+        }
+      },
+      "block_order": [
+        "c-1",
+        "c-2",
+        "c-3",
+        "c-4",
+        "c-5"
+      ]
+    },
+    "vreviews": {
+      "type": "video-reviews",
+      "settings": {
+        "kicker": "Avis vérifiés",
+        "title": "Ils ont arrêté de se cacher pour manger des bonbons.",
+        "rating": "4.6",
+        "count": "3120"
+      },
+      "blocks": {
+        "v-1": {
+          "type": "review",
+          "settings": {
+            "name": "Léa",
+            "age": "29 ans, Lille",
+            "stars": "5",
+            "quote": "J’en ai mangé un sachet entier devant ma série. Zéro culpabilité.",
+            "transcript": "Alors je vais être honnête, j’ai acheté Grisaille parce que le nom me faisait rire, on était en plein novembre à Lille. Le goût mangue-passion est dingue, ça ne fait pas du tout « bonbon santé ». J’en ai mangé un sachet entier devant ma série et je n’ai même pas culpabilisé. J’ai repris le lot de 3.",
+            "product_handle": "grisaille",
+            "fallback": "avis-cuisine",
+            "fallback_width": "457",
+            "fallback_height": "822"
+          }
+        },
+        "v-2": {
+          "type": "review",
+          "settings": {
+            "name": "Karim",
+            "age": "34 ans, Lyon",
+            "stars": "5",
+            "quote": "Mon goûter de la voiture. Le cassis est incroyable.",
+            "transcript": "Je fais beaucoup de route pour le boulot, avant c’était un paquet de bonbons à la station essence. Maintenant j’ai toujours un Lundi Matin dans la boîte à gants. Le myrtille-cassis est incroyable, et je ne craque plus sur la station essence.",
+            "product_handle": "lundi-matin",
+            "fallback": "avis-voiture",
+            "fallback_width": "600",
+            "fallback_height": "1071"
+          }
+        },
+        "v-3": {
+          "type": "review",
+          "settings": {
+            "name": "Martine",
+            "age": "61 ans, Nantes",
+            "stars": "4",
+            "quote": "Très bon, mais je les aurais aimés un peu moins acidulés.",
+            "transcript": "Ma petite-fille me les a fait découvrir. J’aime beaucoup l’idée des oméga 3 sans le goût de poisson, et ça marche, on ne sent rien. Je mets quatre étoiles parce que je les trouve un peu trop acidulés pour moi, mais mon mari les adore.",
+            "product_handle": "poisson-davril",
+            "fallback": "avis-canape",
+            "fallback_width": "600",
+            "fallback_height": "1070"
+          }
+        },
+        "v-4": {
+          "type": "review",
+          "settings": {
+            "name": "Inès",
+            "age": "26 ans, Marseille",
+            "stars": "5",
+            "quote": "Après la salle, c’est devenu mon rituel.",
+            "transcript": "Je fais beaucoup de sport, je cherchais un goûter riche en fer qui ne ressemble pas à une gélule. La fraise-betterave, j’avais peur, et en fait on ne sent pas du tout la betterave. C’est devenu mon rituel en sortant de la salle, un sachet dans le sac en permanence.",
+            "product_handle": "bras-de-fer",
+            "fallback": "avis-sport",
+            "fallback_width": "600",
+            "fallback_height": "1066"
+          }
+        }
+      },
+      "block_order": [
+        "v-1",
+        "v-2",
+        "v-3",
+        "v-4"
+      ]
+    },
+    "offers": {
+      "type": "offer-christmas",
+      "settings": {
+        "kicker": "Deux façons d’en profiter",
+        "title": "Pour offrir, ou pour ne jamais en manquer."
+      }
+    },
+    "origin": {
+      "type": "made-in-france",
+      "settings": {
+        "kicker": "Fabriqué en France",
+        "title": "Cuits à Montélimar. Pas dans une usine anonyme."
+      },
+      "blocks": {
+        "f-1": {
+          "type": "fact",
+          "settings": {
+            "number": "14",
+            "label": "personnes à l’atelier"
+          }
+        },
+        "f-2": {
+          "type": "fact",
+          "settings": {
+            "number": "< 150 km",
+            "label": "entre le verger et la cuve"
+          }
+        },
+        "f-3": {
+          "type": "fact",
+          "settings": {
+            "number": "2024",
+            "label": "première fournée"
+          }
+        }
+      },
+      "block_order": [
+        "f-1",
+        "f-2",
+        "f-3"
+      ]
+    },
+    "story": {
+      "type": "story",
+      "settings": {}
+    },
+    "guarantee": {
+      "type": "guarantee",
+      "settings": {}
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "kicker": "Questions",
+        "title": "Tu te demandes sûrement…",
+        "text": "Une autre question ? On répond en moins de 24 h à bonjour@sansmode.fr.",
+        "open_first": true
+      },
+      "blocks": {
+        "q-1": {
+          "type": "question",
+          "settings": {
+            "question": "C’est vraiment sans sucres ajoutés ?",
+            "answer": "<p>Oui. La douceur vient uniquement des fruits et des légumes doux (patate douce, betterave, carotte). Pas de sucre, pas de sirop de glucose, pas d’édulcorant. Les sucres présents sont ceux naturellement contenus dans les fruits.</p>"
+          }
+        },
+        "q-2": {
+          "type": "question",
+          "settings": {
+            "question": "Je peux vraiment en manger autant que je veux ?",
+            "answer": "<p>C’est le principe du nom. Une portion de 25 g fait 90 kcal et 6 g de fibres : on se sent calé bien avant d’avoir fini le sachet. Comme pour tout, une alimentation variée et équilibrée reste la base.</p>"
+          }
+        },
+        "q-3": {
+          "type": "question",
+          "settings": {
+            "question": "C’est adapté aux enfants ?",
+            "answer": "<p>Oui, à partir de 3 ans. Les bonbons sont tendres et ne contiennent ni gélatine porcine ni colorant artificiel : les couleurs viennent de spiruline, de betterave et de curcuma.</p>"
+          }
+        },
+        "q-4": {
+          "type": "question",
+          "settings": {
+            "question": "Quand vais-je recevoir ma commande ?",
+            "answer": "<p>Commandé avant 14 h en semaine, ton colis part le jour même de Montélimar. Compte 2 à 3 jours ouvrés à domicile, 3 à 4 en point relais. La livraison est offerte dès 25 € d’achat.</p>"
+          }
+        },
+        "q-5": {
+          "type": "question",
+          "settings": {
+            "question": "Comment fonctionne l’abonnement ?",
+            "answer": "<p>Tu reçois 3 sachets par mois à 8,40 € au lieu de 11,70 €. Tu choisis et changes tes parfums quand tu veux, tu mets en pause ou tu arrêtes en un clic depuis ton compte. Aucun engagement.</p>"
+          }
+        },
+        "q-6": {
+          "type": "question",
+          "settings": {
+            "question": "Et si je n’aime pas ?",
+            "answer": "<p>On te rembourse. Écris-nous dans les 30 jours, même sachet ouvert, sans justificatif. C’est notre garantie « Goût adoré ou remboursé ».</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q-1",
+        "q-2",
+        "q-3",
+        "q-4",
+        "q-5",
+        "q-6"
+      ]
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "reassurance",
+    "press",
+    "duo",
+    "grid",
+    "benefits",
+    "compare",
+    "vreviews",
+    "offers",
+    "origin",
+    "story",
+    "guarantee",
+    "faq",
+    "newsletter"
+  ]
+}

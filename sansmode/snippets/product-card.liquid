@@ -1,0 +1,81 @@
+{%- comment -%}
+  Carte produit. Ajout rapide du format 1 sachet directement depuis la grille
+  (pas de clic mort : le bouton ajoute, la carte ouvre la fiche).
+  Usage : {% render 'product-card', card_product: product, eager: false, show_accroche: true %}
+{%- endcomment -%}
+{%- liquid
+  assign h = card_product.handle
+  capture bg
+    render 'product-data', handle: h, field: 'bg', product: card_product
+  endcapture
+  capture color
+    render 'product-data', handle: h, field: 'color', product: card_product
+  endcapture
+  capture badge
+    render 'product-data', handle: h, field: 'badge', product: card_product
+  endcapture
+  capture nutrient
+    render 'product-data', handle: h, field: 'nutrient', product: card_product
+  endcapture
+  capture accroche
+    render 'product-data', handle: h, field: 'accroche', product: card_product
+  endcapture
+  capture rating
+    render 'product-data', handle: h, field: 'rating', product: card_product
+  endcapture
+  capture count
+    render 'product-data', handle: h, field: 'count', product: card_product
+  endcapture
+  capture image_base
+    render 'product-data', handle: h, field: 'image', product: card_product
+  endcapture
+
+  assign quick_variant = card_product.selected_or_first_available_variant
+  for v in card_product.variants
+    if v.title contains '1 sachet' and v.available
+      assign quick_variant = v
+      break
+    endif
+  endfor
+
+  assign lot = nil
+  for v in card_product.variants
+    if v.title contains 'Lot de 3'
+      assign lot = v
+      break
+    endif
+  endfor
+-%}
+<article class="card" style="--card-bg: {{ bg }}; --card-accent: {{ color }}">
+  <a href="{{ card_product.url }}" class="card__media" aria-label="{{ card_product.title | escape }}">
+    {%- if badge != blank -%}<span class="badge badge--{{ badge | handleize }}">{{ badge }}</span>{%- endif -%}
+    {%- if card_product.featured_media -%}
+      {{ card_product.featured_media | image_url: width: 700 | image_tag: widths: '360,540,700', sizes: '(min-width: 990px) 22vw, (min-width: 750px) 33vw, 50vw', loading: 'lazy', alt: card_product.featured_media.alt | default: card_product.title, class: 'card__img' }}
+    {%- elsif image_base == 'coffret-noel' -%}
+      {% render 'picture', base: 'coffret-noel', widths: '600,1000', width: 1000, height: 1250, alt: card_product.title, sizes: '(min-width: 990px) 22vw, 50vw', class: 'card__img card__img--box' %}
+    {%- elsif image_base != blank -%}
+      {% render 'picture', base: image_base, widths: '360,700', width: 700, height: 1120, alt: card_product.title, sizes: '(min-width: 990px) 16vw, 36vw', class: 'card__img', eager: eager %}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'card__img placeholder' }}
+    {%- endif -%}
+  </a>
+  <div class="card__body">
+    {% render 'rating', rating: rating, count: count, compact: true %}
+    <h3 class="card__title"><a href="{{ card_product.url }}">{{ card_product.title }}</a></h3>
+    {%- if nutrient != blank -%}{%- assign nutrient_rest = nutrient | remove_first: 'Riche en ' -%}<p class="card__nutrient">{% if nutrient_rest != nutrient %}<span class="card__nutrient-pre">Riche en </span>{% endif %}<span class="card__nutrient-main">{{ nutrient_rest }}</span></p>{%- endif -%}
+    {%- if show_accroche and accroche != blank -%}<p class="card__accroche">{{ accroche }}</p>{%- endif -%}
+    <div class="card__foot">
+      <div class="card__price">
+        <span class="price">{{ quick_variant.price | money }}</span>
+        {%- if quick_variant.compare_at_price > quick_variant.price -%}<s class="price price--old">{{ quick_variant.compare_at_price | money }}</s>{%- endif -%}
+        {%- if lot -%}<span class="card__unit"><span class="card__unit-or">ou </span>{{ lot.price | divided_by: 3 | money }}/sachet par&nbsp;3</span>{%- endif -%}
+      </div>
+      {%- form 'product', card_product, class: 'card__form' -%}
+        <input type="hidden" name="id" value="{{ quick_variant.id }}">
+        <button type="submit" class="btn btn--small btn--round" {% unless quick_variant.available %}disabled{% endunless %} aria-label="Ajouter {{ card_product.title | escape }} au panier, {{ quick_variant.price | money_without_trailing_zeros | strip_html }}">
+          {% render 'icon', name: 'plus' %}<span class="card__add-label">Ajouter</span>
+        </button>
+      {%- endform -%}
+    </div>
+  </div>
+</article>

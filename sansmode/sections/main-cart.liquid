@@ -1,0 +1,66 @@
+{%- comment -%} Page panier complète (fonctionne sans JavaScript). {%- endcomment -%}
+{%- liquid
+  assign threshold = settings.free_shipping_threshold | times: 100
+  assign remaining = threshold | minus: cart.total_price
+  assign progress = cart.total_price | times: 100 | divided_by: threshold
+  if progress > 100
+    assign progress = 100
+  endif
+-%}
+<section class="cart-page">
+  <div class="container container--narrow">
+    <h1 class="h2">Ton panier</h1>
+    {%- if cart.item_count > 0 -%}
+      <div class="ship-bar{% if remaining <= 0 %} ship-bar--done{% endif %}">
+        <p class="ship-bar__text">{% if remaining > 0 %}Plus que <strong>{{ remaining | money }}</strong> pour la livraison offerte{% else %}{% render 'icon', name: 'check' %} <strong>Livraison offerte</strong>, c’est cadeau.{% endif %}</p>
+        <div class="ship-bar__track" role="progressbar" aria-label="Progression vers la livraison offerte" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ progress }}"><span style="width: {{ progress }}%"></span></div>
+      </div>
+      <form action="{{ routes.cart_url }}" method="post" id="CartForm">
+        <ul class="drawer__items" role="list">
+          {%- for item in cart.items -%}
+            {%- capture item_bg -%}{% render 'product-data', handle: item.product.handle, field: 'bg', product: item.product %}{%- endcapture -%}
+            {%- capture item_img -%}{% render 'product-data', handle: item.product.handle, field: 'image', product: item.product %}{%- endcapture -%}
+            <li class="line" style="--card-bg: {{ item_bg }}">
+              <a href="{{ item.url }}" class="line__media" tabindex="-1" aria-hidden="true">
+                {%- if item.image -%}{{ item.image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+                {%- elsif item_img == 'coffret-noel' -%}<img src="{{ 'coffret-noel-600.webp' | asset_url }}" alt="" width="600" height="750" loading="lazy">
+                {%- elsif item_img != blank -%}<img src="{{ item_img | append: '-360.webp' | asset_url }}" alt="" width="360" height="576" loading="lazy">{%- endif -%}
+              </a>
+              <div class="line__info">
+                <a href="{{ item.url }}" class="line__title">{{ item.product.title }}</a>
+                {%- unless item.product.has_only_default_variant -%}<p class="line__variant">{{ item.variant.title }}</p>{%- endunless -%}
+                <label class="visually-hidden" for="Qty-{{ forloop.index }}">Quantité</label>
+                <input id="Qty-{{ forloop.index }}" class="input input--qty" type="number" name="updates[]" value="{{ item.quantity }}" min="0">
+              </div>
+              <div class="line__price">
+                <span class="price">{{ item.final_line_price | money }}</span>
+                <a href="{{ item.url_to_remove }}" class="line__remove">Retirer</a>
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+        <div class="cart-page__foot">
+          <button type="submit" name="update" class="btn btn--ghost btn--small">Mettre à jour</button>
+          <div class="cart-page__note">
+            <label for="CartNote">Un mot pour la carte cadeau ?</label>
+            <textarea id="CartNote" name="note" class="input" rows="2">{{ cart.note }}</textarea>
+          </div>
+          <div class="drawer__total"><span>Sous-total</span><span class="price">{{ cart.total_price | money }}</span></div>
+          <button type="submit" name="checkout" class="btn btn--block btn--big">Commander · {{ cart.total_price | money }}</button>
+          <ul class="mini-trust" role="list">
+            <li>{% render 'icon', name: 'lock' %} Paiement sécurisé</li>
+            <li>{% render 'icon', name: 'heart' %} Goût adoré ou remboursé</li>
+          </ul>
+        </div>
+      </form>
+    {%- else -%}
+      <div class="drawer__empty">
+        <p class="drawer__empty-title">Ton panier est vide.<br>Ça ne peut pas durer.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn">Voir la gamme</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{ "name": "Panier", "settings": [] }
+{% endschema %}

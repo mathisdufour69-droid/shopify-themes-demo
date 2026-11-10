@@ -1,0 +1,67 @@
+{%- assign trips_url = collections['voyages'].url | default: routes.all_products_collection_url -%}
+<footer id="contact">
+  <div class="f-img">
+    {% render 'picture', image: section.settings.image, base: 'route', widths: '900,1600', width: 1600, height: 686, alt: '', sizes: '100vw' %}
+  </div>
+  <div class="wrap f-in">
+    <div class="f-cta">
+      <div>
+        <span class="kick lt">{{ section.settings.kicker }}</span>
+        <h2 style="margin-top:16px">{{ section.settings.title }}</h2>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button type="button" class="b b-lt" data-dlg-open>{{ section.settings.cta }} <span class="d">{% render 'icon', name: 'arrow' %}</span></button>
+        {%- if section.settings.email != blank -%}<a class="b b-lt" href="mailto:{{ section.settings.email }}">{{ section.settings.email }} <span class="d">{% render 'icon', name: 'mail' %}</span></a>{%- endif -%}
+      </div>
+    </div>
+    <div class="f-grid">
+      <div>
+        <a class="logo" href="{{ routes.root_url }}" style="color:#fff">{{ settings.brand_name | default: 'Azimut' }}</a>
+        <p>{{ section.settings.baseline }}</p>
+      </div>
+      <div class="f-col"><h4>Destinations</h4>
+        {%- assign hs = section.settings.destinations | split: ',' -%}
+        {%- for h in hs -%}
+          {%- assign hh = h | strip -%}
+          {%- assign p = all_products[hh] -%}{%- if p.title == blank or p.variants.size == 0 -%}{%- assign p = nil -%}{%- endif -%}
+          {%- capture c -%}{% render 'trip-data', handle: hh, field: 'country' %}{%- endcapture -%}
+          <a href="{{ p.url | default: trips_url }}">{{ c | default: hh | capitalize }}</a>
+        {%- endfor -%}
+      </div>
+      <div class="f-col"><h4>La maison</h4>
+        <a href="{{ routes.root_url }}#manifeste">Notre histoire</a>
+        <a href="{{ routes.root_url }}#guides">Nos guides</a>
+        <a href="{{ routes.root_url }}#comment">Comment ça se passe</a>
+        <a href="{{ routes.root_url }}#journal">Journal</a>
+      </div>
+      <div class="f-col"><h4>Pratique</h4>
+        <a href="{{ routes.root_url }}#offrir">Offrir un voyage</a>
+        <a href="{{ routes.root_url }}#comment">Acompte et paiement</a>
+        <button type="button" class="f-lk" data-dlg-open>Parler à un concepteur</button>
+        {%- for policy in shop.policies -%}<a href="{{ policy.url }}">{{ policy.title }}</a>{%- endfor -%}
+      </div>
+    </div>
+    <div class="f-bot">
+      <span>© {{ 'now' | date: '%Y' }} {{ settings.brand_name | default: 'Azimut' }} · {{ section.settings.legal }}</span>
+      <span class="r f-legal-demo">{{ section.settings.demo }}</span>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Pied de page",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image de fond" },
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Premier échange" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Dites-nous où vous voulez aller. On s'occupe de la route." },
+    { "type": "text", "id": "cta", "label": "Bouton", "default": "Réserver un appel de 30 min" },
+    { "type": "text", "id": "email", "label": "E-mail", "default": "bonjour@azimut-voyages.fr" },
+    { "type": "text", "id": "baseline", "label": "Phrase", "default": "Maison de voyage indépendante. Expéditions privées conçues une par une, depuis 2009." },
+    { "type": "text", "id": "destinations", "label": "Destinations (handles)", "default": "islande,patagonie,namibie,laponie,japon,canada,maroc" },
+    { "type": "text", "id": "legal", "label": "Mentions", "default": "Immatriculation Atout France IM000000000 (numéro fictif)" },
+    { "type": "text", "id": "demo", "label": "Mention démo", "default": "Azimut est une marque fictive. Boutique de démonstration conçue par Mathis Dufour." }
+  ]
+}
+{% endschema %}

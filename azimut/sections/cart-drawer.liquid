@@ -1,0 +1,46 @@
+<div class="drawer" data-drawer aria-hidden="true">
+  <div class="ov" data-drawer-close></div>
+  <div class="pn" role="dialog" aria-modal="true" aria-labelledby="DrawerTitle" tabindex="-1">
+    <div class="drawer-in" data-drawer-inner data-count="{{ cart.item_count }}" style="display:flex;flex-direction:column;height:100%">
+      <div class="hd">
+        <h2 id="DrawerTitle">Votre panier</h2>
+        <button type="button" class="x" data-drawer-close aria-label="Fermer">{% render 'icon', name: 'close' %}</button>
+      </div>
+      {%- if cart.item_count > 0 -%}
+        <ul class="items" role="list">
+          {%- for item in cart.items -%}
+            {%- capture img -%}{% render 'trip-data', handle: item.product.handle, field: 'img', product: item.product %}{%- endcapture -%}
+            <li class="it">
+              {%- if item.image -%}{{ item.image | image_url: width: 160 | image_tag: alt: '', loading: 'lazy' }}
+              {%- elsif img != blank -%}<img src="{{ img | append: '-600.webp' | asset_url }}" alt="" loading="lazy" width="76" height="76">
+              {%- else -%}<span class="av" style="width:76px;height:76px;border-radius:12px">{% render 'icon', name: 'gift' %}</span>{%- endif -%}
+              <div>
+                <b>{{ item.product.title }}</b>
+                {%- unless item.product.has_only_default_variant -%}<small>{{ item.variant.title | replace: ' / ', ' · ' }}</small>{%- endunless -%}
+                {%- unless item.product.gift_card? -%}<small>Acompte · solde 45 jours avant le départ</small>{%- endunless -%}
+                {%- for p in item.properties -%}{%- assign first = p.first | slice: 0 -%}{%- if p.last != blank and first != '_' -%}<small>{{ p.first }} : {{ p.last }}</small>{%- endif -%}{%- endfor -%}
+                <button type="button" class="rm" data-line="{{ forloop.index }}" data-qty="0">Retirer</button>
+              </div>
+              <span class="pr">{% render 'eur', cents: item.final_line_price %}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+        <div class="ft">
+          <div class="row"><span>À régler aujourd'hui</span><b>{% render 'eur', cents: cart.total_price %}</b></div>
+          <p class="nt">Acompte remboursable sous 14 jours. Le solde du voyage est demandé 45 jours avant le départ.</p>
+          <form action="{{ routes.cart_url }}" method="post">
+            <button type="submit" name="checkout" class="b b-ink">Régler {% render 'eur', cents: cart.total_price %} <span class="d">{% render 'icon', name: 'lock' %}</span></button>
+          </form>
+        </div>
+      {%- else -%}
+        <div class="empty">
+          <p>Votre panier est vide. Le plus dur, c'est de choisir la direction.</p>
+          <a class="b b-line" href="{{ collections['voyages'].url | default: routes.all_products_collection_url }}">Voir les itinéraires <span class="d">{% render 'icon', name: 'arrow' %}</span></a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+{ "name": "Tiroir panier", "settings": [] }
+{% endschema %}

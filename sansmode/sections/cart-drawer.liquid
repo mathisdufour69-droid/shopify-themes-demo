@@ -1,0 +1,167 @@
+{%- comment -%}
+  Tiroir panier. Re-rendu via la Section Rendering API après chaque ajout/modif (aucun rechargement).
+  Règles CRO : barre de livraison offerte, UNE seule suggestion, prix total sur le bouton Commander.
+{%- endcomment -%}
+{%- liquid
+  assign threshold = settings.free_shipping_threshold | times: 100
+  assign remaining = threshold | minus: cart.total_price
+  assign progress = cart.total_price | times: 100 | divided_by: threshold
+  if progress > 100
+    assign progress = 100
+  endif
+
+  assign upsell = settings.cart_upsell
+  if upsell == blank
+    assign upsell = all_products['lundi-matin']
+  endif
+  unless upsell.handle
+    assign upsell = nil
+  endunless
+  assign upsell_in_cart = false
+  for item in cart.items
+    if item.product_id == upsell.id
+      assign upsell_in_cart = true
+    endif
+  endfor
+  if upsell_in_cart
+    assign upsell = blank
+    for p in collections['all'].products limit: 12
+      assign seen = false
+      for i2 in cart.items
+        if i2.product_id == p.id
+          assign seen = true
+        endif
+      endfor
+      unless seen
+        assign upsell = p
+        assign upsell_in_cart = false
+        break
+      endunless
+    endfor
+  endif
+-%}
+<div id="CartDrawer" class="drawer" data-cart-drawer aria-hidden="true">
+  <div class="drawer__overlay" data-cart-close></div>
+  <div class="drawer__panel" role="dialog" aria-modal="true" aria-labelledby="CartDrawerTitle" tabindex="-1">
+    <div class="drawer__inner" data-cart-inner data-count="{{ cart.item_count }}">
+      <div class="drawer__head">
+        <h2 id="CartDrawerTitle" class="drawer__title">Ton panier{% if cart.item_count > 0 %} <span class="drawer__count">({{ cart.item_count }})</span>{% endif %}</h2>
+        <button type="button" class="icon-btn" data-cart-close aria-label="Fermer le panier">{% render 'icon', name: 'close' %}</button>
+      </div>
+
+      {%- if cart.item_count > 0 -%}
+        <div class="ship-bar{% if remaining <= 0 %} ship-bar--done{% endif %}">
+          <p class="ship-bar__text">
+            {%- if remaining > 0 -%}
+              Plus que <strong>{{ remaining | money }}</strong> pour la livraison offerte
+            {%- else -%}
+              {% render 'icon', name: 'check' %} <strong>Livraison offerte</strong>, c’est cadeau.
+            {%- endif -%}
+          </p>
+          <div class="ship-bar__track" role="progressbar" aria-label="Progression vers la livraison offerte" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ progress }}"><span style="width: {{ progress }}%"></span></div>
+        </div>
+
+        <ul class="drawer__items" role="list">
+          {%- for item in cart.items -%}
+            {%- capture item_bg -%}{% render 'product-data', handle: item.product.handle, field: 'bg', product: item.product %}{%- endcapture -%}
+            {%- capture item_img -%}{% render 'product-data', handle: item.product.handle, field: 'image', product: item.product %}{%- endcapture -%}
+            <li class="line" style="--card-bg: {{ item_bg }}">
+              <a href="{{ item.url }}" class="line__media" tabindex="-1" aria-hidden="true">
+                {%- if item.image -%}
+                  {{ item.image | image_url: width: 160 | image_tag: loading: 'lazy', alt: '' }}
+                {%- elsif item_img == 'coffret-noel' -%}
+                  <img src="{{ 'coffret-noel-600.webp' | asset_url }}" alt="" width="600" height="750" loading="lazy">
+                {%- elsif item_img != blank -%}
+                  <img src="{{ item_img | append: '-360.webp' | asset_url }}" alt="" width="360" height="576" loading="lazy">
+                {%- endif -%}
+              </a>
+              <div class="line__info">
+                <a href="{{ item.url }}" class="line__title">{{ item.product.title }}</a>
+                {%- unless item.product.has_only_default_variant -%}<p class="line__variant">{{ item.variant.title }}</p>{%- endunless -%}
+                {%- if item.selling_plan_allocation -%}<p class="line__variant">{{ item.selling_plan_allocation.selling_plan.name }}</p>{%- endif -%}
+                <div class="qty" aria-label="Quantité">
+                  <button type="button" class="qty__btn" data-line="{{ forloop.index }}" data-qty="{{ item.quantity | minus: 1 }}" aria-label="Retirer un {{ item.product.title | escape }}">{% render 'icon', name: 'minus' %}</button>
+                  <span class="qty__val" aria-live="polite">{{ item.quantity }}</span>
+                  <button type="button" class="qty__btn" data-line="{{ forloop.index }}" data-qty="{{ item.quantity | plus: 1 }}" aria-label="Ajouter un {{ item.product.title | escape }}">{% render 'icon', name: 'plus' %}</button>
+                </div>
+              </div>
+              <div class="line__price">
+                {%- if item.original_line_price > item.final_line_price -%}<s class="price--old">{{ item.original_line_price | money }}</s>{%- endif -%}
+                <span class="price">{{ item.final_line_price | money }}</span>
+                <button type="button" class="line__remove" data-line="{{ forloop.index }}" data-qty="0">Retirer</button>
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {%- if upsell and upsell_in_cart == false and upsell.available -%}
+          {%- liquid
+            assign up_variant = upsell.selected_or_first_available_variant
+            for v in upsell.variants
+              if v.title contains '1 sachet' and v.available
+                assign up_variant = v
+                break
+              endif
+            endfor
+          -%}
+          {%- capture up_bg -%}{% render 'product-data', handle: upsell.handle, field: 'bg', product: upsell %}{%- endcapture -%}
+          {%- capture up_img -%}{% render 'product-data', handle: upsell.handle, field: 'image', product: upsell %}{%- endcapture -%}
+          {%- capture up_acc -%}{% render 'product-data', handle: upsell.handle, field: 'accroche', product: upsell %}{%- endcapture -%}
+          <div class="upsell" style="--card-bg: {{ up_bg }}">
+            <p class="upsell__label">Ça va bien avec</p>
+            <div class="upsell__row">
+              <div class="upsell__media">
+                {%- if upsell.featured_media -%}
+                  {{ upsell.featured_media | image_url: width: 160 | image_tag: loading: 'lazy', alt: '' }}
+                {%- elsif up_img != blank -%}
+                  <img src="{{ up_img | append: '-360.webp' | asset_url }}" alt="" width="360" height="576" loading="lazy">
+                {%- endif -%}
+              </div>
+              <div class="upsell__info">
+                <p class="upsell__title">{{ upsell.title }}</p>
+                <p class="upsell__acc">{{ up_acc }}</p>
+              </div>
+              {%- form 'product', upsell, class: 'upsell__form' -%}
+                <input type="hidden" name="id" value="{{ up_variant.id }}">
+                <button type="submit" class="btn btn--small">+ {{ up_variant.price | money }}</button>
+              {%- endform -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        <div class="drawer__foot">
+          <div class="drawer__total">
+            <span>Sous-total</span>
+            <span class="price">{{ cart.total_price | money }}</span>
+          </div>
+          {%- if cart.cart_level_discount_applications.size > 0 -%}
+            <ul class="drawer__discounts" role="list">
+              {%- for d in cart.cart_level_discount_applications -%}<li>{{ d.title }} (−{{ d.total_allocated_amount | money }})</li>{%- endfor -%}
+            </ul>
+          {%- endif -%}
+          <form action="{{ routes.cart_url }}" method="post" class="drawer__checkout">
+            <button type="submit" name="checkout" class="btn btn--block btn--big">Commander · {{ cart.total_price | money }}</button>
+          </form>
+          <ul class="mini-trust" role="list">
+            <li>{% render 'icon', name: 'lock' %} Paiement sécurisé</li>
+            <li>{% render 'icon', name: 'heart' %} Goût adoré ou remboursé</li>
+          </ul>
+        </div>
+      {%- else -%}
+        <div class="drawer__empty">
+          <p class="drawer__empty-title">Ton panier est vide.<br>Ça ne peut pas durer.</p>
+          <p>Commence par Grisaille, notée 4,7/5 par 1&nbsp;284 personnes qui ont survécu à novembre.</p>
+          <a href="{{ all_products['grisaille'].url | default: routes.all_products_collection_url }}" class="btn">Découvrir Grisaille</a>
+          <a href="{{ routes.all_products_collection_url }}" class="link">Voir toute la gamme</a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Tiroir panier",
+  "settings": []
+}
+{% endschema %}

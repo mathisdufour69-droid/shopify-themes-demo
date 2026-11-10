@@ -1,0 +1,129 @@
+{%- comment -%}
+  Roue cadeau. Ouverte UNIQUEMENT au clic sur la notif (jamais de pop-up imposée).
+  Chaque tirage gagne (les cases « Presque ! » ont un poids 0 : elles créent le suspense, jamais la déception).
+  Le tirage pondéré est fait en JS, la roue est dessinée en CSS (conic-gradient) à partir des blocs.
+  E-mail envoyé au formulaire client Shopify (tag newsletter + roue). Un seul tirage par visiteur.
+{%- endcomment -%}
+{%- liquid
+  assign n = section.blocks.size
+  if n == 0
+    assign n = 1
+  endif
+  assign seg = 360.0 | divided_by: n
+  assign gradient = ''
+  for block in section.blocks
+    assign a0 = forloop.index0 | times: seg
+    assign a1 = forloop.index | times: seg
+    assign gradient = gradient | append: block.settings.color | append: ' ' | append: a0 | append: 'deg ' | append: a1 | append: 'deg'
+    unless forloop.last
+      assign gradient = gradient | append: ', '
+    endunless
+  endfor
+-%}
+{%- if section.settings.enabled and section.blocks.size > 1 -%}
+<div class="gw" data-gift-wheel data-key="sm-wheel-v1">
+  <button type="button" class="gw__launcher" data-gw-open aria-haspopup="dialog" aria-label="{{ section.settings.launcher_label | escape }}">
+    <span class="gw__ring" aria-hidden="true"></span>
+    <span class="gw__icon">{% render 'icon', name: 'gift' %}</span>
+    <span class="gw__badge" data-gw-badge aria-hidden="true">1</span>
+  </button>
+  <span class="gw__tip" data-gw-tip aria-hidden="true">{{ section.settings.tip }}</span>
+
+  <dialog class="gw__dialog" aria-labelledby="GwTitle-{{ section.id }}" data-gw-dialog>
+    <button type="button" class="gw__close" data-gw-close aria-label="Fermer">{% render 'icon', name: 'close' %}</button>
+    <div class="gw__layout">
+      <div class="gw__stage" aria-hidden="true">
+        <div class="gw__wheel">
+          <div class="gw__disc" data-gw-disc style="background: conic-gradient({{ gradient }})">
+            {%- for block in section.blocks -%}
+              {%- assign mid = forloop.index0 | times: seg | plus: 0 -%}
+              {%- assign half = seg | divided_by: 2 -%}
+              {%- assign mid = mid | plus: half -%}
+              <span class="gw__label" style="--a: {{ mid }}deg; color: {{ block.settings.text_color }}"
+                data-gw-seg
+                data-mid="{{ mid }}"
+                data-weight="{{ block.settings.weight }}"
+                data-code="{{ block.settings.code | escape }}"
+                data-prize="{{ block.settings.prize | escape }}"><span>{{ block.settings.label }}</span></span>
+            {%- endfor -%}
+          </div>
+          {%- for block in section.blocks -%}
+            <span class="gw__peg" style="--a: {{ forloop.index0 | times: seg }}deg"></span>
+          {%- endfor -%}
+          <span class="gw__hub"><span class="gw__hub-pill"></span></span>
+          <span class="gw__pointer"></span>
+        </div>
+      </div>
+
+      <div class="gw__panel">
+        <div class="gw__step" data-gw-step="form">
+          <p class="kicker">{{ section.settings.kicker }}</p>
+          <h2 id="GwTitle-{{ section.id }}" class="gw__title">{{ section.settings.title }}</h2>
+          <p class="gw__sub">{{ section.settings.subtitle }}</p>
+          {%- form 'customer', class: 'gw__form', id: 'GiftWheelForm' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter,roue-noel">
+            <label for="GwEmail-{{ section.id }}" class="visually-hidden">Ton adresse e-mail</label>
+            <div class="gw__field">
+              {% render 'icon', name: 'mail' %}
+              <input id="GwEmail-{{ section.id }}" type="email" name="contact[email]" required autocomplete="email" placeholder="ton@email.fr" data-gw-email>
+            </div>
+            <p class="form-error" data-gw-error hidden>Il manque ton e-mail (ou il a une petite faute).</p>
+            <button type="submit" class="btn btn--block btn--big" data-gw-spin>{{ section.settings.button }}</button>
+          {%- endform -%}
+          <p class="gw__fine">{{ section.settings.fine }}</p>
+          <button type="button" class="gw__later" data-gw-close>Pas aujourd’hui {% render 'icon', name: 'close' %}</button>
+        </div>
+
+        <div class="gw__step" data-gw-step="result" hidden>
+          <p class="kicker">{{ section.settings.win_kicker }}</p>
+          <p class="gw__title gw__prize" data-gw-prize></p>
+          <p class="gw__sub">Ton code, à coller au paiement (ou on l’applique pour toi) :</p>
+          <button type="button" class="gw__code" data-gw-copy>
+            <span data-gw-code></span>
+            <span class="gw__copy" data-gw-copy-label>Copier</span>
+          </button>
+          <a href="{{ routes.all_products_collection_url }}" class="btn btn--block btn--big" data-gw-apply>{{ section.settings.apply_label }}</a>
+          <p class="gw__fine">{{ section.settings.win_fine }}</p>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Roue cadeau",
+  "class": "section-gift-wheel",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Afficher la notif cadeau", "default": true },
+    { "type": "text", "id": "launcher_label", "label": "Libellé du bouton (accessibilité)", "default": "Ouvrir la roue cadeau de Noël" },
+    { "type": "text", "id": "tip", "label": "Bulle d'info", "default": "Ton cadeau de Noël t’attend" },
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Cadeau de Noël" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Tourne la roue, tout le monde gagne." },
+    { "type": "text", "id": "subtitle", "label": "Sous-titre", "default": "Jusqu’à −20 % sur ta commande de Noël." },
+    { "type": "text", "id": "button", "label": "Bouton", "default": "Tourner la roue" },
+    { "type": "text", "id": "fine", "label": "Mention", "default": "Un seul tour par personne. Tu reçois aussi nos bons plans (un mail par semaine maximum, désinscription en un clic)." },
+    { "type": "text", "id": "win_kicker", "label": "Sur-titre gagné", "default": "C’est gagné !" },
+    { "type": "text", "id": "apply_label", "label": "Bouton gagné", "default": "En profiter maintenant" },
+    { "type": "text", "id": "win_fine", "label": "Mention gagné", "default": "Valable 7 jours, une fois par commande. On te l’envoie aussi par e-mail." }
+  ],
+  "blocks": [
+    {
+      "type": "segment",
+      "name": "Case",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Texte sur la roue", "default": "−10 %" },
+        { "type": "text", "id": "prize", "label": "Texte du gain", "default": "−10 % sur ta commande" },
+        { "type": "text", "id": "code", "label": "Code promo Shopify", "info": "À créer dans Réductions. Vide = case perdante.", "default": "NOEL10" },
+        { "type": "range", "id": "weight", "label": "Chances (poids)", "min": 0, "max": 100, "step": 5, "default": 25, "info": "0 = la roue ne s'arrête jamais dessus." },
+        { "type": "color", "id": "color", "label": "Couleur", "default": "#7B3FC4" },
+        { "type": "color", "id": "text_color", "label": "Couleur du texte", "default": "#FFFFFF" }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [{ "name": "Roue cadeau" }]
+}
+{% endschema %}

@@ -1,0 +1,12 @@
+<section style="padding-top:40px"><div class="wrap">
+  <span class="kick">Recherche</span>
+  <form action="{{ routes.search_url }}" method="get" role="search" style="display:flex;gap:10px;margin:18px 0 34px;max-width:560px">
+    <label class="field" style="flex:1"><span class="visually-hidden">Rechercher</span><input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Patagonie, désert, aurores…"></label>
+    <input type="hidden" name="type" value="product">
+    <button class="b b-ink" type="submit">Chercher <span class="d">{% render 'icon', name: 'arrow' %}</span></button>
+  </form>
+  {%- if search.performed -%}<div class="trips">{%- for item in search.results -%}{%- if item.object_type == 'product' -%}{% render 'trip-card', trip: item %}{%- endif -%}{%- else -%}<p>Aucun résultat pour « {{ search.terms | escape }} ».</p>{%- endfor -%}</div>{%- endif -%}
+</div></section>
+{% schema %}
+{ "name": "Recherche", "settings": [] }
+{% endschema %}

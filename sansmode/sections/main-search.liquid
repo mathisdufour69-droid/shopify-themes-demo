@@ -1,0 +1,26 @@
+<section class="grid-sec">
+  <div class="container">
+    <div class="sec-head">
+      <h1 class="h2">Recherche</h1>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+        <label for="SearchInput" class="visually-hidden">Rechercher</label>
+        <input id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}" class="input" placeholder="Un parfum, un nutriment…">
+        <input type="hidden" name="type" value="product">
+        <button type="submit" class="btn">Chercher</button>
+      </form>
+      {%- if search.performed -%}<p class="sec-head__text">{{ search.results_count }} résultat{% if search.results_count > 1 %}s{% endif %} pour «&nbsp;{{ search.terms | escape }}&nbsp;»</p>{%- endif -%}
+    </div>
+    {%- if search.performed -%}
+      <ul class="product-grid" role="list">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}<li>{% render 'product-card', card_product: item %}</li>{%- endif -%}
+        {%- else -%}
+          <li class="empty-note">Rien trouvé. Essaie « vitamine », « fer » ou « mangue ».</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{ "name": "Recherche", "settings": [] }
+{% endschema %}

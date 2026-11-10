@@ -1,0 +1,154 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {}
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {},
+      "blocks": {
+        "reviews-1": {
+          "type": "review",
+          "settings": {
+            "stars": "5",
+            "text": "Le camp était monté avant notre arrivée, et Mateo connaissait la vallée mieux que la carte. Le jour de réserve a servi : on a vu les tours sans un nuage.",
+            "name": "Camille R.",
+            "meta": "En couple · mars 2026",
+            "trip": "Patagonie",
+            "handle": "patagonie",
+            "asset": "avis-camille"
+          }
+        },
+        "reviews-2": {
+          "type": "review",
+          "settings": {
+            "stars": "4",
+            "text": "Itinéraire superbe, guide exceptionnel. Notre vol retour a été annulé à Punta Arenas et ça a été long.",
+            "name": "Thomas L.",
+            "meta": "Entre amis, 4 voyageurs · janvier 2026",
+            "trip": "Patagonie",
+            "handle": "patagonie",
+            "asset": "avis-thomas"
+          }
+        },
+        "reviews-3": {
+          "type": "review",
+          "settings": {
+            "stars": "5",
+            "text": "Sigrún nous a fait marcher sur un glacier qu'elle étudie depuis quinze ans. On a compris ce qu'on regardait, et c'est ce qui change tout.",
+            "name": "Nadia et Paul B.",
+            "meta": "Avec nos deux ados · août 2025",
+            "trip": "Islande",
+            "handle": "islande",
+            "asset": "avis-nadia-paul"
+          }
+        },
+        "reviews-4": {
+          "type": "review",
+          "settings": {
+            "stars": "5",
+            "text": "Conduire son propre attelage dès le deuxième jour, je n'y croyais pas. Les cabanes étaient chaudes, l'astronome passionnant.",
+            "name": "Hélène V.",
+            "meta": "En solo · février 2026",
+            "trip": "Laponie",
+            "handle": "laponie",
+            "asset": "avis-helene"
+          }
+        },
+        "reviews-5": {
+          "type": "review",
+          "settings": {
+            "stars": "5",
+            "text": "Partir avant le jour sur les dunes, sans personne autour : Ibrahim avait raison, c'est là que le désert existe vraiment.",
+            "name": "Marc et Inès D.",
+            "meta": "En couple · octobre 2025",
+            "trip": "Namibie",
+            "handle": "namibie",
+            "asset": "avis-marc-ines"
+          }
+        },
+        "reviews-6": {
+          "type": "review",
+          "settings": {
+            "stars": "5",
+            "text": "Nous voulions la Patagonie sans souffrir. Ils ont raccourci deux étapes et ajouté un jour de repos, sans que le prix bouge.",
+            "name": "Sophie et Alain G.",
+            "meta": "Jeunes retraités · novembre 2025",
+            "trip": "Patagonie",
+            "handle": "patagonie",
+            "asset": "avis-sophie-alain"
+          }
+        }
+      },
+      "block_order": [
+        "reviews-1",
+        "reviews-2",
+        "reviews-3",
+        "reviews-4",
+        "reviews-5",
+        "reviews-6"
+      ]
+    },
+    "trips": {
+      "type": "trips",
+      "settings": {
+        "kicker": "À voir aussi",
+        "title_1": "D'autres routes,",
+        "title_2": "même façon de faire.",
+        "handles": "islande,namibie,laponie,japon",
+        "limit": 4
+      }
+    },
+    "guarantees": {
+      "type": "guarantees",
+      "settings": {},
+      "blocks": {
+        "guarantees-1": {
+          "type": "item",
+          "settings": {
+            "fig": "14 j",
+            "title": "Acompte remboursable",
+            "text": "500 € pour bloquer une date, rendus sans justificatif dans les 14 jours."
+          }
+        },
+        "guarantees-2": {
+          "type": "item",
+          "settings": {
+            "fig": "0 %",
+            "title": "Prix garanti à la signature",
+            "text": "Ni le change ni le carburant ne bougent le prix une fois signé."
+          }
+        },
+        "guarantees-3": {
+          "type": "item",
+          "settings": {
+            "fig": "100 %",
+            "title": "Fonds protégés",
+            "text": "Vos versements sont couverts par une garantie financière, comme l'exige la loi."
+          }
+        },
+        "guarantees-4": {
+          "type": "item",
+          "settings": {
+            "fig": "24/7",
+            "title": "La maison décroche 24 h/24",
+            "text": "Pas une plateforme : quelqu'un qui connaît votre itinéraire par cœur."
+          }
+        }
+      },
+      "block_order": [
+        "guarantees-1",
+        "guarantees-2",
+        "guarantees-3",
+        "guarantees-4"
+      ]
+    }
+  },
+  "order": [
+    "main",
+    "reviews",
+    "guarantees",
+    "trips"
+  ]
+}

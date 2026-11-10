@@ -1,0 +1,29 @@
+<section class="story" aria-labelledby="StoryTitle-{{ section.id }}">
+  <div class="story__media">
+    {% render 'picture', image: section.settings.image, base: 'createur-hugo', widths: '800,1456', width: 1456, height: 816, alt: section.settings.alt, sizes: '100vw', class: 'story__img' %}
+  </div>
+  <div class="container story__content">
+    <div class="story__text">
+      <p class="kicker">{{ section.settings.kicker }}</p>
+      <h2 id="StoryTitle-{{ section.id }}" class="h2">{{ section.settings.title }}</h2>
+      <div class="rte">{{ section.settings.text }}</div>
+      <p class="story__sign">{{ section.settings.signature }}</p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Histoire du fondateur",
+  "class": "section-story",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Sujet à droite, espace libre à gauche." },
+    { "type": "text", "id": "alt", "label": "Texte alternatif", "default": "Hugo, fondateur de SANSMODÉ, bras croisés, en pull marron" },
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Pourquoi SANSMODÉ" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "J’étais pâtissier. Je voulais un bonbon que je pouvais donner à ma fille sans négocier." },
+    { "type": "richtext", "id": "text", "label": "Texte", "default": "<p>Pendant dix ans, j’ai fait des desserts à Lyon. Le soir, je voyais les mêmes paquets de bonbons dans tous les cartables, et la même culpabilité chez les parents.</p><p>En 2024, j’ai passé onze mois à remplacer le sucre par des fruits, sans perdre le goût. Le premier qui a dit « on dirait des vrais bonbons », c’était ma fille. On a lancé le lendemain.</p>" },
+    { "type": "text", "id": "signature", "label": "Signature", "default": "Hugo, fondateur" }
+  ],
+  "presets": [{ "name": "Histoire du fondateur" }]
+}
+{% endschema %}

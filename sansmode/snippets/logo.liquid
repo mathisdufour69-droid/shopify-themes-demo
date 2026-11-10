@@ -1,0 +1,12 @@
+{%- comment -%}
+  Logo SANSMODÉ en texte + CSS : l'accent du É est une pilule rose inclinée (le bonbon).
+  Zéro image, net à toutes les tailles, éditable dans les réglages du thème.
+  Usage : {% render 'logo', tag: 'span' %}
+{%- endcomment -%}
+{%- assign logo_text = settings.logo_text | default: 'SANSMODÉ' -%}
+{%- assign pill = '<span class="logo__e" aria-hidden="true">E<span class="logo__pill"></span></span>' -%}
+{%- assign tag = tag | default: 'span' -%}
+<{{ tag }} class="logo{% if class %} {{ class }}{% endif %}">
+  <span class="visually-hidden">{{ logo_text }}</span>
+  <span class="logo__word" aria-hidden="true">{{ logo_text | escape | replace: 'É', pill }}</span>
+</{{ tag }}>

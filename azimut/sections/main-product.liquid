@@ -1,0 +1,364 @@
+{%- comment -%}
+  Fiche itinéraire. Un voyage à 6 000 € ne s'achète pas d'un clic : on vend ici l'ACOMPTE qui bloque une date.
+  - Variantes Shopify : « Départ » × « Voyageurs ». Chaque variante coûte l'acompte (500 €) et porte un vrai stock
+    (places restantes) : un mois complet est grisé automatiquement.
+  - Le prix du voyage par personne (et son total estimé) se recalcule selon la taille du groupe.
+  - Deux sorties : « Bloquer ma date » (achat) ou « Parler d'abord à un concepteur » (formulaire sur place).
+  - Carte de réservation collante sur ordinateur, barre fixe sur mobile.
+  La carte cadeau (produit « gift card » Shopify) utilise la même section, en version cadeau.
+{%- endcomment -%}
+{%- liquid
+  assign h = product.handle
+  assign current = product.selected_or_first_available_variant
+-%}
+
+{%- if product.gift_card? -%}
+  {%- comment -%} ---------- CARTE CADEAU ---------- {%- endcomment -%}
+  <div class="pdp">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Fil d'Ariane"><a href="{{ routes.root_url }}">Accueil</a><span>/</span><span>Offrir un voyage</span></nav>
+      <div class="gc-pdp">
+        <div>
+          <div class="gcard">
+            <span class="lg">{{ settings.brand_name | default: 'Azimut' }}</span>
+            <span class="az">AZ 000°</span>
+            <span class="amt"><small>CARTE CADEAU</small><span data-gc-amount>{% render 'eur', cents: current.price %}</span></span>
+          </div>
+          <div class="incl" style="display:block;margin-top:34px">
+            <ul role="list">
+              <li>{% render 'icon', name: 'check' %} Valable deux ans sur tous les itinéraires, acompte compris</li>
+              <li>{% render 'icon', name: 'check' %} Envoyée par e-mail le jour de votre choix, avec votre message</li>
+              <li>{% render 'icon', name: 'check' %} Le destinataire choisit sa route avec un concepteur</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <span class="kick">Offrir un voyage</span>
+          <h1 style="margin-top:12px">{{ product.title }}</h1>
+          <div class="rte" style="margin-top:6px">{{ product.description }}</div>
+          {%- form 'product', product, id: 'ProductForm', class: 'book', novalidate: 'novalidate' -%}
+            <input type="hidden" name="id" value="{{ current.id }}" data-variant-id>
+            <fieldset>
+              <legend>Montant</legend>
+              <div class="chips" style="grid-template-columns:repeat(2,1fr)">
+                {%- for v in product.variants -%}
+                  <label class="chip"><input type="radio" name="gc-amount" value="{{ v.id }}" data-price="{% render 'eur', cents: v.price %}"{% if v.id == current.id %} checked{% endif %}><span>{% render 'eur', cents: v.price %}</span></label>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+            <label class="check"><input type="checkbox" name="properties[__shopify_send_gift_card_to_recipient]" value="on" data-gc-toggle> L'envoyer directement au destinataire</label>
+            <div class="rcpt" data-gc-fields hidden>
+              <label class="field"><span>E-mail du destinataire</span><input type="email" name="properties[Recipient email]" disabled></label>
+              <label class="field"><span>Son prénom</span><input type="text" name="properties[Recipient name]" disabled></label>
+              <label class="field"><span>Votre message</span><textarea name="properties[Message]" rows="3" maxlength="200" disabled placeholder="Pour la Patagonie qu'on se promet depuis dix ans."></textarea></label>
+              <label class="field"><span>Date d'envoi</span><input type="date" name="properties[Send on]" disabled></label>
+            </div>
+            <button type="submit" class="b b-ink" data-atc><span>Offrir · <span data-atc-price>{% render 'eur', cents: current.price %}</span></span> <span class="d">{% render 'icon', name: 'gift' %}</span></button>
+            <p class="err" data-form-error hidden></p>
+          {%- endform -%}
+        </div>
+      </div>
+    </div>
+  </div>
+
+{%- else -%}
+  {%- comment -%} ---------- ITINÉRAIRE ---------- {%- endcomment -%}
+  {%- liquid
+    capture country
+      render 'trip-data', handle: h, field: 'country', product: product
+    endcapture
+    capture place
+      render 'trip-data', handle: h, field: 'place', product: product
+    endcapture
+    capture days
+      render 'trip-data', handle: h, field: 'days', product: product
+    endcapture
+    capture season
+      render 'trip-data', handle: h, field: 'season', product: product
+    endcapture
+    capture level
+      render 'trip-data', handle: h, field: 'level', product: product
+    endcapture
+    capture group
+      render 'trip-data', handle: h, field: 'group', product: product
+    endcapture
+    capture price
+      render 'trip-data', handle: h, field: 'price', product: product
+    endcapture
+    capture guide
+      render 'trip-data', handle: h, field: 'guide', product: product
+    endcapture
+    capture img
+      render 'trip-data', handle: h, field: 'img', product: product
+    endcapture
+    capture rating
+      render 'trip-data', handle: h, field: 'rating', product: product
+    endcapture
+    capture count
+      render 'trip-data', handle: h, field: 'count', product: product
+    endcapture
+    capture intro
+      render 'trip-data', handle: h, field: 'intro', product: product
+    endcapture
+    capture hosting
+      render 'trip-data', handle: h, field: 'hosting', product: product
+    endcapture
+    capture stages
+      render 'trip-data', handle: h, field: 'stages', product: product
+    endcapture
+    capture inc
+      render 'trip-data', handle: h, field: 'inc', product: product
+    endcapture
+    capture exc
+      render 'trip-data', handle: h, field: 'exc', product: product
+    endcapture
+    capture route
+      render 'trip-data', handle: h, field: 'route', product: product
+    endcapture
+    capture months
+      render 'trip-data', handle: h, field: 'months', product: product
+    endcapture
+
+    assign price_n = price | plus: 0
+    if price_n == 0
+      assign price_n = current.price | divided_by: 100
+    endif
+    assign price_2 = price_n | times: 2
+    assign stage_list = stages | split: '||'
+    assign month_list = months | split: '||'
+    assign img_w = 1080
+    assign img_h = 720
+    assign img_ws = '600,1080'
+    if img contains 'dest-'
+      assign img_w = 940
+      assign img_h = 1248
+      assign img_ws = '600,940'
+    endif
+    assign guide_name = ''
+    assign guide_role = ''
+    assign guide_quote = ''
+    assign guide_base = ''
+    case guide
+      when 'mateo'
+        assign guide_name = 'Mateo Iriarte'
+        assign guide_role = 'Guide de haute montagne IFMGA · Andes'
+        assign guide_quote = 'La montagne ne se négocie pas. On part tôt, ou on ne part pas.'
+        assign guide_base = 'EL CHALTÉN · AZ 214°|12 ans dans la maison'
+      when 'kaisa'
+        assign guide_name = 'Kaisa Lindqvist'
+        assign guide_role = 'Guide nordique · ski et traîneau'
+        assign guide_quote = 'Je choisis l’itinéraire selon la neige du matin, jamais selon le programme.'
+        assign guide_base = 'ABISKO · AZ 003°|7 ans dans la maison'
+      when 'ibrahim'
+        assign guide_name = 'Ibrahim Ould Sidi'
+        assign guide_role = 'Guide de désert · navigation céleste'
+        assign guide_quote = 'Dans le désert, le luxe c’est l’eau et l’ombre. Le reste n’est que décor.'
+        assign guide_base = 'M’HAMID · AZ 168°|15 ans dans la maison'
+      when 'sigrun'
+        assign guide_name = 'Sigrún Hall'
+        assign guide_role = 'Glaciologue, guide AIMG · Atlantique nord'
+        assign guide_quote = 'Un glacier bouge. Ce que j’ai montré l’an dernier n’existe déjà plus.'
+        assign guide_base = 'HÖFN · AZ 341°|9 ans dans la maison'
+    endcase
+    assign trips_url = collections['voyages'].url | default: routes.all_products_collection_url
+  -%}
+  <div class="pdp" data-trip data-price="{{ price_n }}">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Fil d'Ariane"><a href="{{ routes.root_url }}">Accueil</a><span>/</span><a href="{{ trips_url }}">Nos voyages</a><span>/</span><span>{{ country | default: product.title }}</span></nav>
+
+      <div class="pdp-head">
+        <div>
+          <span class="kick">{{ country }}{% if days != blank %} · {{ days }} jours{% endif %}{% if place != blank %} · {{ place }}{% endif %}</span>
+          <h1>{{ product.title }}</h1>
+          {%- if rating != blank -%}
+            <a class="rate dk" href="#avis">{% render 'stars', rating: rating %}<span class="nb">{{ rating | replace: '.', ',' }}/5 · {{ count }} avis de voyageurs</span></a>
+          {%- endif -%}
+        </div>
+        <div class="facts-mini">
+          {%- if days != blank -%}<div><b>{{ days }} jours</b>Durée</div>{%- endif -%}
+          {%- if level != blank -%}<div><b>{{ level }}</b>Niveau</div>{%- endif -%}
+          <div><b>{% render 'eur', value: price_n %}</b>par personne, base 2</div>
+        </div>
+      </div>
+
+      <div class="gal" data-gal>
+        {%- if product.media.size > 0 -%}
+          {%- for m in product.media -%}
+            {%- if forloop.index <= 3 -%}
+              <button type="button" class="g" data-lb="{{ forloop.index0 }}" data-full="{{ m | image_url: width: 2200 }}" data-cap="{{ m.alt | default: product.title | escape }}" aria-label="Agrandir la photo {{ forloop.index }} sur {{ product.media.size }}">{{ m | image_url: width: 1400 | image_tag: widths: '600,900,1400', sizes: '(min-width: 1080px) 60vw, 100vw', loading: 'eager', alt: m.alt | default: product.title }}{% if forloop.first %}<span class="pill">{{ country }}</span>{% endif %}{% if forloop.index == 3 and product.media.size > 3 %}<span class="more">+{{ product.media.size | minus: 3 }}</span>{% endif %}</button>
+            {%- else -%}
+              <span hidden data-lb="{{ forloop.index0 }}" data-full="{{ m | image_url: width: 2200 }}" data-cap="{{ m.alt | default: product.title | escape }}"></span>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign big = img_ws | split: ',' | last -%}
+          <button type="button" class="g" data-lb="0" data-full="{{ img | append: '-' | append: big | append: '.webp' | asset_url }}" data-cap="Le terrain · {{ place }}" aria-label="Agrandir la photo 1 sur 3">{% render 'picture', base: img, widths: img_ws, width: img_w, height: img_h, alt: product.title, sizes: '(min-width: 1080px) 60vw, 100vw', eager: true %}<span class="pill">{{ country }}</span><span class="cap">Le terrain</span></button>
+          <button type="button" class="g" data-lb="1" data-full="{{ 'tente-940.webp' | asset_url }}" data-cap="Camps montés pour vous avant votre arrivée" aria-label="Agrandir la photo 2 sur 3">{% render 'picture', base: 'tente', widths: '600,940', width: 940, height: 1175, alt: 'Camp monté au crépuscule', sizes: '(min-width: 1080px) 30vw, 50vw' %}<span class="cap">Camps montés pour vous</span></button>
+          <button type="button" class="g" data-lb="2" data-full="{{ 'table-fjord-1400.webp' | asset_url }}" data-cap="La table du lieu, dressée face au paysage" aria-label="Agrandir la photo 3 sur 3">{% render 'picture', base: 'table-fjord', widths: '800,1400', width: 1400, height: 785, alt: 'Table dressée face au paysage', sizes: '(min-width: 1080px) 30vw, 50vw' %}<span class="cap">La table du lieu</span></button>
+        {%- endif -%}
+        <button type="button" class="g-all" data-lb-all>{% render 'icon', name: 'expand' %}Voir les photos</button>
+      </div>
+
+      <dialog class="zm" id="Lightbox" aria-label="Photos du voyage">
+        <button type="button" class="zm-x" data-lb-close aria-label="Fermer">{% render 'icon', name: 'close' %}</button>
+        <figure class="zm-fig"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" width="1600" height="1000" data-lb-img><figcaption><span data-lb-cap></span><span class="zm-n" data-lb-n></span></figcaption></figure>
+        <button type="button" class="zm-nav prev" data-lb-prev aria-label="Photo précédente">{% render 'icon', name: 'arrow-l' %}</button>
+        <button type="button" class="zm-nav next" data-lb-next aria-label="Photo suivante">{% render 'icon', name: 'arrow' %}</button>
+      </dialog>
+
+      <div class="pdp-grid">
+        <div>
+          <div class="blk">
+            <span class="kick">Le voyage</span>
+            <p class="lead" style="margin-top:16px">{{ intro | default: product.description | strip_html }}</p>
+            <div class="facts">
+              <div><small>Durée</small><b>{{ days }} jours</b></div>
+              <div><small>Saison</small><b>{{ season }}</b></div>
+              <div><small>Niveau</small><b>{{ level }}</b></div>
+              <div><small>Groupe</small><b>{{ group }}</b></div>
+              <div><small>Hébergement</small><b>{{ hosting }}</b></div>
+              <div><small>Guide</small><b>{{ guide_name | default: 'Concepteur dédié' }}</b></div>
+            </div>
+          </div>
+
+          {%- if route != blank -%}
+            {%- assign pts = route | split: '||' -%}
+            <div class="blk">
+              <span class="kick">La route</span>
+              <h2>{{ pts.size }} étapes, et toujours un plan B.</h2>
+              <ol class="route" role="list" style="--n: {{ pts.size }}">
+                {%- for pt in pts -%}
+                  {%- assign c = pt | split: ':' -%}
+                  <li class="{% if forloop.first %}is-start{% elsif forloop.last %}is-end{% endif %}">
+                    <span class="ix">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+                    <i aria-hidden="true"></i>
+                    <b>{{ c[0] }}</b>
+                    {%- if forloop.first -%}<small>Arrivée</small>{%- elsif forloop.last -%}<small>Retour</small>{%- endif -%}
+                  </li>
+                {%- endfor -%}
+              </ol>
+            </div>
+          {%- endif -%}
+
+          {%- if stage_list.size > 0 -%}
+            <div class="blk days">
+              <span class="kick">Jour par jour</span>
+              <h2>Le programme, ajustable à votre rythme.</h2>
+              <div class="acc">
+                {%- for s in stage_list -%}
+                  {%- assign sp = s | split: '::' -%}
+                  <details class="ac"{% if forloop.first %} open{% endif %}>
+                    <summary><span class="mk" aria-hidden="true"></span><span class="n">{{ sp[0] }}</span><span class="t">{{ sp[1] }}</span></summary><div class="bd"><p>{{ sp[2] }}</p></div>
+                  </details>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if inc != blank -%}
+            <div class="blk">
+              <span class="kick">Le prix comprend</span>
+              <h2>Ce que vous payez, et ce que vous ne payez pas.</h2>
+              <div class="incl">
+                <div><h3>Inclus</h3><ul role="list">{%- assign il = inc | split: '||' -%}{%- for i in il -%}<li>{% render 'icon', name: 'check' %}{{ i }}</li>{%- endfor -%}</ul></div>
+                <div class="no"><h3>Non inclus</h3><ul role="list">{%- assign el = exc | split: '||' -%}{%- for i in el -%}<li>{% render 'icon', name: 'minus' %}{{ i }}</li>{%- endfor -%}</ul></div>
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if guide_name != blank -%}
+            {%- assign gb = guide_base | split: '|' -%}
+            <div class="blk">
+              <span class="kick">Votre guide</span>
+              <h2>Celui qui a marché la vallée vous accompagne.</h2>
+              <div class="gcard-guide">
+                <img src="{{ 'guide-' | append: guide | append: '-500.webp' | asset_url }}" alt="Portrait de {{ guide_name }}" width="500" height="625" loading="lazy">
+                <div>
+                  <b>{{ guide_name }}</b>
+                  <small>{{ guide_role }}</small>
+                  <blockquote>«&nbsp;{{ guide_quote }}&nbsp;»</blockquote>
+                  <div class="gd-m"><span>{{ gb[0] }}</span><span>{{ gb[1] }}</span></div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} ---------- Carte de réservation ---------- {%- endcomment -%}
+        <aside>
+          {%- form 'product', product, id: 'ProductForm', class: 'book', novalidate: 'novalidate' -%}
+            <input type="hidden" name="id" value="{{ current.id }}" data-variant-id>
+            <span class="from">Prix par personne · base 2</span>
+            <div class="pp"><strong data-pp>{% render 'eur', value: price_n %}</strong><span>/ pers.</span></div>
+            <p class="tot" data-tot>≈ {% render 'eur', value: price_2 %} pour 2 voyageurs, tout compris sur place</p>
+
+            {%- for option in product.options_with_values -%}
+              <fieldset>
+                <legend><span>{{ option.name }}</span>{% if forloop.first %}<span data-month-note></span>{% endif %}</legend>
+                <div class="chips">
+                  {%- for value in option.values -%}
+                    {%- assign status = '' -%}
+                    {%- if forloop.parentloop.first -%}
+                      {%- for m in month_list -%}{%- assign mp = m | split: ':' -%}{%- if mp[0] == value -%}{%- assign status = mp[1] -%}{%- endif -%}{%- endfor -%}
+                    {%- endif -%}
+                    <label class="chip">
+                      <input type="radio" name="opt-{{ forloop.parentloop.index }}" value="{{ value | escape }}" data-opt="{{ forloop.parentloop.index }}" data-index="{{ forloop.index0 }}"{% if option.selected_value == value %} checked{% endif %}>
+                      <span>{{ value }}
+                        {%- if status == 'few' -%}<small class="few">Dernières places</small>
+                        {%- elsif status == 'full' -%}<small>Complet</small>
+                        {%- elsif forloop.parentloop.index == 2 and forloop.index > 1 -%}<small>−{% if forloop.index == 2 %}8{% else %}12{% endif %} % / pers.</small>
+                        {%- elsif forloop.parentloop.first -%}<small>Disponible</small>{%- endif -%}
+                      </span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </fieldset>
+            {%- endfor -%}
+
+            <div class="sum">
+              <div class="today"><span>À régler aujourd'hui</span><b data-atc-price>{% render 'eur', cents: current.price %}</b></div>
+              <div><span>Solde du voyage</span><b>45 jours avant le départ</b></div>
+            </div>
+            <button type="submit" class="b b-ink" data-atc{% unless current.available %} disabled{% endunless %}><span data-atc-label>{% if current.available %}Bloquer ma date · acompte{% else %}Date complète{% endif %}</span> <span class="d">{% render 'icon', name: 'arrow' %}</span></button>
+            <button type="button" class="alt" data-dlg-open data-trip-name="{{ country }} · {{ product.title | escape }}">{% render 'icon', name: 'phone' %} Parler d'abord à un concepteur</button>
+            <p class="err" data-form-error hidden></p>
+            <ul class="reass" role="list">
+              <li><span><b style="color:var(--ink)">Acompte remboursable sous 14 jours</b>, sans justificatif.</span></li>
+              <li><span>Prix garanti à la signature, même si le change varie.</span></li>
+              <li><span>Fonds protégés par une garantie financière.</span></li>
+              <li><span>Assistance 24 h/24 tenue par la maison.</span></li>
+            </ul>
+            <script type="application/json" data-variants>{{ product.variants | json }}</script>
+          {%- endform -%}
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <div class="mbar" data-mbar>
+    <div><small>Dès</small><b>{% render 'eur', value: price_n %}</b><small>/ pers.</small></div>
+    <a class="b b-ink" href="#ProductForm">Choisir ma date <span class="d">{% render 'icon', name: 'arrow' %}</span></a>
+  </div>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": {{ product.title | json }},
+      "description": {{ intro | strip | json }},
+      "brand": { "@type": "Brand", "name": {{ settings.brand_name | default: 'Azimut' | json }} },
+      "image": {{ img | append: '-1080.webp' | asset_url | prepend: 'https:' | json }},
+      {%- if rating != blank -%}"aggregateRating": { "@type": "AggregateRating", "ratingValue": {{ rating | json }}, "reviewCount": {{ count | plus: 0 }} },{%- endif -%}
+      "offers": { "@type": "AggregateOffer", "priceCurrency": {{ cart.currency.iso_code | json }}, "lowPrice": {{ price_n | json }}, "offerCount": {{ product.variants.size }}, "availability": "https://schema.org/{% if product.available %}InStock{% else %}SoldOut{% endif %}" }
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Fiche itinéraire",
+  "settings": [
+    { "type": "paragraph", "content": "Contenus éditoriaux : snippet trip-data ou métachamps custom.* (country, days, stages, inc, exc, route, months…)." }
+  ]
+}
+{% endschema %}

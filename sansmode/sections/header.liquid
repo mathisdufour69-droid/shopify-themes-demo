@@ -1,0 +1,60 @@
+{%- liquid
+  assign menu = linklists[section.settings.menu]
+-%}
+<header class="header" data-header>
+  <div class="header__inner container">
+    <details class="mnav" data-mnav>
+      <summary class="icon-btn mnav__toggle" aria-label="Menu">{% render 'icon', name: 'menu' %}</summary>
+      <div class="mnav__panel">
+        <nav aria-label="Menu mobile">
+          <ul role="list" class="mnav__list">
+            {%- if menu.links.size > 0 -%}
+              {%- for link in menu.links -%}<li><a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a></li>{%- endfor -%}
+            {%- else -%}
+              <li><a href="{{ routes.all_products_collection_url }}">Tous les bonbons</a></li>
+              <li><a href="{{ routes.root_url }}#offre-noel">Coffret de Noël</a></li>
+              <li><a href="{{ routes.root_url }}#fabrication">Fabriqué à Montélimar</a></li>
+              <li><a href="{{ routes.root_url }}#faq">Questions</a></li>
+            {%- endif -%}
+          </ul>
+        </nav>
+        <p class="mnav__note">{% render 'icon', name: 'truck' %} Livraison offerte dès {{ settings.free_shipping_threshold }} €</p>
+      </div>
+    </details>
+
+    <nav class="dnav" aria-label="Menu principal">
+      <ul role="list" class="dnav__list">
+        {%- if menu.links.size > 0 -%}
+          {%- for link in menu.links -%}<li><a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a></li>{%- endfor -%}
+        {%- else -%}
+          <li><a href="{{ routes.all_products_collection_url }}">Les bonbons</a></li>
+          <li><a href="{{ routes.root_url }}#offre-noel">Noël</a></li>
+          <li><a href="{{ routes.root_url }}#fabrication">L’atelier</a></li>
+        {%- endif -%}
+      </ul>
+    </nav>
+
+    <a href="{{ routes.root_url }}" class="header__logo" aria-label="{{ settings.brand_name | default: 'SANSMODÉ' }}, accueil">
+      {%- if request.page_type == 'index' -%}{% render 'logo', tag: 'h1' %}{%- else -%}{% render 'logo' %}{%- endif -%}
+    </a>
+
+    <div class="header__icons">
+      <a href="{{ routes.search_url }}" class="icon-btn" aria-label="Rechercher">{% render 'icon', name: 'search' %}</a>
+      <a href="{{ routes.cart_url }}" class="icon-btn cart-btn" data-cart-open aria-label="Panier, {{ cart.item_count }} article(s)">
+        {% render 'icon', name: 'cart' %}
+        <span class="cart-btn__count{% if cart.item_count == 0 %} is-empty{% endif %}" data-cart-count>{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "En-tête",
+  "class": "section-header",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu", "info": "Laisser vide pour afficher les liens SANSMODÉ par défaut (Les bonbons, Noël, L’atelier)." }
+  ]
+}
+{% endschema %}

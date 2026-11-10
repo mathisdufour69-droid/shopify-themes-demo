@@ -1,0 +1,97 @@
+{%- comment -%}
+  Remplace le témoignage unique (même voyageuse citée deux fois, destination absente du site).
+  Plusieurs voyageurs, voyage + mois + composition du groupe, un avis à 4/5 gardé tel quel,
+  et une note globale de 4,8 : une note parfaite paraît fausse.
+  Sur une fiche itinéraire, seuls les avis de ce voyage s'affichent (sinon tous).
+{%- endcomment -%}
+{%- liquid
+  assign only = ''
+  if product
+    assign only = product.handle
+  endif
+  assign match = 0
+  for block in section.blocks
+    if block.settings.handle == only
+      assign match = match | plus: 1
+    endif
+  endfor
+  if match == 0
+    assign only = ''
+  endif
+  assign dist = section.settings.distribution | split: ','
+-%}
+<section id="avis" style="padding-top:0">
+  <div class="wrap">
+    <div class="revs">
+      <div class="revs-sum rv">
+        <span class="kick">{{ section.settings.kicker }}</span>
+        <p class="big" style="margin-top:18px">{{ section.settings.rating | replace: '.', ',' }}<small>/5</small></p>
+        {% render 'stars', rating: section.settings.rating %}
+        <p class="cnt">{{ section.settings.count }} avis vérifiés après le retour</p>
+        <ul class="dist" role="list">
+          {%- for pct in dist -%}
+            {%- assign s = 6 | minus: forloop.index -%}
+            <li><span>{{ s }}★</span><i><b style="width: {{ pct | strip }}%"></b></i><span>{{ pct | strip }} %</span></li>
+          {%- endfor -%}
+        </ul>
+        <p class="note">{{ section.settings.note }}</p>
+      </div>
+      <div class="rv" style="min-width:0">
+        <div class="rv-track" data-rv-track>
+          {%- for block in section.blocks -%}
+            {%- if only == '' or block.settings.handle == only -%}
+              {%- assign p = all_products[block.settings.handle] -%}{%- if p.title == blank or p.variants.size == 0 -%}{%- assign p = nil -%}{%- endif -%}
+              <article class="rc" {{ block.shopify_attributes }}>
+                <div class="top">{% render 'stars', rating: block.settings.stars %}<span class="ver">Voyage vérifié</span></div>
+                <blockquote>«&nbsp;{{ block.settings.text }}&nbsp;»</blockquote>
+                <div class="who">
+                  {%- if block.settings.avatar != blank -%}
+                    {{ block.settings.avatar | image_url: width: 90 | image_tag: class: 'av', alt: '', loading: 'lazy' }}
+                  {%- elsif block.settings.asset != blank -%}
+                    <img class="av" src="{{ block.settings.asset | append: '-160.webp' | asset_url }}" alt="" width="44" height="44" loading="lazy">
+                  {%- else -%}
+                    <span class="av" aria-hidden="true">{{ block.settings.name | slice: 0 }}</span>
+                  {%- endif -%}
+                  <span><b>{{ block.settings.name }}</b><small>{{ block.settings.meta }}</small></span>
+                  {%- if p and only == '' -%}<a class="trip-lk" href="{{ p.url }}">{{ block.settings.trip }} →</a>{%- else -%}<span class="trip-lk">{{ block.settings.trip }}</span>{%- endif -%}
+                </div>
+              </article>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        <div class="rv-nav">
+          <button type="button" class="rv-btn" data-rv-prev aria-label="Avis précédent">{% render 'icon', name: 'arrow-l' %}</button>
+          <button type="button" class="rv-btn" data-rv-next aria-label="Avis suivant">{% render 'icon', name: 'arrow' %}</button>
+          <span class="rv-count" data-rv-count></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Avis voyageurs",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Ils sont partis avec nous" },
+    { "type": "text", "id": "rating", "label": "Note globale", "default": "4.8" },
+    { "type": "text", "id": "count", "label": "Nombre d'avis", "default": "214" },
+    { "type": "text", "id": "distribution", "label": "Répartition 5★ à 1★ (%)", "default": "86,11,2,1,0" },
+    { "type": "textarea", "id": "note", "label": "Note de bas", "default": "Un avis n'est publié qu'après le retour, et uniquement par quelqu'un qui est parti. Nous répondons à tous, surtout aux moins bons." }
+  ],
+  "blocks": [
+    { "type": "review", "name": "Avis", "settings": [
+      { "type": "select", "id": "stars", "label": "Note", "default": "5", "options": [{ "value": "5", "label": "5" }, { "value": "4", "label": "4" }, { "value": "3", "label": "3" }] },
+      { "type": "textarea", "id": "text", "label": "Avis" },
+      { "type": "text", "id": "name", "label": "Nom", "default": "Camille R." },
+      { "type": "text", "id": "meta", "label": "Contexte", "default": "En couple · mars 2026" },
+      { "type": "text", "id": "trip", "label": "Voyage", "default": "Patagonie" },
+      { "type": "text", "id": "handle", "label": "Handle de l'itinéraire", "default": "patagonie" },
+      { "type": "image_picker", "id": "avatar", "label": "Photo" },
+      { "type": "text", "id": "asset", "label": "Photo du thème (sinon initiale)" }
+    ] }
+  ],
+  "max_blocks": 12,
+  "presets": [{ "name": "Avis voyageurs" }]
+}
+{% endschema %}

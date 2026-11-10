@@ -1,0 +1,29 @@
+{%- comment -%} Ajout CRO : ce qui protège l'argent du voyageur, posé juste après les prix. {%- endcomment -%}
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="gar rv">
+      {%- for block in section.blocks -%}
+        <div {{ block.shopify_attributes }}>
+          {%- if block.settings.fig != blank -%}<span class="fig">{{ block.settings.fig }}</span>{%- endif -%}
+          <b>{{ block.settings.title }}</b>
+          <p>{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Garanties",
+  "blocks": [
+    { "type": "item", "name": "Garantie", "settings": [
+      { "type": "text", "id": "fig", "label": "Chiffre", "default": "14 j" },
+      { "type": "text", "id": "title", "label": "Titre", "default": "Acompte remboursable" },
+      { "type": "textarea", "id": "text", "label": "Texte" }
+    ] }
+  ],
+  "max_blocks": 4,
+  "presets": [{ "name": "Garanties" }]
+}
+{% endschema %}

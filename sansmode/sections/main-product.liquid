@@ -1,0 +1,347 @@
+{%- comment -%}
+  Fiche produit. Ordre pensé pour le mobile (75 %+ du trafic food DTC) :
+  1. Galerie limitée à ~55 % du premier écran : le prix et le bouton restent visibles sans scroller.
+  2. Preuve (note) > nom > promesse > offres > bouton > date de livraison > réassurance.
+  3. Offres en boutons, le lot de 3 présélectionné et marqué « Le plus choisi », prix par sachet partout.
+  4. L'achat unique reste toujours visible à côté de l'abonnement (pas de dark pattern).
+  5. Onglets « J'ai 2 minutes / J'ai le temps » (Rishi Rawat) : le pressé et le méfiant ont chacun leur lecture.
+  6. Barre d'ajout collante sur mobile dès que le bouton principal sort de l'écran.
+{%- endcomment -%}
+{%- liquid
+  assign h = product.handle
+  capture accroche
+    render 'product-data', handle: h, field: 'accroche', product: product
+  endcapture
+  capture nutrient
+    render 'product-data', handle: h, field: 'nutrient', product: product
+  endcapture
+  capture flavour
+    render 'product-data', handle: h, field: 'flavour', product: product
+  endcapture
+  capture color
+    render 'product-data', handle: h, field: 'color', product: product
+  endcapture
+  capture bg
+    render 'product-data', handle: h, field: 'bg', product: product
+  endcapture
+  capture badge
+    render 'product-data', handle: h, field: 'badge', product: product
+  endcapture
+  capture rating
+    render 'product-data', handle: h, field: 'rating', product: product
+  endcapture
+  capture count
+    render 'product-data', handle: h, field: 'count', product: product
+  endcapture
+  capture gallery
+    render 'product-data', handle: h, field: 'gallery', product: product
+  endcapture
+  capture vnr
+    render 'product-data', handle: h, field: 'vnr', product: product
+  endcapture
+  capture moment
+    render 'product-data', handle: h, field: 'moment', product: product
+  endcapture
+  capture ingredients
+    render 'product-data', handle: h, field: 'ingredients', product: product
+  endcapture
+
+  assign current = product.selected_variant
+  if current == blank
+    assign current = product.selected_or_first_available_variant
+    for v in product.variants
+      if v.title contains 'Lot de 3' and v.available
+        assign current = v
+        break
+      endif
+    endfor
+  endif
+
+  assign single_price = product.price_min
+  assign lot_price = 0
+  for v in product.variants
+    if v.title contains '1 sachet'
+      assign single_price = v.price
+    elsif v.title contains 'Lot de 3'
+      assign lot_price = v.price
+    endif
+  endfor
+
+  assign gallery_items = gallery | split: ','
+-%}
+
+<section class="pdp" style="--accent: {{ color }}; --card-bg: {{ bg }}" data-product-section>
+  <div class="container pdp__grid">
+
+    {%- comment -%} GALERIE {%- endcomment -%}
+    <div class="pdp__gallery">
+      <div class="gallery" data-gallery>
+        <ul class="gallery__track" role="list" data-gallery-track>
+          {%- if product.media.size > 0 -%}
+            {%- for media in product.media -%}
+              {%- liquid
+                assign load = 'lazy'
+                if forloop.first
+                  assign load = 'eager'
+                endif
+              -%}
+              <li class="gallery__slide" id="Slide-{{ forloop.index }}">
+                {%- if media.media_type == 'image' -%}
+                  {{ media | image_url: width: 1400 | image_tag: widths: '450,700,900,1100,1400', sizes: '(min-width: 990px) 50vw, 100vw', loading: load, alt: media.alt | default: product.title, class: 'gallery__img' }}
+                {%- else -%}
+                  {{ media | media_tag: image_size: '1100x' }}
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for base in gallery_items -%}
+              {%- liquid
+                assign w = 700
+                assign ht = 1120
+                assign ws = '360,700'
+                assign cls = 'gallery__img gallery__img--pouch'
+                if base contains 'portrait'
+                  assign w = 1024
+                  assign ht = 1536
+                  assign ws = '600,1024'
+                  assign cls = 'gallery__img gallery__img--cover'
+                elsif base contains 'sachet'
+                  assign w = 900
+                  assign ht = 1200
+                  assign ws = '450,900'
+                  assign cls = 'gallery__img gallery__img--white'
+                elsif base contains 'coffret'
+                  assign w = 1000
+                  assign ht = 1250
+                  assign ws = '600,1000'
+                  assign cls = 'gallery__img gallery__img--cover'
+                endif
+                assign alt_text = product.title | append: ', vue ' | append: forloop.index
+                if forloop.first
+                  assign nutrient_lc = nutrient | downcase
+                  assign alt_text = 'Sachet ' | append: product.title | append: ', ' | append: nutrient_lc
+                endif
+              -%}
+              <li class="gallery__slide{% if base contains 'pouch' %} gallery__slide--tint{% endif %}" id="Slide-{{ forloop.index }}">
+                {%- if forloop.first -%}
+                  {% render 'picture', base: base, widths: ws, width: w, height: ht, alt: alt_text, sizes: '(min-width: 990px) 40vw, 60vw', class: cls, eager: true %}
+                {%- else -%}
+                  {% render 'picture', base: base, widths: ws, width: w, height: ht, alt: alt_text, sizes: '(min-width: 990px) 40vw, 60vw', class: cls %}
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+        {%- liquid
+          assign slide_count = product.media.size
+          if slide_count == 0
+            assign slide_count = gallery_items.size
+          endif
+        -%}
+        {%- if slide_count > 1 -%}
+          <ol class="gallery__dots" aria-label="Images du produit">
+            {%- for i in (1..slide_count) -%}
+              <li><a href="#Slide-{{ i }}" data-gallery-dot="{{ i }}"{% if forloop.first %} aria-current="true"{% endif %}><span class="visually-hidden">Image {{ i }} sur {{ slide_count }}</span></a></li>
+            {%- endfor -%}
+          </ol>
+        {%- endif -%}
+        {%- if badge != blank -%}<span class="badge badge--{{ badge | handleize }} gallery__badge">{{ badge }}</span>{%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} INFOS + ACHAT {%- endcomment -%}
+    <div class="pdp__info">
+      <a href="#avis" class="pdp__rating">{% render 'rating', rating: rating, count: count %}</a>
+      <h1 class="pdp__title">{{ product.title }}</h1>
+      <p class="pdp__accroche">{{ accroche }}</p>
+      <ul class="chips" role="list">
+        {%- if nutrient != blank -%}<li class="chip chip--accent">{{ nutrient }}</li>{%- endif -%}
+        {%- if flavour != blank -%}<li class="chip">{{ flavour }}</li>{%- endif -%}
+        <li class="chip">0 g sucres ajoutés</li>
+      </ul>
+
+      {%- form 'product', product, id: 'ProductForm', class: 'pdp__form', novalidate: 'novalidate' -%}
+        <input type="hidden" name="id" value="{{ current.id }}" data-variant-input>
+
+        {%- unless product.has_only_default_variant -%}
+          <fieldset class="offers-pick">
+            <legend class="offers-pick__legend">Choisis ta formule</legend>
+            {%- for v in product.variants -%}
+              {%- liquid
+                assign units = 1
+                if v.title contains '3'
+                  assign units = 3
+                endif
+                assign is_sub = false
+                if v.title contains 'Abonnement'
+                  assign is_sub = true
+                endif
+                assign per_unit = v.price | divided_by: units
+                assign ref = single_price | times: units
+                if is_sub and lot_price > 0
+                  assign ref = lot_price
+                endif
+                assign saving = ref | minus: v.price
+                assign saving_pct = 0
+                if ref > 0
+                  assign saving_pct = saving | times: 100.0 | divided_by: ref | round
+                endif
+                assign label = v.title
+                if is_sub
+                  assign label = 'Abonnement mensuel'
+                endif
+              -%}
+              <label class="opt{% if is_sub %} opt--sub{% endif %}{% unless v.available %} opt--off{% endunless %}">
+                <input type="radio" name="sm-variant" value="{{ v.id }}" class="opt__input"
+                  data-price="{{ v.price | money | escape }}"
+                  data-sub="{{ is_sub }}"
+                  {% if v.id == current.id %}checked{% endif %}
+                  {% unless v.available %}disabled{% endunless %}>
+                <span class="opt__box">
+                  <span class="opt__main">
+                    <span class="opt__name">{{ label }}</span>
+                    {%- if v.title contains 'Lot de 3' -%}<span class="opt__flag">Le plus choisi</span>{%- endif -%}
+                    {%- if is_sub -%}<span class="opt__flag opt__flag--sub">−{{ saving_pct }} %</span>{%- endif -%}
+                  </span>
+                  <span class="opt__sub">
+                    {%- if is_sub -%}
+                      3 sachets par mois · sans engagement
+                    {%- elsif units > 1 -%}
+                      {{ units }} sachets · tu économises {{ saving | money }}
+                    {%- else -%}
+                      Pour goûter
+                    {%- endif -%}
+                  </span>
+                  <span class="opt__price">
+                    <strong>{{ v.price | money }}{% if is_sub %}<small>/mois</small>{% endif %}</strong>
+                    {%- if units > 1 -%}<span class="opt__unit">{{ per_unit | money }}/sachet</span>{%- endif -%}
+                    {%- if v.compare_at_price > v.price -%}<s class="price--old">{{ v.compare_at_price | money }}</s>{%- endif -%}
+                  </span>
+                </span>
+              </label>
+            {%- endfor -%}
+            <p class="offers-pick__sub-note" data-sub-note {% unless current.title contains 'Abonnement' %}hidden{% endunless %}>
+              {% render 'icon', name: 'refresh' %} Change tes parfums, mets en pause ou arrête en un clic. Rappel par mail 3 jours avant chaque envoi.
+            </p>
+          </fieldset>
+        {%- endunless -%}
+
+        <div class="pdp__buy" data-main-atc>
+          <button type="submit" name="add" class="btn btn--block btn--big" data-atc {% unless current.available %}disabled{% endunless %}>
+            {%- if current.available -%}
+              Ajouter · <span data-atc-price>{{ current.price | money }}</span>
+            {%- else -%}
+              Bientôt de retour
+            {%- endif -%}
+          </button>
+        </div>
+        <p class="form-error" data-form-error role="alert" hidden></p>
+      {%- endform -%}
+
+      <div class="delivery" data-delivery data-home="2,3" data-relay="3,4">
+        <p class="delivery__line">{% render 'icon', name: 'truck' %} <span data-delivery-text>Expédié sous 24 h depuis Montélimar</span></p>
+        {%- if settings.christmas_deadline != blank -%}
+          <p class="delivery__line delivery__line--xmas">{% render 'icon', name: 'gift' %} Livré avant Noël si commandé avant le {{ settings.christmas_deadline }}</p>
+        {%- endif -%}
+      </div>
+
+      <ul class="mini-trust mini-trust--pdp" role="list">
+        <li>{% render 'icon', name: 'truck' %} Offerte dès {{ settings.free_shipping_threshold }} €</li>
+        <li>{% render 'icon', name: 'heart' %} Goût adoré ou remboursé</li>
+        <li>{% render 'icon', name: 'flag' %} Fabriqué à Montélimar</li>
+      </ul>
+
+      {%- comment -%} Rishi Rawat : deux profondeurs de lecture {%- endcomment -%}
+      <div class="tabs" data-tabs>
+        <div class="tabs__list" role="tablist" aria-label="Description">
+          <button type="button" role="tab" id="Tab-short" aria-controls="Panel-short" aria-selected="true" class="tabs__tab">J’ai 2 minutes</button>
+          <button type="button" role="tab" id="Tab-long" aria-controls="Panel-long" aria-selected="false" tabindex="-1" class="tabs__tab">J’ai le temps</button>
+        </div>
+        <div role="tabpanel" id="Panel-short" aria-labelledby="Tab-short" class="tabs__panel">
+          <ul class="checklist" role="list">
+            <li>{% render 'icon', name: 'check' %} <span><strong>{{ nutrient }}</strong>. {{ vnr }} pour 25 g.</span></li>
+            <li>{% render 'icon', name: 'check' %} <span><strong>80 % de fruits et légumes</strong>, 0 g de sucres ajoutés, 6 g de fibres par portion.</span></li>
+            <li>{% render 'icon', name: 'check' %} <span><strong>Goût {{ flavour | downcase | replace: ' · ', '-' }}</strong>, texture tendre, zéro arrière-goût de « santé ».</span></li>
+            <li>{% render 'icon', name: 'check' %} <span><strong>Quand ?</strong> {{ moment }}</span></li>
+          </ul>
+        </div>
+        <div role="tabpanel" id="Panel-long" aria-labelledby="Tab-long" class="tabs__panel rte" hidden>
+          {%- if product.description != blank -%}
+            {{ product.description }}
+          {%- else -%}
+            <p>{{ accroche }} {{ product.title }} est un bonbon tendre, cuit doucement à Montélimar à partir de purées de vrais fruits et de légumes doux.</p>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="accs">
+        <details class="acc">
+          <summary>Ingrédients {% render 'icon', name: 'plus' %}</summary>
+          <div class="acc__body"><p>{{ ingredients }}</p><p class="muted">Sans gluten, sans gélatine animale. Fabriqué dans un atelier qui utilise aussi des fruits à coque.</p></div>
+        </details>
+        <details class="acc">
+          <summary>Valeurs nutritionnelles {% render 'icon', name: 'plus' %}</summary>
+          <div class="acc__body">
+            <table class="nutri">
+              <thead><tr><th scope="col">Pour</th><th scope="col">100 g</th><th scope="col">25 g (≈ 8 bonbons)</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Énergie</th><td>1 506 kJ / 360 kcal</td><td>377 kJ / 90 kcal</td></tr>
+                <tr><th scope="row">Matières grasses</th><td>0,4 g</td><td>0,1 g</td></tr>
+                <tr><th scope="row">Glucides</th><td>74 g</td><td>18,5 g</td></tr>
+                <tr class="nutri__sub"><th scope="row">dont sucres (des fruits)</th><td>46 g</td><td>11,5 g</td></tr>
+                <tr><th scope="row">Fibres</th><td>24 g</td><td>6 g</td></tr>
+                <tr><th scope="row">Protéines</th><td>2,4 g</td><td>0,6 g</td></tr>
+                <tr><th scope="row">Sel</th><td>0,03 g</td><td>0,01 g</td></tr>
+              </tbody>
+            </table>
+            <p class="muted">{{ vnr }} (pour 25 g). VNR : valeurs nutritionnelles de référence.</p>
+          </div>
+        </details>
+        <details class="acc">
+          <summary>Livraison et retours {% render 'icon', name: 'plus' %}</summary>
+          <div class="acc__body">
+            <p>Commandé avant {{ settings.cutoff_hour }} h en semaine : expédié le jour même. Point relais {{ settings.shipping_relay_price }} (3 à 4 jours ouvrés), domicile {{ settings.shipping_home_price }} (2 à 3 jours ouvrés). <strong>Offerte dès {{ settings.free_shipping_threshold }} €.</strong></p>
+            <p>Pas convaincu ? On te rembourse dans les 30 jours, même sachet ouvert.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Barre d'ajout collante (mobile), affichée quand le bouton principal sort de l'écran {%- endcomment -%}
+  <div class="sticky-atc" data-sticky-atc aria-hidden="true">
+    <div class="sticky-atc__info">
+      <span class="sticky-atc__title">{{ product.title }}</span>
+      <span class="sticky-atc__variant" data-sticky-variant>{{ current.title | replace: 'Default Title', '' }}</span>
+    </div>
+    <button type="submit" form="ProductForm" class="btn" tabindex="-1" {% unless current.available %}disabled{% endunless %}>Ajouter · <span data-atc-price>{{ current.price | money }}</span></button>
+  </div>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": {{ product.title | json }},
+      "description": {{ accroche | strip | json }},
+      "brand": { "@type": "Brand", "name": {{ settings.brand_name | default: 'SANSMODÉ' | json }} },
+      "url": {{ request.origin | append: product.url | json }},
+      {%- if product.featured_image -%}"image": {{ product.featured_image | image_url: width: 1200 | prepend: 'https:' | json }},{%- endif -%}
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": {{ rating | strip | json }}, "reviewCount": {{ count | strip | plus: 0 }} },
+      "offers": [
+        {%- for v in product.variants -%}
+          { "@type": "Offer", "name": {{ v.title | json }}, "sku": {{ v.sku | json }}, "price": {{ v.price | divided_by: 100.0 | json }}, "priceCurrency": {{ cart.currency.iso_code | json }}, "availability": "http://schema.org/{% if v.available %}InStock{% else %}OutOfStock{% endif %}", "url": {{ request.origin | append: v.url | json }} }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Fiche produit",
+  "class": "section-main-product",
+  "settings": [
+    { "type": "paragraph", "content": "Accroche, nutriment, couleurs et images de secours : snippet product-data ou métachamps custom.*" }
+  ]
+}
+{% endschema %}

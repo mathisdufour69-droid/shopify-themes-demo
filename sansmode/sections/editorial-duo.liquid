@@ -1,0 +1,56 @@
+{%- comment -%}
+  Deux tuiles éditoriales : la nouveauté à gauche (curiosité), le best-seller à droite (sécurité).
+  Toute la tuile est cliquable, le bouton annonce le prix : pas de surprise au clic.
+{%- endcomment -%}
+<section class="duo" aria-label="{{ section.settings.label | escape }}">
+  <div class="container duo__grid">
+    {%- for block in section.blocks -%}
+      {%- assign p = block.settings.product | default: all_products[block.settings.fallback_handle] -%}
+      {%- unless p.handle -%}{%- assign p = nil -%}{%- endunless -%}
+      {%- assign h = p.handle | default: block.settings.fallback_handle -%}
+      {%- capture color -%}{% render 'product-data', handle: h, field: 'color', product: p %}{%- endcapture -%}
+      {%- capture accroche -%}{% render 'product-data', handle: h, field: 'accroche', product: p %}{%- endcapture -%}
+      {%- capture nutrient -%}{% render 'product-data', handle: h, field: 'nutrient', product: p %}{%- endcapture -%}
+      {%- assign portrait = 'portrait-' | append: h -%}
+      <a href="{{ p.url | default: routes.all_products_collection_url }}" class="duo__tile" style="--accent: {{ color }}" {{ block.shopify_attributes }}>
+        <span class="duo__media">
+          {% render 'picture', image: block.settings.image, base: portrait, widths: '600,1024', width: 1024, height: 1536, alt: block.settings.alt, sizes: '(min-width: 750px) 50vw, 100vw', class: 'duo__img' %}
+        </span>
+        <span class="duo__text">
+          <span class="badge badge--{{ block.settings.badge | handleize }}">{{ block.settings.badge }}</span>
+          <span class="duo__title">{{ p.title | default: block.settings.fallback_title }}</span>
+          <span class="duo__acc">{{ accroche }}</span>
+          <span class="duo__meta">{{ nutrient }}</span>
+          <span class="btn btn--light"><span class="duo__cta-txt">{{ block.settings.cta }} · </span>{% if p %}{{ p.price | money }}{% endif %} {% render 'icon', name: 'arrow' %}</span>
+        </span>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Duo éditorial",
+  "class": "section-duo",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Libellé (accessibilité)", "default": "Nouveauté et best-seller" }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tuile",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Produit" },
+        { "type": "text", "id": "fallback_handle", "label": "Handle de secours", "default": "grisaille", "info": "Utilisé pour l'image du thème si aucun produit n'est choisi." },
+        { "type": "text", "id": "fallback_title", "label": "Titre de secours", "default": "Grisaille" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "alt", "label": "Texte alternatif", "default": "Une femme tient un sachet SANSMODÉ" },
+        { "type": "text", "id": "badge", "label": "Badge", "default": "Best-seller" },
+        { "type": "text", "id": "cta", "label": "Bouton", "default": "Goûter" }
+      ]
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [{ "name": "Duo éditorial", "blocks": [{ "type": "tile" }, { "type": "tile" }] }]
+}
+{% endschema %}

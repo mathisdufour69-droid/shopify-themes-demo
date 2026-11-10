@@ -1,0 +1,10 @@
+{
+  "accessibility": {
+    "skip_to_content": "Aller au contenu"
+  },
+  "general": {
+    "password_page": {
+      "login_form_heading": "Entrer dans la boutique"
+    }
+  }
+}

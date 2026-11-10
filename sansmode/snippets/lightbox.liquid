@@ -1,0 +1,8 @@
+{%- comment -%}
+  Lecteur unique (dialog natif, accessible, fermeture Échap + clic extérieur).
+  Les déclencheurs pointent un <template> : vidéo Shopify si fournie, sinon visuel + transcription.
+{%- endcomment -%}
+<dialog class="lightbox" id="Lightbox" aria-label="Lecteur">
+  <button type="button" class="lightbox__close" data-lightbox-close aria-label="Fermer">{% render 'icon', name: 'close' %}</button>
+  <div class="lightbox__content" data-lightbox-content></div>
+</dialog>

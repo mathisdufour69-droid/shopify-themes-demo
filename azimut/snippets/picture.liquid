@@ -1,0 +1,31 @@
+{%- comment -%}
+  Image responsive : image Shopify si fournie, sinon visuel du thème (assets WebP).
+  Params : image, base, widths ('600,1080'), width, height, alt, sizes, class, eager
+{%- endcomment -%}
+{%- liquid
+  assign loading = 'lazy'
+  assign priority = 'auto'
+  if eager
+    assign loading = 'eager'
+    assign priority = 'high'
+  endif
+  assign sizes = sizes | default: '100vw'
+-%}
+{%- if image != blank -%}
+  {{- image | image_url: width: 2000 | image_tag: widths: '400,600,900,1200,1600,2000', sizes: sizes, loading: loading, fetchpriority: priority, alt: alt, class: class -}}
+{%- else -%}
+  {%- liquid
+    assign ws = widths | split: ','
+    assign srcset = ''
+    for w in ws
+      assign file = base | append: '-' | append: w | append: '.webp'
+      assign url = file | asset_url
+      assign srcset = srcset | append: url | append: ' ' | append: w | append: 'w'
+      unless forloop.last
+        assign srcset = srcset | append: ', '
+      endunless
+      assign src = url
+    endfor
+  -%}
+  <img src="{{ src }}" srcset="{{ srcset }}" sizes="{{ sizes }}" width="{{ width }}" height="{{ height }}" alt="{{ alt | escape }}" loading="{{ loading }}" fetchpriority="{{ priority }}" decoding="async"{% if class %} class="{{ class }}"{% endif %}>
+{%- endif -%}

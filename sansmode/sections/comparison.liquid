@@ -1,0 +1,82 @@
+{%- comment -%}
+  Comparatif : la colonne SANSMODÉ est une carte violette qui « sort » du tableau.
+  Rendu visuel en grille (aria-hidden) + vrai <table> pour les lecteurs d'écran.
+  Cellules "yes" / "no" rendues en icônes, tout autre texte affiché tel quel.
+{%- endcomment -%}
+<section class="compare" aria-labelledby="CompareTitle-{{ section.id }}">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker">{{ section.settings.kicker }}</p>
+      <h2 id="CompareTitle-{{ section.id }}" class="h2">{{ section.settings.title }}</h2>
+    </div>
+
+    <div class="visually-hidden">
+    <table>
+      <caption>{{ section.settings.title }}</caption>
+      <thead><tr><th scope="col">Critère</th><th scope="col">{{ settings.brand_name | default: 'SANSMODÉ' }}</th><th scope="col">{{ section.settings.col_2 }}</th><th scope="col">{{ section.settings.col_3 }}</th></tr></thead>
+      <tbody>
+        {%- for block in section.blocks -%}
+          <tr>
+            <th scope="row">{{ block.settings.label }}</th>
+            <td>{% render 'compare-cell', value: block.settings.us, text: true %}</td>
+            <td>{% render 'compare-cell', value: block.settings.col_2, text: true %}</td>
+            <td>{% render 'compare-cell', value: block.settings.col_3, text: true %}</td>
+          </tr>
+        {%- endfor -%}
+      </tbody>
+    </table>
+    </div>
+
+    <div class="cmp" data-cmp aria-hidden="true" style="--rows: {{ section.blocks.size }}">
+      <div class="cmp__col cmp__col--label">
+        <div class="cmp__head"></div>
+        {%- for block in section.blocks -%}<div class="cmp__cell" {{ block.shopify_attributes }}>{{ block.settings.label }}</div>{%- endfor -%}
+      </div>
+      <div class="cmp__col cmp__col--us">
+        <div class="cmp__head">
+          {%- if section.settings.badge != blank -%}<span class="cmp__badge">{{ section.settings.badge }}</span>{%- endif -%}
+          {% render 'logo' %}
+        </div>
+        {%- for block in section.blocks -%}<div class="cmp__cell" style="--i: {{ forloop.index }}">{% render 'compare-cell', value: block.settings.us %}</div>{%- endfor -%}
+      </div>
+      <div class="cmp__col">
+        <div class="cmp__head">{{ section.settings.col_2 }}</div>
+        {%- for block in section.blocks -%}<div class="cmp__cell" style="--i: {{ forloop.index }}">{% render 'compare-cell', value: block.settings.col_2 %}</div>{%- endfor -%}
+      </div>
+      <div class="cmp__col">
+        <div class="cmp__head">{{ section.settings.col_3 }}</div>
+        {%- for block in section.blocks -%}<div class="cmp__cell" style="--i: {{ forloop.index }}">{% render 'compare-cell', value: block.settings.col_3 %}</div>{%- endfor -%}
+      </div>
+    </div>
+    <p class="compare__note">{{ section.settings.note }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Comparatif",
+  "class": "section-compare",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre", "default": "Comparons honnêtement" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Ce qui change vraiment." },
+    { "type": "text", "id": "badge", "label": "Badge de la colonne SANSMODÉ", "default": "Le choix malin" },
+    { "type": "text", "id": "col_2", "label": "Colonne 2", "default": "Bonbons classiques" },
+    { "type": "text", "id": "col_3", "label": "Colonne 3", "default": "Gélules de compléments" },
+    { "type": "text", "id": "note", "label": "Note", "default": "Valeurs moyennes pour 100 g, relevées sur les étiquettes des produits les plus vendus en grande surface." }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Ligne",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Critère", "default": "Sucres ajoutés" },
+        { "type": "text", "id": "us", "label": "SANSMODÉ", "default": "0 g", "info": "yes / no pour une icône" },
+        { "type": "text", "id": "col_2", "label": "Colonne 2", "default": "≈ 50 g" },
+        { "type": "text", "id": "col_3", "label": "Colonne 3", "default": "0 g" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [{ "name": "Comparatif", "blocks": [{ "type": "row" }] }]
+}
+{% endschema %}

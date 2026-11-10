@@ -1,0 +1,5 @@
+{%- comment -%} Étoiles pleines arrondies au plus proche (sobre, comme la référence). {%- endcomment -%}
+{%- assign full = rating | plus: 0 | round -%}
+<span class="stars" role="img" aria-label="Noté {{ rating | replace: '.', ',' }} sur 5">
+  {%- for i in (1..5) -%}<span{% if i > full %} class="off"{% endif %}>{% render 'icon', name: 'star' %}</span>{%- endfor -%}
+</span>
